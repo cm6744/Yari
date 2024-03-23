@@ -1,0 +1,12 @@
+C:\Users\Administrator\source\repos\Yari\bin\Release\net5.0\Yari.deps.json
+C:\Users\Administrator\source\repos\Yari\bin\Release\net5.0\Yari.dll
+C:\Users\Administrator\source\repos\Yari\bin\Release\net5.0\ref\Yari.dll
+C:\Users\Administrator\source\repos\Yari\bin\Release\net5.0\Yari.pdb
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.csproj.AssemblyReference.cache
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.dll
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\ref\Yari.dll
+C:\Users\Administrator\source\repos\Yari\obj\Release\net5.0\Yari.pdb

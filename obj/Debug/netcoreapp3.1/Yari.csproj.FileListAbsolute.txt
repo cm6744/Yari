@@ -1,0 +1,10 @@
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.csproj.AssemblyReference.cache
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.AssemblyInfoInputs.cache
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.AssemblyInfo.cs
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\Yari\bin\Debug\netcoreapp3.1\Yari.deps.json
+C:\Users\Administrator\source\repos\Yari\bin\Debug\netcoreapp3.1\Yari.dll
+C:\Users\Administrator\source\repos\Yari\bin\Debug\netcoreapp3.1\Yari.pdb
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.dll
+C:\Users\Administrator\source\repos\Yari\obj\Debug\netcoreapp3.1\Yari.pdb
