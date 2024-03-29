@@ -40,7 +40,7 @@ namespace Yari.Common
 			Children.Add(loader);
 
 			Total += loader.Total;
-			foreach (Runnable loaderTask in loader.Tasks)
+			foreach(Runnable loaderTask in loader.Tasks)
 			{
 				Tasks.Enqueue(loaderTask);
 			}
@@ -136,6 +136,7 @@ namespace Yari.Common
 					AddLoadTask(resName, file, false);
 				}
 			}
+
 			files = fileBase.Documents();
 
 			foreach(FileHandler file in files)

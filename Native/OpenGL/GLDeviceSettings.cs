@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Native.OpenGL
 {
@@ -10,11 +10,15 @@ namespace Yari.Native.OpenGL
 
 		public vec2 Size = new vec2(128, 128);
 		public bool Fullframe;
-		
+
 		public int Stencil = 1;
 		public int Samples = 1;
-		public string Title = "Dimcube - OpenGL (Silk.NET)";
-		public Dictionary<string, object> Properties = new Dictionary<string, object>();
+		public string Title = "Yari OpenTK";
+		public bool Floating = false;
+		public bool Resizable = true;
+		public bool Decorated = true;
+		public bool AutoIconify = true;
+		public bool Maximized = false;
 		public GLTexture Icon;
 		public GLTexture Cursor;
 		public vec2 Hotspot = new vec2(0, 0);

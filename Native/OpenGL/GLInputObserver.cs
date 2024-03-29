@@ -10,7 +10,7 @@ namespace Yari.Native.OpenGL
 
 		long PressOccur;
 		int Press;
-		
+
 		public void Fire()
 		{
 			Press = 1;
@@ -29,6 +29,7 @@ namespace Yari.Native.OpenGL
 			{
 				return 0;
 			}
+
 			return (int) (InputCheckTicks - PressOccur);
 		}
 

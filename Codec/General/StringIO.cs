@@ -7,65 +7,65 @@ namespace Yari.Codec.General
 
 	public delegate bool LineLimiter(string line);
 
-    public class StringIO
-    {
+	public class StringIO
+	{
 
-        public static string GetCompression(ICollection<string> strs, LineLimiter limiter)
-        {
-            StringBuilder sb = new StringBuilder();
+		public static string GetCompression(ICollection<string> strs, LineLimiter limiter)
+		{
+			StringBuilder sb = new StringBuilder();
 
-            foreach(string s in strs)
-            {
-	            if(!limiter.Invoke(s))
-	            {
-		            continue;
-	            }
+			foreach(string s in strs)
+			{
+				if(!limiter.Invoke(s))
+				{
+					continue;
+				}
 
-	            sb.Append(s);
-	            sb.AppendLine();
-            }
+				sb.Append(s);
+				sb.AppendLine();
+			}
 
-            return sb.ToString();
-        }
+			return sb.ToString();
+		}
 
-        public static string[] ReadArray(FileHandler file)
-        {
-            List<string> list = new List<string>();
+		public static string[] ReadArray(FileHandler file)
+		{
+			List<string> list = new List<string>();
 
-            using(StreamReader r = new StreamReader(file.Path))
-            {
-                string line;
+			using(StreamReader r = new StreamReader(file.Path))
+			{
+				string line;
 
-                while ((line = r.ReadLine()) != null)
-                {
-                    list.Add(line);
-                }
-            }
+				while((line = r.ReadLine()) != null)
+				{
+					list.Add(line);
+				}
+			}
 
-            return list.ToArray();
-        }
+			return list.ToArray();
+		}
 
-        public static string Read(FileHandler file)
-        {
-            return File.ReadAllText(file.Path);
-        }
+		public static string Read(FileHandler file)
+		{
+			return File.ReadAllText(file.Path);
+		}
 
-        public static void WriteArray(FileHandler file, string[] arr)
-        {
-            using(StreamWriter r = new StreamWriter(file.Path))
-            {
-                foreach(string s in arr)
-                {
-                    r.WriteLine(s);
-                }
-            }
-        }
+		public static void WriteArray(FileHandler file, string[] arr)
+		{
+			using(StreamWriter r = new StreamWriter(file.Path))
+			{
+				foreach(string s in arr)
+				{
+					r.WriteLine(s);
+				}
+			}
+		}
 
-        public static void Write(FileHandler file, string s)
-        {
-            File.WriteAllText(file.Path, s);
-        }
+		public static void Write(FileHandler file, string s)
+		{
+			File.WriteAllText(file.Path, s);
+		}
 
-    }
+	}
 
 }

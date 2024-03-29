@@ -11,7 +11,7 @@ namespace Yari.Common
 		public bool Snapshot;
 		public bool Stable;
 		public int Iteration;
-		
+
 		public Version(string code, int iteration)
 		{
 			Full = code;

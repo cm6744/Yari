@@ -4,153 +4,153 @@ using System.IO;
 namespace Yari.Codec
 {
 
-    //In control of files and folders without "/" contained.
-    //You should consider the file type when using because it has no handler for error.
-    public interface FileHandler
-    {
+	//In control of files and folders without "/" contained.
+	//You should consider the file type when using because it has no handler for error.
+	public interface FileHandler
+	{
 
 		public string Path { get; }
 
 		bool IsFolder();
 
-        bool IsDocument();
+		bool IsDocument();
 
-        string Format();
+		string Format();
 
-        string Name();
+		string Name();
 
-        FileHandler Enter(string name);
+		FileHandler Enter(string name);
 
-        FileHandler Exit();
+		FileHandler Exit();
 
-        FileHandler[] Folders();
+		FileHandler[] Folders();
 
-        FileHandler[] Documents();
+		FileHandler[] Documents();
 
-        bool Exists();
+		bool Exists();
 
-        void Mkdirs();
+		void Mkdirs();
 
-        void MkDocs();
+		void MkDocs();
 
-        void Delete();
+		void Delete();
 
-    }
+	}
 
-    public class FileHandlerImpl : FileHandler
-    {
+	public class FileHandlerImpl : FileHandler
+	{
 
-        readonly string File;
-        readonly bool Doc, Fol;
+		readonly string File;
+		readonly bool Doc, Fol;
 
-        public FileHandlerImpl(string file)
-        {
-            File = file;
+		public FileHandlerImpl(string file)
+		{
+			File = file;
 
-            Doc = System.IO.File.Exists(file);
-            Fol = Directory.Exists(file);
-        }
+			Doc = System.IO.File.Exists(file);
+			Fol = Directory.Exists(file);
+		}
 
-        public void Delete()
-        {
-            if(Doc)
-            {
-                System.IO.File.Delete(File);
-            }
-            else if(Fol)
-            {
-                Directory.Delete(File, true);
-            }
-        }
+		public void Delete()
+		{
+			if(Doc)
+			{
+				System.IO.File.Delete(File);
+			}
+			else if(Fol)
+			{
+				Directory.Delete(File, true);
+			}
+		}
 
-        public FileHandler[] Documents()
-        {
-            List<FileHandler> files = new List<FileHandler>();
+		public FileHandler[] Documents()
+		{
+			List<FileHandler> files = new List<FileHandler>();
 
-            foreach(FileInfo info in new DirectoryInfo(File).GetFiles())
-            {
-                files.Add(new FileHandlerImpl(info.FullName));
-            }
+			foreach(FileInfo info in new DirectoryInfo(File).GetFiles())
+			{
+				files.Add(new FileHandlerImpl(info.FullName));
+			}
 
-            return files.ToArray();
-        }
+			return files.ToArray();
+		}
 
-        public FileHandler Enter(string name)
-        {
-            string call;
+		public FileHandler Enter(string name)
+		{
+			string call;
 
-            if (File.EndsWith("/"))
-            {
-                call = File + name;
-            }
-            else
-            {
-                call = File + "/" + name;
-            }
+			if(File.EndsWith("/"))
+			{
+				call = File + name;
+			}
+			else
+			{
+				call = File + "/" + name;
+			}
 
-            return new FileHandlerImpl(call);
-        }
+			return new FileHandlerImpl(call);
+		}
 
-        public bool Exists()
-        {
-            return Doc || Fol;
-        }
+		public bool Exists()
+		{
+			return Doc || Fol;
+		}
 
-        public FileHandler Exit()
-        {
-            int idx = File.LastIndexOf('/');
-            string call = File.Substring(0, idx);
-            return new FileHandlerImpl(call);
-        }
+		public FileHandler Exit()
+		{
+			int idx = File.LastIndexOf('/');
+			string call = File.Substring(0, idx);
+			return new FileHandlerImpl(call);
+		}
 
-        public FileHandler[] Folders()
-        {
-            List<FileHandler> files = new List<FileHandler>();
+		public FileHandler[] Folders()
+		{
+			List<FileHandler> files = new List<FileHandler>();
 
-            foreach(DirectoryInfo info in new DirectoryInfo(File).GetDirectories())
-            {
-                files.Add(new FileHandlerImpl(info.FullName));
-            }
+			foreach(DirectoryInfo info in new DirectoryInfo(File).GetDirectories())
+			{
+				files.Add(new FileHandlerImpl(info.FullName));
+			}
 
-            return files.ToArray();
-        }
+			return files.ToArray();
+		}
 
-        public string Format()
-        {
-            int idx = File.LastIndexOf('.');
-            return File.Substring(idx + 1);
-        }
+		public string Format()
+		{
+			int idx = File.LastIndexOf('.');
+			return File.Substring(idx + 1);
+		}
 
-        public bool IsDocument()
-        {
-            return Doc;
-        }
+		public bool IsDocument()
+		{
+			return Doc;
+		}
 
-        public string Path => File;
+		public string Path => File;
 
-        public bool IsFolder()
-        {
-            return Fol;
-        }
+		public bool IsFolder()
+		{
+			return Fol;
+		}
 
-        public void Mkdirs()
-        {
-            new DirectoryInfo(File).Create();
-        }
+		public void Mkdirs()
+		{
+			new DirectoryInfo(File).Create();
+		}
 
-        public void MkDocs()
-        {
-            Exit().Mkdirs();
-            new FileInfo(File).Create().Close();
-        }
+		public void MkDocs()
+		{
+			Exit().Mkdirs();
+			new FileInfo(File).Create().Close();
+		}
 
-        public string Name()
-        {
-            int idx = File.LastIndexOf('.');
-            int idx1 = File.LastIndexOf('/') + 1;
-            return File.Substring(idx1, idx - idx1);
-        }
+		public string Name()
+		{
+			int idx = File.LastIndexOf('.');
+			int idx1 = File.LastIndexOf('/') + 1;
+			return File.Substring(idx1, idx - idx1);
+		}
 
-    }
+	}
 
 }

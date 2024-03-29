@@ -3,4 +3,9 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)system.text.encodings.web\8.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets" Condition="Exists('$(NuGetPackageRoot)system.text.encodings.web\8.0.0\buildTransitive\netcoreapp2.0\System.Text.Encodings.Web.targets')" />
+    <Import Project="$(NuGetPackageRoot)system.text.json\8.0.0\buildTransitive\netcoreapp2.0\System.Text.Json.targets" Condition="Exists('$(NuGetPackageRoot)system.text.json\8.0.0\buildTransitive\netcoreapp2.0\System.Text.Json.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.extensions.dependencymodel\8.0.0\buildTransitive\netcoreapp2.0\Microsoft.Extensions.DependencyModel.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.dependencymodel\8.0.0\buildTransitive\netcoreapp2.0\Microsoft.Extensions.DependencyModel.targets')" />
+  </ImportGroup>
 </Project>

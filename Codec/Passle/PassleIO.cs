@@ -9,7 +9,8 @@ namespace Yari.Codec.Passle
 
 		public static BinaryCompound Read(FileHandler handler)
 		{
-			string code = StringIO.GetCompression(StringIO.ReadArray(handler), s => !s.StartsWith("#") && !s.StartsWith("//"));
+			string code = StringIO.GetCompression(StringIO.ReadArray(handler),
+				s => !s.StartsWith("#") && !s.StartsWith("//"));
 			return ReadRaw(code);
 		}
 

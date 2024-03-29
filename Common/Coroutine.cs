@@ -12,6 +12,7 @@ namespace Yari.Common
 		public bool IsStarted;
 
 		public Runnable Task;
+		private Timer timer;
 
 		public Coroutine(Runnable runnable)
 		{
@@ -25,28 +26,21 @@ namespace Yari.Common
 				IsStarted = true;
 				Task.Invoke();
 				IsCompleted = true;
+				Dispose();
 			});
 		}
 
 		public void Start(TimeSpan time)
 		{
-			long toMills = time.Ticks + DateTime.Now.Ticks;
-			Start(toMills);
+			timer = new Timer((o) =>
+			{
+				Start();
+			}, this, time, Timeout.InfiniteTimeSpan);
 		}
 
-		void Start(long toMills)
+		public void Dispose()
 		{
-			ThreadPool.QueueUserWorkItem(_ =>
-			{
-				if(DateTime.Now.Ticks < toMills)
-				{
-					ThreadPool.QueueUserWorkItem(_ => Start(toMills));
-					return;
-				}
-				IsStarted = true;
-				Task.Invoke();
-				IsCompleted = true;
-			});
+			timer.Dispose();
 		}
 
 	}

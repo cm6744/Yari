@@ -1,18 +1,11 @@
-﻿using Box2D.NetStandard.Dynamics.Fixtures;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using static System.Net.Mime.MediaTypeNames;
-using System;
-using Yari.Common.Manage;
-using Yari.Common;
-using Yari.Draw;
-using Yari.Draw.Extended;
+﻿using Yari.Common;
 using Yari.Input;
-using Yari.Math;
+using Yari.Maths;
 
-namespace Yari.Gui.Element
+namespace Yari.Draw.Gui.Structs
 {
 
-	public class ElementButton : Element
+	public class Button : Component
 	{
 
 		public static InputObserver LEFT_CODE = InputState.Instance.Observe(Keycode.BUTTON_LEFT);
@@ -24,8 +17,8 @@ namespace Yari.Gui.Element
 		public Texture Texture3Line;
 		public string Text;
 
-		public Runnable OnLeftFired = () => {};
-		public Runnable OnRightFired = () => {};
+		public Runnable OnLeftFired = () => { };
+		public Runnable OnRightFired = () => { };
 
 		private int pressDelay;
 		private bool cursorOn;
@@ -43,6 +36,7 @@ namespace Yari.Gui.Element
 					OnLeftFired.Invoke();
 					pressDelay = DEFAULT_PRESS_DELAY;
 				}
+
 				if(RIGHT_CODE.Pressed())
 				{
 					OnRightFired.Invoke();
@@ -84,12 +78,13 @@ namespace Yari.Gui.Element
 				}
 				else if(cursorOn)
 				{
-					sy = Texture3Line.Height / 3f;	
+					sy = Texture3Line.Height / 3f;
 				}
 				else
 				{
 					sy = 0;
 				}
+
 				batch.Draw(Texture3Line, Bound, 0, sy, Texture3Line.Width, Texture3Line.Height / 3f);
 			}
 		}

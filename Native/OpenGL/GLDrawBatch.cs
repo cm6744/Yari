@@ -1,7 +1,8 @@
 ﻿using System;
 using OpenTK.Graphics.OpenGL;
+using Yari.Common;
 using Yari.Draw;
-using Yari.Math;
+using Yari.Maths;
 using Texture = Yari.Draw.Texture;
 
 namespace Yari.Native.OpenGL
@@ -15,7 +16,7 @@ namespace Yari.Native.OpenGL
 
 		public VertArrayObject<float, int> Vao;
 		public BufferObject<float> Vbo;
-		
+
 		public GLShaderProgram Program;
 		public GLShaderProgram ProgramDefault;
 		public GLShaderProgram ProgramShape;
@@ -42,13 +43,16 @@ namespace Yari.Native.OpenGL
 
 			Vbo = new BufferObject<float>(Vertices, BufferTarget.ArrayBuffer);
 			Vao = new VertArrayObject<float, int>(Vbo, null);
-			
+
 			ProgramDefault = GetDefaultShader();
 			ProgramShape = GetDefaultShaderShape();
 
 			Load(ProgramDefault);
 
 			UniTexture = ProgramDefault.GetUniform("u_texture");
+
+			//Get as default
+			ViewportArray = new vec4(0, 0, Platform.GraphicEnv.Size.x, Platform.GraphicEnv.Size.y);
 		}
 
 		public void Load(GLShaderProgram program)
@@ -91,7 +95,7 @@ namespace Yari.Native.OpenGL
 		{
 			Flush();
 
-			switch (mode)
+			switch(mode)
 			{
 				case Frags.Textured:
 					Load(ProgramDefault);
@@ -102,7 +106,8 @@ namespace Yari.Native.OpenGL
 			}
 		}
 
-		public override void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight)
+		public override void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
+			float srcWidth, float srcHeight)
 		{
 			GLTexture glt = (GLTexture) texture;
 
@@ -116,6 +121,7 @@ namespace Yari.Native.OpenGL
 				InvTexHeight = 1f / texture.Height;
 				Flush();
 			}
+
 			TextureID = id;
 
 			float x1 = x + Transform.m02;
@@ -225,7 +231,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[2].y);
 			Vertices[Idx++] = (Color[2].z);
 			Vertices[Idx++] = (Color[2].w);
-			
+
 			//RD
 			Vertices[Idx++] = (x4);
 			Vertices[Idx++] = (y4);
@@ -233,7 +239,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[3].y);
 			Vertices[Idx++] = (Color[3].z);
 			Vertices[Idx++] = (Color[3].w);
-			
+
 			//LT
 			Vertices[Idx++] = (x2);
 			Vertices[Idx++] = (y2);
@@ -241,7 +247,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[1].y);
 			Vertices[Idx++] = (Color[1].z);
 			Vertices[Idx++] = (Color[1].w);
-			
+
 			//RD
 			Vertices[Idx++] = (x4);
 			Vertices[Idx++] = (y4);
@@ -249,7 +255,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[3].y);
 			Vertices[Idx++] = (Color[3].z);
 			Vertices[Idx++] = (Color[3].w);
-			
+
 			//LD
 			Vertices[Idx++] = (x1);
 			Vertices[Idx++] = (y1);
@@ -257,7 +263,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[0].y);
 			Vertices[Idx++] = (Color[0].z);
 			Vertices[Idx++] = (Color[0].w);
-			
+
 			//LT
 			Vertices[Idx++] = (x2);
 			Vertices[Idx++] = (y2);
@@ -265,7 +271,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[1].y);
 			Vertices[Idx++] = (Color[1].z);
 			Vertices[Idx++] = (Color[1].w);
-			
+
 			NewVertex(6);
 		}
 
@@ -322,7 +328,7 @@ namespace Yari.Native.OpenGL
 
 		public override void WriteTransformed(vec2 vec)
 		{
-			vec2 vecTrf = Transform.ApplyTo(vec);
+			vec2 vecTrf = Transform.ApplyTo(ref vec);
 			Vertices[Idx++] = vecTrf.x;
 			Vertices[Idx++] = vecTrf.y;
 		}
@@ -358,9 +364,9 @@ namespace Yari.Native.OpenGL
 			Idx = 0;
 		}
 
-		public override void Viewport(float[] viewport)
+		public override void Viewport(vec4 viewport)
 		{
-			Viewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+			Viewport(viewport.x, viewport.y, viewport.z, viewport.w);
 		}
 
 		public override void Viewport(float x, float y, float w, float h)
@@ -369,7 +375,7 @@ namespace Yari.Native.OpenGL
 			ViewportArray = new vec4(x, y, w, h);
 		}
 
-		public override void Scissor(PerspectiveCamera camera, float[] viewport, float x, float y, float w, float h)
+		public override void Scissor(PerspectiveCamera camera, vec4 viewport, float x, float y, float w, float h)
 		{
 			Flush();
 			float x0 = camera.ToScrX(x, viewport);
@@ -388,7 +394,7 @@ namespace Yari.Native.OpenGL
 
 		public override void Clear()
 		{
-			GL.ClearColor(GLUtil.ToColor(GraphicsDevice.Settings.ClearColor));
+			GL.ClearColor(GLUtil.ToColor(GLDevice.Settings.ClearColor));
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 		}
 
@@ -434,7 +440,7 @@ namespace Yari.Native.OpenGL
 			              "    vec4 col = texture(u_texture, o_texCoord);\n" +
 			              "    fragColor = o_color * col;\n" +
 			              "}";
-			return ShaderBuilds.Build(vert, frag, (program) => 
+			return ShaderBuilds.Build(vert, frag, (program) =>
 			{
 				Attribute posAttrib = program.GetAttribute("i_position");
 				posAttrib.Enable();
@@ -480,7 +486,7 @@ namespace Yari.Native.OpenGL
 				posAttrib.Enable();
 				Attribute colAttrib = program.GetAttribute("i_color");
 				colAttrib.Enable();
-				
+
 				posAttrib.PtrFloat(2, 6, 0);
 				colAttrib.PtrFloat(4, 6, 2);
 			});

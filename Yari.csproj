@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -14,17 +14,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".editorconfig" />
+    <None Remove=".gitattributes" />
     <None Remove="C:\Users\Administrator\.nuget\packages\aether.physics2d.diagnostics.mg\2.0.0.1\contentFiles\any\any\Content\DiagnosticsFont.xnb" />
+    <None Remove="global.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
     <PackageReference Include="OpenTK" Version="4.8.2" />
+    <PackageReference Include="Silk.NET.OpenAL" Version="2.20.0" />
+    <PackageReference Include="Silk.NET.OpenAL.Extensions.Soft" Version="2.20.0" />
+    <PackageReference Include="Silk.NET.OpenAL.Soft.Native" Version="1.21.1.2" />
     <PackageReference Include="StbImageSharp" Version="2.27.13" />
+    <PackageReference Include="System.Windows.Extensions" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Grid\" />
+    <EditorConfigFiles Remove="C:\Users\Administrator\source\repos\Yari\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Administrator\source\repos\Yari\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Administrator\source\repos\Yari\.editorconfig" />
   </ItemGroup>
 
 </Project>

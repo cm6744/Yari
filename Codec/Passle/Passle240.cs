@@ -21,7 +21,7 @@ namespace Yari.Codec.Passle
 			Skip();
 			char c = code[pos];
 
-			switch (c)
+			switch(c)
 			{
 				case '{':
 					return parseObject();
@@ -73,8 +73,10 @@ namespace Yari.Codec.Passle
 					++pos;
 					Skip();
 				}
+
 				ch = code[pos];
 			}
+
 			++pos;
 			return new BinaryCompound(result);
 		}
@@ -103,6 +105,7 @@ namespace Yari.Codec.Passle
 
 				ch = code[pos];
 			}
+
 			++pos;
 
 			return new BinaryList(result);
@@ -114,7 +117,7 @@ namespace Yari.Codec.Passle
 
 			char ch = code[pos];
 
-			while(ch != '=' && ch != ' ')//Key cannot include white space
+			while(ch != '=' && ch != ' ') //Key cannot include white space
 			{
 				result.Append(ch);
 				++pos;
@@ -138,7 +141,7 @@ namespace Yari.Codec.Passle
 					++pos;
 					ch = code[pos];
 
-					switch (ch)
+					switch(ch)
 					{
 						case '\"':
 							result.Append('\"');
@@ -170,9 +173,11 @@ namespace Yari.Codec.Passle
 				{
 					result.Append(ch);
 				}
+
 				++pos;
 				ch = code[pos];
 			}
+
 			++pos;
 
 			return result.ToString();
@@ -209,18 +214,22 @@ namespace Yari.Codec.Passle
 				{
 					break;
 				}
+
 				ch = code[pos];
 			}
+
 			string numberStr = code.Substring(start, pos);
 
 			if(int.TryParse(numberStr, out int ov))
 			{
 				return ov;
 			}
+
 			if(float.TryParse(numberStr, out float ov1))
 			{
 				return ov1;
 			}
+
 			if(double.TryParse(numberStr, out double ov2))
 			{
 				return ov2;

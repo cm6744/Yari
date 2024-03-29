@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.IO.Compression;
 
 namespace Yari.Codec.General
 {
@@ -29,6 +31,13 @@ namespace Yari.Codec.General
 
 			byte[] bytes = new byte[stream.Length];
 			br.Read(bytes, 0, bytes.Length);
+			return bytes;
+		}
+
+		public static byte[] ReadReversed(FileHandler handler)
+		{
+			byte[] bytes = Read(handler);
+			Array.Reverse(bytes);
 			return bytes;
 		}
 

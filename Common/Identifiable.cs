@@ -3,9 +3,9 @@
 
 	public interface Identifiable
 	{
-		
-		public Identity Registry { get; set; }
 
+		public Identity Registry { get; set; }
+		
 	}
 
 }

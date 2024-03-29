@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Draw
 {
@@ -18,7 +18,8 @@ namespace Yari.Draw
 		public vec4 ViewportArray;
 		public Font Font;
 
-		public abstract void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY, float srcWidth, float srcHeight);
+		public abstract void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
+			float srcWidth, float srcHeight);
 
 		public void Draw(Texture tex, float x, float y, float sx, float sy, float sw, float sh)
 		{
@@ -131,9 +132,9 @@ namespace Yari.Draw
 			Color[0] = Color[1] = Color[2] = Color[3] = new vec4(1, 1, 1, 1);
 		}
 
-		public abstract void Viewport(float[] viewport);
+		public abstract void Viewport(vec4 viewport);
 		public abstract void Viewport(float x, float y, float w, float h);
-		public abstract void Scissor(PerspectiveCamera camera, float[] viewport, float x, float y, float w, float h);
+		public abstract void Scissor(PerspectiveCamera camera, vec4 viewport, float x, float y, float w, float h);
 		public abstract void ScissorEnd();
 		public abstract void Clear();
 		public abstract void UseCamera(PerspectiveCamera camera);
@@ -159,17 +160,20 @@ namespace Yari.Draw
 					newLine = false;
 					continue;
 				}
+
 				if(ch == '\r')
 				{
 					continue;
 				}
+
 				int w = (int) (Font.GlyphWidth[ch] * Font.Scale);
 				if(drawX - x + w >= maxWidth)
 				{
 					newLine = true;
-					i -= (int) (2 * Font.Scale);//correct index
+					i -= (int) (2 * Font.Scale); //correct index
 					continue;
 				}
+
 				Draw(Font.texture[Font.Locate(ch)], drawX, drawY, w, fontHeight,
 					Font.GlyphX[ch], Font.GlyphY[ch], Font.GlyphWidth[ch], Font.YSize);
 				drawX += w;
@@ -198,15 +202,19 @@ namespace Yari.Draw
 
 	public enum Primitives
 	{
+
 		Triangles,
 		Lines,
 		Point
+
 	}
 
 	public enum Frags
 	{
+
 		Textured,
 		ColorFill
+
 	}
 
 }

@@ -1,8 +1,28 @@
-﻿namespace Yari.Audio
+﻿using System.Collections.Generic;
+
+namespace Yari.Audio
 {
 
 	public interface AudioClip
 	{
+
+		protected static List<AudioClip> ClipsPlaying = new List<AudioClip>();
+		protected static List<AudioClip> ClipsStopped = new List<AudioClip>();
+
+		public static void CheckClipStates()
+		{
+			ClipsPlaying.ForEach((c) =>
+			{
+				if(!c.IsPlaying() && !c.IsPaused())
+				{
+					ClipsStopped.Add(c);
+					c.Dispose();
+				}
+			});
+
+			ClipsPlaying.RemoveAll(ClipsStopped.Contains);
+			ClipsStopped.Clear();
+		}
 
 		AudioData GetData();
 
@@ -25,6 +45,8 @@
 		bool IsPaused();
 
 		bool IsDestroyed();
+
+		void Dispose();
 
 	}
 

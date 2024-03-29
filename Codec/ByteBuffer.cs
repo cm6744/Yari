@@ -15,7 +15,7 @@ namespace Yari.Codec
 		public int Capacity;
 
 		public int ReadableBytes => WriteIndex - ReadIndex;
-		
+
 		protected LowByteBuffer(int cap)
 		{
 			Buf = new byte[cap];
@@ -41,6 +41,7 @@ namespace Yari.Codec
 			{
 				return 1;
 			}
+
 			value--;
 			value |= value >> 1;
 			value |= value >> 2;
@@ -56,6 +57,7 @@ namespace Yari.Codec
 			{
 				Array.Reverse(bytes);
 			}
+
 			return bytes;
 		}
 
@@ -68,11 +70,13 @@ namespace Yari.Codec
 				{
 					size = GetPower2Len(futureLen) * 2;
 				}
+
 				byte[] newbuf = new byte[size];
 				Array.Copy(Buf, 0, newbuf, 0, currLen);
 				Buf = newbuf;
 				Capacity = size;
 			}
+
 			return futureLen;
 		}
 
@@ -87,6 +91,7 @@ namespace Yari.Codec
 			{
 				Buf[i] = bytes[j];
 			}
+
 			WriteIndex = total;
 		}
 
@@ -121,6 +126,7 @@ namespace Yari.Codec
 			{
 				Buf[i] = 0;
 			}
+
 			ReadIndex = 0;
 			WriteIndex = 0;
 			MarkReadIndex = 0;

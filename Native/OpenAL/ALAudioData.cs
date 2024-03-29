@@ -4,6 +4,8 @@ using System.IO;
 using OpenTK.Audio.OpenAL;
 using Yari.Audio;
 using Yari.Codec;
+using Yari.Common;
+using Yari.Common.Manage;
 
 namespace Yari.Native.OpenAL
 {
@@ -17,11 +19,13 @@ namespace Yari.Native.OpenAL
 			ALContext context = ALC.CreateContext(device, (int[]) null);
 			ALC.MakeContextCurrent(context);
 
-			Common.Manage.Reference.FREE.OnHoldReferred(() =>
+			Reference.FREE.OnHoldReferred(() =>
 			{
 				ALC.DestroyContext(context);
 				ALC.CloseDevice(device);
 			});
+
+			Platform.Lifecycle.TaskTick += AudioClip.CheckClipStates;
 		}
 
 		public int Id;
@@ -36,9 +40,9 @@ namespace Yari.Native.OpenAL
 			int index = 0;
 
 			if(file[index++] != 'R'
-			|| file[index++] != 'I'
-			|| file[index++] != 'F'
-			|| file[index++] != 'F')
+			   || file[index++] != 'I'
+			   || file[index++] != 'F'
+			   || file[index++] != 'F')
 			{
 				throw new Exception("Only support Wave file!");
 			}
@@ -47,9 +51,9 @@ namespace Yari.Native.OpenAL
 			index += 4;
 
 			if(file[index++] != 'W'
-			|| file[index++] != 'A'
-			|| file[index++] != 'V'
-			|| file[index++] != 'E')
+			   || file[index++] != 'A'
+			   || file[index++] != 'V'
+			   || file[index++] != 'E')
 			{
 				throw new Exception("Only support Wave file!");
 			}
@@ -65,11 +69,12 @@ namespace Yari.Native.OpenAL
 
 			while(index + 4 < file.Length)
 			{
-				string identifier = "" + (char) file[index++] + (char) file[index++] + (char) file[index++] + (char) file[index++];
+				string identifier = "" + (char) file[index++] + (char) file[index++] + (char) file[index++] +
+				                    (char) file[index++];
 				int size = BinaryPrimitives.ReadInt32LittleEndian(file.Slice(index, 4));
 				index += 4;
-				
-				switch (identifier)
+
+				switch(identifier)
 				{
 					case "fmt " when size != 16:
 						throw new Exception($"Unknown Audio Format with subchunk1 size {size}");
@@ -163,7 +168,7 @@ namespace Yari.Native.OpenAL
 			ALAudioData aad = new ALAudioData();
 
 			aad.Id = buffer;
-			
+
 			return aad;
 		}
 

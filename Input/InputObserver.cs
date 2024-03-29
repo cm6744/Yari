@@ -19,7 +19,7 @@
 
 		private InputObserver observer;
 		public string Key;
-		
+
 		public KeyBind(string key, Keycode code)
 		{
 			Key = key;

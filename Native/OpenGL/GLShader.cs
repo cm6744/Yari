@@ -6,7 +6,7 @@ using Yari.Codec;
 using Yari.Codec.General;
 using Yari.Common.Manage;
 using Yari.Draw;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Native.OpenGL
 {
@@ -63,12 +63,12 @@ namespace Yari.Native.OpenGL
 
 		public Attribute(int id)
 		{
-			this.id = (int)id;
+			this.id = (int) id;
 		}
 
 		public unsafe void PtrFloat(int size, int stride, int offset)
 		{
-			GL.VertexAttribPointer(id, size, VertexAttribPointerType.Float, false, 
+			GL.VertexAttribPointer(id, size, VertexAttribPointerType.Float, false,
 				stride * sizeof(float), offset * sizeof(float));
 		}
 
@@ -83,7 +83,7 @@ namespace Yari.Native.OpenGL
 	{
 
 		private int id;
-		
+
 		public Uniform(int id)
 		{
 			this.id = id;

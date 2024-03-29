@@ -23,6 +23,7 @@ namespace Yari.Common.Manage
 			{
 				return (T) normalVal.Invoke();
 			}
+
 			return (T) Patches[key].Invoke();
 		}
 

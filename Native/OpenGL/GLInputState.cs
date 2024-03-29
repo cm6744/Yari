@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using Yari.Input;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Native.OpenGL
 {
@@ -11,12 +12,7 @@ namespace Yari.Native.OpenGL
 		public Dictionary<int, GLInputObserver> Observers = new Dictionary<int, GLInputObserver>();
 		public string PileChars = "";
 		public float Scroll;
-		public vec2 Cursor = new vec2();
-
-		public GLInputState()
-		{
-			InputState.Instance = this;
-		}
+		public float[] Cursor { get; } = new float[2];
 
 		public InputObserver Observe(Keycode code)
 		{
@@ -35,14 +31,14 @@ namespace Yari.Native.OpenGL
 			return obs;
 		}
 
-		public string GetClipboardText()
+		public unsafe string GetClipboardText()
 		{
-			return GraphicsDevice.Window.ClipboardString;
+			return GLFW.GetClipboardString(GLDevice.Window);
 		}
 
-		public void PushToClipboard(string text)
+		public unsafe void PushToClipboard(string text)
 		{
-			GraphicsDevice.Window.ClipboardString = text;
+			GLFW.SetClipboardString(GLDevice.Window, text);
 		}
 
 		public string getTextInput()
@@ -78,11 +74,6 @@ namespace Yari.Native.OpenGL
 			}
 
 			return ScrollDirection.NONE;
-		}
-
-		public vec2 GetCursor()
-		{
-			return Cursor;
 		}
 
 		public void StartRoll()

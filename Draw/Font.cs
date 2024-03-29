@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using Yari.Codec;
 
 namespace Yari.Draw
 {
@@ -8,15 +10,27 @@ namespace Yari.Draw
 	public class Font
 	{
 
-		public static Font load(Texture[] textures, LocatePage locator, int[] xa, int[] ya, int[] wa, int hf)
+		public static string ASCII;
+
+		static Font()
+		{
+			StringBuilder builder = new StringBuilder();
+			for(int i = 32; i < 256 && i != 127; i++)
+			{
+				builder.Append((char) i);
+			}
+			ASCII = builder.ToString();
+		}
+
+		public static Font load(Texture[] textures, LocatePage locator, BinaryCompound compound)
 		{
 			Font font = new Font();
 			font.texture = textures;
 			font.Locate = locator;
-			font.GlyphX = xa;
-			font.GlyphY = ya;
-			font.GlyphWidth = wa;
-			font.YSize = hf;
+			font.GlyphX = compound.GetInts("ArrayX");
+			font.GlyphY = compound.GetInts("ArrayY");
+			font.GlyphWidth = compound.GetInts("ArrayWidth");
+			font.YSize = compound.GetInt("Height");
 
 			return font;
 		}
@@ -50,21 +64,25 @@ namespace Yari.Draw
 					needNewLine = false;
 					continue;
 				}
+
 				if(c == '\r')
 				{
 					continue;
 				}
+
 				if(lineWidth + GlyphWidth[c] * Scale >= maxWidth)
 				{
 					needNewLine = true;
-					i -= 2;//correct index
+					i -= 2; //correct index
 					continue;
 				}
+
 				lineWidth += (int) (GlyphWidth[c] * Scale);
 			}
+
 			height += lineHeight;
 			width = System.Math.Max(lineWidth, width);
-			
+
 			return new GlyphBounds(text, width, height);
 		}
 

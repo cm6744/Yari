@@ -1,45 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Yari.Math
+﻿namespace Yari.Maths
 {
-    public class Mth
-    {
 
-	    private static readonly float[] SinTable = new float[0x10000];
-	    private const float DTR = (float)(System.Math.PI / 180F);
-	    private const float RTD = 1 / DTR;
+	public class Mth
+	{
 
-	    static Mth()
-	    {
-		    for(int i = 0; i< 0x10000; i++)
-		    {
-			    SinTable[i] = (float) System.Math.Sin((i * System.Math.PI * 2.0) / 65536.0);
-		    }
-	    }
+		private static readonly float[] SinTable = new float[0x10000];
+		private const float DTR = (float) (System.Math.PI / 180F);
+		private const float RTD = 1 / DTR;
 
-	    public static float Sqrt(float v)
-        {
-	        return (float) System.Math.Sqrt(v);
-        }
+		static Mth()
+		{
+			for(int i = 0; i < 0x10000; i++)
+			{
+				SinTable[i] = (float) System.Math.Sin((i * System.Math.PI * 2.0) / 65536.0);
+			}
+		}
 
-        public static float Log(float v)
-        {
-	        return (float) System.Math.Log(v);
-        }
+		public static float Sqrt(float v)
+		{
+			return (float) System.Math.Sqrt(v);
+		}
 
-        public static float Abs(float v)
-        {
-	        return (v > 0 ? v : -v);
-        }
+		public static float Log(float v)
+		{
+			return (float) System.Math.Log(v);
+		}
 
-        public static long Abs(long v)
-        {
-	        return (v > 0 ? v : -v);
-        }
+		public static float Abs(float v)
+		{
+			return (v > 0 ? v : -v);
+		}
+
+		public static long Abs(long v)
+		{
+			return (v > 0 ? v : -v);
+		}
 
 		public static float AtanRad(float y, float x)
 		{

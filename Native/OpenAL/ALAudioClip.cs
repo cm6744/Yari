@@ -1,30 +1,13 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Audio.OpenAL;
 using Yari.Audio;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Native.OpenAL
 {
 
 	public class ALAudioClip : AudioClip
-	{
-
-		static List<ALAudioClip> ClipsPlaying = new List<ALAudioClip>();
-		static List<ALAudioClip> ClipsStopped = new List<ALAudioClip>();
-
-		public static void CheckClipStates()
-		{
-			ClipsPlaying.ForEach((c) => 
-			{
-				if(!c.IsPlaying() && !c.IsPaused())
-				{
-					ClipsStopped.Add(c);
-				}
-			});
-
-			ClipsPlaying.RemoveAll(ClipsStopped.Contains);
-			ClipsStopped.Clear();
-		}
+	{ 
 
 		public int Id;
 		public ALAudioData Data;
@@ -46,7 +29,7 @@ namespace Yari.Native.OpenAL
 		{
 			AL.SourcePlay(Id);
 
-			ClipsPlaying.Add(this);
+			AudioClip.ClipsPlaying.Add(this);
 		}
 
 		public void Loop()
@@ -54,7 +37,7 @@ namespace Yari.Native.OpenAL
 			AL.Source(Id, ALSourceb.Looping, true);
 			AL.SourcePlay(Id);
 
-			ClipsPlaying.Add(this);
+			AudioClip.ClipsPlaying.Add(this);
 		}
 
 		public void Pause()
@@ -123,6 +106,11 @@ namespace Yari.Native.OpenAL
 		{
 			AL.GetSource(Id, ALGetSourcei.SourceState, out int v);
 			return v == (int) ALSourceState.Stopped;
+		}
+
+		public void Dispose()
+		{
+			AL.DeleteSource(Id);
 		}
 
 	}

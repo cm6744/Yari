@@ -1,6 +1,8 @@
 ﻿using System.Drawing;
 using System.Numerics;
-using Yari.Math;
+using OpenTK.Mathematics;
+using Yari.Maths;
+using Vector2 = System.Numerics.Vector2;
 
 namespace Yari.Native.OpenGL
 {
@@ -23,7 +25,7 @@ namespace Yari.Native.OpenGL
 			);
 		}
 
-		public static vec2 SysToVec2(Vector2 vec)
+		public static vec2 SysToVec2(Vector2i vec)
 		{
 			return new vec2(vec.X, vec.Y);
 		}

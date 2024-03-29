@@ -17,11 +17,12 @@ namespace Yari.Codec.General
 			DOUBLE = 131,
 			BOOL = 132,
 			STR = 133,
-			BYTE_ARR = 200;
+			BYTE_ARR = 200,
+			INT_ARR = 201;
 
 		public static byte GetId(object o)
 		{
-			switch (o)
+			switch(o)
 			{
 				case BinaryCompound:
 					return COMPOUND;
@@ -41,6 +42,8 @@ namespace Yari.Codec.General
 					return STR;
 				case byte[]:
 					return BYTE_ARR;
+				case int[]:
+					return INT_ARR;
 			}
 
 			return 0;
@@ -58,7 +61,7 @@ namespace Yari.Codec.General
 				EncodePrimitive(val, output);
 			}
 
-			output.WriteByte(0);//Exit
+			output.WriteByte(0); //Exit
 		}
 
 		public static void EncodePrimitive(object o, ByteBuffer output)
@@ -76,6 +79,7 @@ namespace Yari.Codec.General
 					{
 						EncodePrimitive(v, output);
 					}
+
 					break;
 				case byte:
 					output.WriteByte((byte) o);
@@ -96,7 +100,17 @@ namespace Yari.Codec.General
 					output.WriteString((string) o);
 					break;
 				case byte[]:
-					output.WriteBytes((byte[]) o);
+					byte[] bytes = (byte[]) o;
+					output.WriteInt(bytes.Length);
+					output.WriteBytes(bytes);
+					break;
+				case int[]:
+					int[] ints = (int[]) o;
+					output.WriteInt(ints.Length);
+					foreach(int i in ints)
+					{
+						output.WriteInt(i);
+					}
 					break;
 				default:
 					Log.Warn($"{o} is not a primitive type in serialization!");
@@ -116,7 +130,7 @@ namespace Yari.Codec.General
 				{
 					break;
 				}
-				
+
 				string key = input.ReadString();
 				object data = DecodePrimitive(input, id);
 				compound.Set(key, data);
@@ -140,6 +154,7 @@ namespace Yari.Codec.General
 					{
 						throw new Exception("Find no type mark in BinaryList! Is the saving broken?");
 					}
+
 					for(int i = 0; i < size; i++)
 					{
 						object data = DecodePrimitive(input, type);
@@ -164,6 +179,14 @@ namespace Yari.Codec.General
 					byte[] bytes = new byte[len];
 					input.ReadBytes(bytes, len);
 					return bytes;
+				case INT_ARR:
+					len = input.ReadInt();
+					int[] ints = new int[len];
+					for(int i = 0; i < len; i++)
+					{
+						ints[i] = input.ReadInt();
+					}
+					return ints;
 			}
 
 			Log.Warn("Unknown type in binary found. Input data may be broken.");

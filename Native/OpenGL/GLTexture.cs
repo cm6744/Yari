@@ -17,15 +17,16 @@ namespace Yari.Native.OpenGL
 		}
 
 		public int Id;
-		
-		public unsafe GLTexture(FileHandler handler)
+
+		public GLTexture(FileHandler handler)
 		{
 			Id = GL.GenTexture();
-			
+
 			GL.ActiveTexture(TextureUnit.Texture0);
 			GL.BindTexture(TextureTarget.Texture2D, Id);
 
-			ImageResult result = ImageResult.FromMemory(File.ReadAllBytes(handler.Path), ColorComponents.RedGreenBlueAlpha);
+			ImageResult result =
+				ImageResult.FromMemory(File.ReadAllBytes(handler.Path), ColorComponents.RedGreenBlueAlpha);
 
 			Width = result.Width;
 			Height = result.Height;
@@ -42,15 +43,20 @@ namespace Yari.Native.OpenGL
 				result.Data
 			);
 
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) GraphicsDeviceSettings.FilterMag);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) GraphicsDeviceSettings.FilterMin);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) GraphicsDeviceSettings.Wrap);
-			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) GraphicsDeviceSettings.Wrap);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
+				(int) GraphicsDeviceSettings.FilterMag);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
+				(int) GraphicsDeviceSettings.FilterMin);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
+				(int) GraphicsDeviceSettings.Wrap);
+			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
+				(int) GraphicsDeviceSettings.Wrap);
 
 			if(GraphicsDeviceSettings.MipmapLevel > 0)
 			{
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
-				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel, GraphicsDeviceSettings.MipmapLevel);
+				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel,
+					GraphicsDeviceSettings.MipmapLevel);
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 			}
 
@@ -58,7 +64,5 @@ namespace Yari.Native.OpenGL
 		}
 
 	}
-
-
 
 }

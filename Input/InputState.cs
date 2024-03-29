@@ -1,6 +1,6 @@
 ﻿using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Input
 {
@@ -8,7 +8,7 @@ namespace Yari.Input
 	public interface InputState
 	{
 
-		public static InputState Instance;
+		public float[] Cursor { get; }
 
 		InputObserver Observe(Keycode code);
 
@@ -27,8 +27,6 @@ namespace Yari.Input
 		void ConsumeCursorScroll();
 
 		ScrollDirection GetScrollDirection();
-
-		vec2 GetCursor();
 
 		void StartRoll();
 

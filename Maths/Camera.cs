@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Yari.Math;
-
-namespace Yari.Math
+﻿namespace Yari.Maths
 {
 
 	public class PerspectiveCamera
@@ -31,7 +24,7 @@ namespace Yari.Math
 		public bool IsInSight(float x, float y, float w, float h)
 		{
 			vec2 testCache = new vec2(x, y);
-			Project(testCache);
+			Project(ref testCache);
 			w /= ScaleX;
 			h /= ScaleY;
 			float vx = Center.x - Viewport.w / 2;
@@ -64,87 +57,87 @@ namespace Yari.Math
 			ShouldSeeCenter = true;
 		}
 
-		public void Project(vec2 v)
+		public void Project(ref vec2 v)
 		{
-			CombinedAffine.ApplyTo(v);
+			CombinedAffine.ApplyTo(ref v);
 			v.x = Viewport.w * (v.x + 1.0f) / 2.0f + Viewport.x;
 			v.y = Viewport.h * (v.y + 1.0f) / 2.0f + Viewport.y;
 		}
 
-		public void Unproject(vec2 v)
+		public void Unproject(ref vec2 v)
 		{
 			v.x = 2.0f * (v.x - Viewport.x) / Viewport.w - 1.0f;
 			v.y = 2.0f * (v.y - Viewport.y) / Viewport.h - 1.0f;
-			InvertedAffine.ApplyTo(v);
+			InvertedAffine.ApplyTo(ref v);
 		}
 
-		public void Project(vec2 v, float[] scrCoords)
+		public void Project(ref vec2 v, vec4 scrCoords)
 		{
-			CombinedAffine.ApplyTo(v);
-			v.x = scrCoords[2] * (v.x + 1) / 2 + scrCoords[0];
-			v.y = scrCoords[3] * (v.y + 1) / 2 + scrCoords[1];
+			CombinedAffine.ApplyTo(ref v);
+			v.x = scrCoords.z * (v.x + 1) / 2 + scrCoords.x;
+			v.y = scrCoords.w * (v.y + 1) / 2 + scrCoords.y;
 		}
 
-		public void Unproject(vec2 v, float[] scrCoords)
+		public void Unproject(ref vec2 v, vec4 scrCoords)
 		{
-			v.x = 2.0f * (v.x - scrCoords[0]) / scrCoords[2] - 1.0f;
-			v.y = 2.0f * (v.y - scrCoords[1]) / scrCoords[3] - 1.0f;
-			InvertedAffine.ApplyTo(v);
+			v.x = 2.0f * (v.x - scrCoords.x) / scrCoords.z - 1.0f;
+			v.y = 2.0f * (v.y - scrCoords.y) / scrCoords.w - 1.0f;
+			InvertedAffine.ApplyTo(ref v);
 		}
 
 		public float ToWldX(float x)
 		{
 			vec2 cache = new vec2(x, -1);
-			Unproject(cache);
+			Unproject(ref cache);
 			return cache.x;
 		}
 
 		public float ToWldY(float y)
 		{
 			vec2 cache = new vec2(-1, y);
-			Unproject(cache);
+			Unproject(ref cache);
 			return cache.y;
 		}
 
 		public float ToScrX(float x)
 		{
 			vec2 cache = new vec2(x, -1);
-			Project(cache);
+			Project(ref cache);
 			return cache.x;
 		}
 
 		public float ToScrY(float y)
 		{
 			vec2 cache = new vec2(-1, y);
-			Project(cache);
+			Project(ref cache);
 			return cache.y;
 		}
 
-		public float ToWldX(float x, float[] scrCoords)
+		public float ToWldX(float x, vec4 scrCoords)
 		{
 			vec2 cache = new vec2(x, -1);
-			Unproject(cache, scrCoords);
+			Unproject(ref cache, scrCoords);
 			return cache.x;
 		}
 
-		public float ToWldY(float y, float[] scrCoords)
+		public float ToWldY(float y, vec4 scrCoords)
 		{
 			vec2 cache = new vec2(-1, y);
-			Unproject(cache, scrCoords);
+			Unproject(ref cache, scrCoords);
 			return cache.y;
 		}
 
-		public float ToScrX(float x, float[] scrCoords)
+		public float ToScrX(float x, vec4 scrCoords)
 		{
 			vec2 cache = new vec2(x, -1);
-			Project(cache, scrCoords);
+			Project(ref cache, scrCoords);
 			return cache.x;
 		}
 
-		public float ToScrY(float y, float[] scrCoords)
+		public float ToScrY(float y, vec4 scrCoords)
 		{
 			vec2 cache = new vec2(-1, y);
-			Project(cache, scrCoords);
+			Project(ref cache, scrCoords);
 			return cache.y;
 		}
 

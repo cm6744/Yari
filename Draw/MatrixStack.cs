@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Yari.Math;
+using Yari.Maths;
 
 namespace Yari.Draw
 {
@@ -38,6 +38,7 @@ namespace Yari.Draw
 				Push(aff);
 				return;
 			}
+
 			Push(new affine());
 		}
 

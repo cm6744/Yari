@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Yari.Math
+﻿namespace Yari.Maths
 {
 
 	public class matrix4
@@ -213,8 +207,8 @@ namespace Yari.Math
 			dest.m33 = m33;
 			return dest;
 		}
-
-		public static vec4 Transform(matrix4 left, vec4 right, vec4 dest)
+		
+		public static vec4 Transform(matrix4 left, vec4 right, ref vec4 dest)
 		{
 			float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
 			float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
@@ -414,14 +408,19 @@ namespace Yari.Math
 
 		public float Determinant()
 		{
-			float f = m00 * (m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m13 * m22 * m31 - m11 * m23 * m32 - m12 * m21 * m33);
-			f -= m01 * (m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32 - m13 * m22 * m30 - m10 * m23 * m32 - m12 * m20 * m33);
-			f += m02 * (m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31 - m13 * m21 * m30 - m10 * m23 * m31 - m11 * m20 * m33);
-			f -= m03 * (m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31 - m12 * m21 * m30 - m10 * m22 * m31 - m11 * m20 * m32);
+			float f = m00 * (m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m13 * m22 * m31 - m11 * m23 * m32 -
+			                 m12 * m21 * m33);
+			f -= m01 * (m10 * m22 * m33 + m12 * m23 * m30 + m13 * m20 * m32 - m13 * m22 * m30 - m10 * m23 * m32 -
+			            m12 * m20 * m33);
+			f += m02 * (m10 * m21 * m33 + m11 * m23 * m30 + m13 * m20 * m31 - m13 * m21 * m30 - m10 * m23 * m31 -
+			            m11 * m20 * m33);
+			f -= m03 * (m10 * m21 * m32 + m11 * m22 * m30 + m12 * m20 * m31 - m12 * m21 * m30 - m10 * m22 * m31 -
+			            m11 * m20 * m32);
 			return f;
 		}
 
-		private static float Determinant3x3(float t00, float t01, float t02, float t10, float t11, float t12, float t20, float t21, float t22)
+		private static float Determinant3x3(float t00, float t01, float t02, float t10, float t11, float t12, float t20,
+			float t21, float t22)
 		{
 			return t00 * (t11 * t22 - t12 * t21) + t01 * (t12 * t20 - t10 * t22) + t02 * (t10 * t21 - t11 * t20);
 		}
@@ -442,22 +441,38 @@ namespace Yari.Math
 				}
 
 				float determinant_inv = 1.0F / determinant;
-				float t00 = Determinant3x3(src.m11, src.m12, src.m13, src.m21, src.m22, src.m23, src.m31, src.m32, src.m33);
-				float t01 = -Determinant3x3(src.m10, src.m12, src.m13, src.m20, src.m22, src.m23, src.m30, src.m32, src.m33);
-				float t02 = Determinant3x3(src.m10, src.m11, src.m13, src.m20, src.m21, src.m23, src.m30, src.m31, src.m33);
-				float t03 = -Determinant3x3(src.m10, src.m11, src.m12, src.m20, src.m21, src.m22, src.m30, src.m31, src.m32);
-				float t10 = -Determinant3x3(src.m01, src.m02, src.m03, src.m21, src.m22, src.m23, src.m31, src.m32, src.m33);
-				float t11 = Determinant3x3(src.m00, src.m02, src.m03, src.m20, src.m22, src.m23, src.m30, src.m32, src.m33);
-				float t12 = -Determinant3x3(src.m00, src.m01, src.m03, src.m20, src.m21, src.m23, src.m30, src.m31, src.m33);
-				float t13 = Determinant3x3(src.m00, src.m01, src.m02, src.m20, src.m21, src.m22, src.m30, src.m31, src.m32);
-				float t20 = Determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m31, src.m32, src.m33);
-				float t21 = -Determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m30, src.m32, src.m33);
-				float t22 = Determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m30, src.m31, src.m33);
-				float t23 = -Determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m30, src.m31, src.m32);
-				float t30 = -Determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m21, src.m22, src.m23);
-				float t31 = Determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m20, src.m22, src.m23);
-				float t32 = -Determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m20, src.m21, src.m23);
-				float t33 = Determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m20, src.m21, src.m22);
+				float t00 = Determinant3x3(src.m11, src.m12, src.m13, src.m21, src.m22, src.m23, src.m31, src.m32,
+					src.m33);
+				float t01 = -Determinant3x3(src.m10, src.m12, src.m13, src.m20, src.m22, src.m23, src.m30, src.m32,
+					src.m33);
+				float t02 = Determinant3x3(src.m10, src.m11, src.m13, src.m20, src.m21, src.m23, src.m30, src.m31,
+					src.m33);
+				float t03 = -Determinant3x3(src.m10, src.m11, src.m12, src.m20, src.m21, src.m22, src.m30, src.m31,
+					src.m32);
+				float t10 = -Determinant3x3(src.m01, src.m02, src.m03, src.m21, src.m22, src.m23, src.m31, src.m32,
+					src.m33);
+				float t11 = Determinant3x3(src.m00, src.m02, src.m03, src.m20, src.m22, src.m23, src.m30, src.m32,
+					src.m33);
+				float t12 = -Determinant3x3(src.m00, src.m01, src.m03, src.m20, src.m21, src.m23, src.m30, src.m31,
+					src.m33);
+				float t13 = Determinant3x3(src.m00, src.m01, src.m02, src.m20, src.m21, src.m22, src.m30, src.m31,
+					src.m32);
+				float t20 = Determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m31, src.m32,
+					src.m33);
+				float t21 = -Determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m30, src.m32,
+					src.m33);
+				float t22 = Determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m30, src.m31,
+					src.m33);
+				float t23 = -Determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m30, src.m31,
+					src.m32);
+				float t30 = -Determinant3x3(src.m01, src.m02, src.m03, src.m11, src.m12, src.m13, src.m21, src.m22,
+					src.m23);
+				float t31 = Determinant3x3(src.m00, src.m02, src.m03, src.m10, src.m12, src.m13, src.m20, src.m22,
+					src.m23);
+				float t32 = -Determinant3x3(src.m00, src.m01, src.m03, src.m10, src.m11, src.m13, src.m20, src.m21,
+					src.m23);
+				float t33 = Determinant3x3(src.m00, src.m01, src.m02, src.m10, src.m11, src.m12, src.m20, src.m21,
+					src.m22);
 				dest.m00 = t00 * determinant_inv;
 				dest.m11 = t11 * determinant_inv;
 				dest.m22 = t22 * determinant_inv;

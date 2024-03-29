@@ -1,5 +1,6 @@
-﻿namespace Yari.Math
+﻿namespace Yari.Maths
 {
+
 	public class Mthc
 	{
 

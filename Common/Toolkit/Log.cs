@@ -10,9 +10,9 @@ namespace Yari.Common.Toolkit
 	public class Log
 	{
 
-		public static bool UseConsoleOutput = true;
-		public static bool PrintClassName = true;
-		
+		public static bool _UseConsoleOutput = true;
+		public static bool _PrintClassName = true;
+
 		const string
 			DEBUG = "DEBUG",
 			INFO = "INFO",
@@ -20,13 +20,13 @@ namespace Yari.Common.Toolkit
 			FATAL = "FATAL",
 			STACKTRACE = "STACKTRACE";
 
-		public static List<string> LogStack = new List<string>();
+		public static List<string> _LogStack = new List<string>();
 
 		static void Print(string level, string info)
 		{
 			string className = "UNKNOWN";
 
-			if(PrintClassName)
+			if(_PrintClassName)
 			{
 				StackTrace stacks = new StackTrace(1);
 				StackFrame frame = stacks.GetFrame(1);
@@ -57,14 +57,14 @@ namespace Yari.Common.Toolkit
 
 			string outs = $"[{level}] [{threadName}] [{className}] [{time}] {info}";
 
-			if(UseConsoleOutput)
+			if(_UseConsoleOutput)
 			{
 				Console.WriteLine(outs);
 			}
 
 			if(level != DEBUG)
 			{
-				LogStack.Add(outs);
+				_LogStack.Add(outs);
 			}
 		}
 

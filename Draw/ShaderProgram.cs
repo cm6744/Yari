@@ -1,5 +1,6 @@
 ﻿namespace Yari.Draw
 {
+
 	public abstract class ShaderProgram
 	{
 

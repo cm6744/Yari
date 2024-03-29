@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using Random = System.Random;
 
-namespace Yari.Math
+namespace Yari.Maths
 {
 
 	public abstract class Rand
@@ -46,6 +41,7 @@ namespace Yari.Math
 			{
 				return default;
 			}
+
 			if(col.Count == 0)
 			{
 				return default;
@@ -60,6 +56,7 @@ namespace Yari.Math
 			{
 				return default;
 			}
+
 			if(arr.Length == 0)
 			{
 				return default;
@@ -76,10 +73,10 @@ namespace Yari.Math
 				x = NextFloat() * 2 - 1;
 				y = NextFloat() * 2 - 1;
 				w = x * x + y * y;
-			}
-			while(w >= 1 || w == 0);
+			} while(w >= 1 || w == 0);
+
 			double c = Mth.Sqrt(-2 * Mth.Log(w) / w);
-			return (float) (y * c);//Use a temp is good but this is fast enough.
+			return (float) (y * c); //Use a temp is good but this is fast enough.
 		}
 
 		public int NextNDInt()
@@ -116,8 +113,7 @@ namespace Yari.Math
 			{
 				gen = (M * NowSeed * gen + A) % C;
 				NowSeed = (NowSeed * M + A) >> C - A;
-			}
-			while(gen < -100 || gen > 100);
+			} while(gen < -100 || gen > 100);
 
 			return gen;
 		}

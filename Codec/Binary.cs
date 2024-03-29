@@ -8,6 +8,7 @@ namespace Yari.Codec
 
 	public interface IBinary
 	{
+
 	}
 
 	public class BinaryCompound : IBinary
@@ -35,6 +36,7 @@ namespace Yari.Codec
 			{
 				return;
 			}
+
 			Map.Clear();
 		}
 
@@ -44,6 +46,7 @@ namespace Yari.Codec
 			{
 				return;
 			}
+
 			Map = Map.Concat(compound.Map).ToDictionary(k => k.Key, v => v.Value);
 		}
 
@@ -87,6 +90,12 @@ namespace Yari.Codec
 			return Get<byte[]>(key);
 		}
 
+		public int[] GetInts(string key)
+		{
+			return Get<int[]>(key);
+		}
+
+
 		public BinaryCompound GetCompound(string key)
 		{
 			return Get<BinaryCompound>(key);
@@ -103,6 +112,7 @@ namespace Yari.Codec
 			{
 				return;
 			}
+
 			Map[key] = v;
 		}
 
@@ -125,6 +135,7 @@ namespace Yari.Codec
 				return BinaryIO.GetId(List[0]);
 			}
 		}
+
 		public int Count => List.Count;
 
 		public BinaryList(List<object> ListCpy)
