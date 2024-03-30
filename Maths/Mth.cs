@@ -1,29 +1,31 @@
-﻿namespace Yari.Maths
+﻿using System;
+
+namespace Yari.Maths
 {
 
 	public class Mth
 	{
 
 		private static readonly float[] SinTable = new float[0x10000];
-		private const float DTR = (float) (System.Math.PI / 180F);
+		private const float DTR = (float) (Math.PI / 180F);
 		private const float RTD = 1 / DTR;
 
 		static Mth()
 		{
 			for(int i = 0; i < 0x10000; i++)
 			{
-				SinTable[i] = (float) System.Math.Sin((i * System.Math.PI * 2.0) / 65536.0);
+				SinTable[i] = (float) Math.Sin((i * Math.PI * 2.0) / 65536.0);
 			}
 		}
 
 		public static float Sqrt(float v)
 		{
-			return (float) System.Math.Sqrt(v);
+			return (float) Math.Sqrt(v);
 		}
 
 		public static float Log(float v)
 		{
-			return (float) System.Math.Log(v);
+			return (float) Math.Log(v);
 		}
 
 		public static float Abs(float v)
@@ -38,7 +40,7 @@
 
 		public static float AtanRad(float y, float x)
 		{
-			return (float) System.Math.Atan2(y, x);
+			return (float) Math.Atan2(y, x);
 		}
 
 		public static float AtanDeg(float y, float x)
@@ -78,7 +80,7 @@
 
 		public static float Clamp(float v, float min, float max)
 		{
-			return v < min ? min : System.Math.Min(v, max);
+			return v < min ? min : Math.Min(v, max);
 		}
 
 		public static int Factorial(int n)
@@ -99,7 +101,7 @@
 
 		public static int Round(float v)
 		{
-			return (int) System.Math.Round(v);
+			return (int) Math.Round(v);
 		}
 
 	}

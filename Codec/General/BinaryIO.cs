@@ -8,7 +8,7 @@ namespace Yari.Codec.General
 	public class BinaryIO
 	{
 
-		public const byte
+		const byte
 			COMPOUND = 16,
 			LIST = 64,
 			BYTE = 128,
@@ -192,6 +192,29 @@ namespace Yari.Codec.General
 			Log.Warn("Unknown type in binary found. Input data may be broken.");
 
 			return null;
+		}
+
+		//Packed ops:
+
+		public static void Write(BinaryCompound compound, FileHandler file)
+		{
+			if(!file.Exists()) file.MkDocs();
+
+			ByteBuffer buffer = new ByteBuffer();
+			Encode(compound, buffer);
+			BytesIO.Write(file, buffer.Output());
+		}
+
+		public static BinaryCompound Read(FileHandler file)
+		{
+			if(!file.Exists())
+			{
+				Log.Warn($"Cannot find compound coded file at {file.Path}");
+			}
+
+			byte[] bytes = BytesIO.Read(file);
+			ByteBuffer buffer = new ByteBuffer(bytes);
+			return Decode(buffer);
 		}
 
 	}

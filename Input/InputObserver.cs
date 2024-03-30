@@ -1,4 +1,6 @@
-﻿namespace Yari.Input
+﻿using Yari.Common;
+
+namespace Yari.Input
 {
 
 	public interface InputObserver
@@ -28,12 +30,12 @@
 
 		public void Reset(Keycode code)
 		{
-			observer = InputState.Instance.Observe(code);
+			observer = Platform.InputState.Observe(code);
 		}
 
 		public void Reset(int code)
 		{
-			observer = InputState.Instance.Observe(code);
+			observer = Platform.InputState.Observe(code);
 		}
 
 		public void Consume()

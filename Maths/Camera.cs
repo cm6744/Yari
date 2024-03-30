@@ -13,13 +13,9 @@
 		public affine InvertedAffine = new affine();
 		public affine ProjectionAffine = new affine();
 		protected affine TranslationAffine = new affine();
-		public bool ShouldSeeCenter { get; private set; } = false;
-		public Rect CacheDim { get; private set; } = new Rect();
+		public bool ShouldSeeCenter = false;
 
-		public Rect Dim()
-		{
-			return CacheDim;
-		}
+		public Rect CacheDim { get; private set; } = new Rect();
 
 		public bool IsInSight(float x, float y, float w, float h)
 		{
@@ -47,8 +43,7 @@
 			CombinedAffine.Mul(TranslationAffine);
 			InvertedAffine.Set(CombinedAffine);
 			InvertedAffine.Invert();
-			CacheDim = new Rect(w: Viewport.w, h: Viewport.h, x: Center.x - Viewport.w / 2.0f,
-				y: Center.y - Viewport.h / 2.0f);
+			CacheDim = new Rect(w: Viewport.w, h: Viewport.h, x: Center.x - Viewport.w / 2.0f, y: Center.y - Viewport.h / 2.0f);
 			ShouldSeeCenter = false;
 		}
 

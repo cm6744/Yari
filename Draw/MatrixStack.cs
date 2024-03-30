@@ -57,6 +57,12 @@ namespace Yari.Draw
 			Changed = true;
 		}
 
+		public void Load(affine affine)
+		{
+			Top.Set(affine);
+			Changed = true;
+		}
+
 		public void RotateRad(float f)
 		{
 			Top.Rotate(f);

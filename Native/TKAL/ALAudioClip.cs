@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using OpenTK.Audio.OpenAL;
+﻿using OpenTK.Audio.OpenAL;
 using Yari.Audio;
 using Yari.Maths;
 
-namespace Yari.Native.OpenAL
+namespace Yari.Native.TKAL
 {
 
-	public class ALAudioClip : AudioClip
+	public class TALAudioClip : AudioClip
 	{ 
 
 		public int Id;
-		public ALAudioData Data;
+		public TALAudioData Data;
 
-		public ALAudioClip(ALAudioData data)
+		public TALAudioClip(TALAudioData data)
 		{
 			Id = AL.GenSource();
 			Data = data;

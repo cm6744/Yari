@@ -2,6 +2,7 @@
 using Yari.Codec;
 using Yari.Common;
 using Yari.Draw.Gui.Structs;
+using Yari.Input;
 using Yari.Maths;
 
 namespace Yari.Draw.Gui
@@ -14,14 +15,14 @@ namespace Yari.Draw.Gui
 
 		public Dictionary<int, Component> Components = new Dictionary<int, Component>();
 		public Dictionary<int, BinaryCompound> DataStore = new Dictionary<int, BinaryCompound>();
+		private List<int> ToRemove = new List<int>();
 		public int DataIdNext;
 
 		public vec2 Size;
-		public float[] Cursor;
 		public float ScaleFactor;
 
 		public virtual float ScaleMul => 1;
-		public virtual float ScaleLocked => 0;
+		public virtual float ScaleLocked => -1;
 
 		public void Join(Component component)
 		{
@@ -41,14 +42,12 @@ namespace Yari.Draw.Gui
 
 		public void Remove(Component component)
 		{
-			Components.Remove(component.IdxInScreen);
-			DataStore.Remove(component.IdxInScreen);
+			ToRemove.Add(component.IdxInScreen);
 		}
 
 		public void Remove(int idx)
 		{
-			Components.Remove(idx);
-			DataStore.Remove(idx);
+			ToRemove.Add(idx);
 		}
 
 		public void Reflush()
@@ -58,16 +57,15 @@ namespace Yari.Draw.Gui
 			InitComponents();
 		}
 
-		public void Resolve(Resolution res, float[] cursor)
+		public void Resolve(Resolution res)
 		{
 			Size = new vec2(res.ScaledWidth, res.ScaledHeight);
-			Cursor = cursor;
 			ScaleFactor = res.ScaleFactor;
 
 			Reflush();
 		}
 
-		public virtual void InitComponents() {}
+		public virtual void InitComponents() { }
 
 		public void Display()
 		{
@@ -82,6 +80,29 @@ namespace Yari.Draw.Gui
 		}
 
 		public virtual void OnClosed() { }
+
+		public void Update(InputState state, rvec2 cursor)
+		{
+			foreach(Component comp in Components.Values)
+			{
+				comp.Update();
+				comp.Input(state, cursor);
+			}
+
+			foreach(int idx in ToRemove)
+			{
+				Components.Remove(idx);
+				DataStore.Remove(idx);
+			}
+		}
+
+		public void Render(DrawBatch batch)
+		{
+			foreach(Component comp in Components.Values)
+			{
+				comp.Render(batch);
+			}
+		}
 
 	}
 

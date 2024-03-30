@@ -17,6 +17,14 @@ namespace Yari.Native.OpenGL
 		}
 
 		public int Id;
+		public bool IsFB;
+
+		public GLTexture(int id, int w, int h)
+		{
+			Id = id;
+			Width = w;
+			Height = h;
+		}
 
 		public GLTexture(FileHandler handler)
 		{
@@ -60,7 +68,7 @@ namespace Yari.Native.OpenGL
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 			}
 
-			Reference.FREE.OnHoldReferred(() => GL.DeleteTexture(Id));
+			Finalisation.FREE.OnHoldReferred(() => GL.DeleteTexture(Id));
 		}
 
 	}

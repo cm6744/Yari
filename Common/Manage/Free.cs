@@ -4,10 +4,10 @@ using Yari.Common.Toolkit;
 namespace Yari.Common.Manage
 {
 
-	public class Reference
+	public class Finalisation
 	{
 
-		public static Reference FREE = new Reference();
+		public static Finalisation FREE = new Finalisation();
 
 		private List<Runnable> ToRelease = new List<Runnable>();
 
@@ -28,14 +28,14 @@ namespace Yari.Common.Manage
 		}
 
 
-		private static Dictionary<Identity, Reference> ShortNatives = new Dictionary<Identity, Reference>();
+		private static Dictionary<Identity, Finalisation> ShortNatives = new Dictionary<Identity, Finalisation>();
 
 		//Provides a short-time native manager, and you're supposed to free it by yourself when its usage ends.
-		public static Reference GetFree(Identity key)
+		public static Finalisation GetFree(Identity key)
 		{
 			if(!ShortNatives.ContainsKey(key))
 			{
-				ShortNatives[key] = new Reference();
+				ShortNatives[key] = new Finalisation();
 			}
 
 			return ShortNatives[key];

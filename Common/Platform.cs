@@ -12,8 +12,11 @@ namespace Yari.Common
 
 		public static readonly Version Version = new Version("stable-1.0.0", 1);
 
+		//Backends to implement
 		public static GraphicEnv GraphicEnv;
 		public static InputState InputState;
+		public static DrawBatch DrawBatch;
+
 		public static readonly Lifecycle Lifecycle = new Lifecycle();
 
 		public static bool IsExited;
@@ -50,33 +53,44 @@ namespace Yari.Common
 						Lifecycle.TaskTick.Invoke();
 						InputState.EndRoll();
 
-						if(syncRender)
+						if(!syncRender)
 						{
-							Lifecycle.TaskRender.Invoke(renderPartialTicks);
-							framesR++;
+							continue;
 						}
+
+						GraphicEnv.Prepare();
+						Lifecycle.TaskRender.Invoke(renderPartialTicks);
+						GraphicEnv.Swap();
+						framesR++;
 					}
 
 					if(!syncRender)
 					{
+						GraphicEnv.Prepare();
 						Lifecycle.TaskRender.Invoke(renderPartialTicks);
+						GraphicEnv.Swap();
 						framesR++;
 					}
 
-					if(GraphicEnv.Millitime - lastCalcClock >= 1000)
+					if(GraphicEnv.Millitime - lastCalcClock < 1000)
 					{
-						lastCalcClock = GraphicEnv.Millitime;
-						Tps = framesT;
-						Fps = framesR;
-						framesT = framesR = 0;
+						continue;
 					}
+
+					lastCalcClock = GraphicEnv.Millitime;
+					Tps = framesT;
+					Fps = framesR;
+					framesT = framesR = 0;
 				}
 			}
 			catch(Exception e)
 			{
 				Log.Fatal(e);
 			}
-			Reference.FREE.OnFinalized();
+			finally
+			{
+				Finalisation.FREE.OnFinalized();
+			}
 		}
 
 	}

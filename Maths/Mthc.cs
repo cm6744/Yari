@@ -4,9 +4,7 @@
 	public class Mthc
 	{
 
-		static readonly float[] BUF = new float[3];
-
-		public static float[] HsvToRgb(float hue, float saturation, float value, float[] floats)
+		public static vec4 HsvToRgb(float hue, float saturation, float value)
 		{
 			int i = (int) (hue * 6.0F) % 6;
 			float f = hue * 6.0F - (float) i;
@@ -51,16 +49,7 @@
 					break;
 			}
 
-			floats[0] = f4;
-			floats[1] = f5;
-			floats[2] = f6;
-
-			return floats;
-		}
-
-		public static float[] HsvToRgb(float hue, float saturation, float value)
-		{
-			return HsvToRgb(hue, saturation, value, BUF);
+			return new vec4(f4, f5, f6, 1);
 		}
 
 	}

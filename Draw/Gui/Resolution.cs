@@ -12,8 +12,8 @@ namespace Yari.Draw.Gui
 
 		public Resolution(Screen curScreen, float scaleForced = 0, bool limitInt = false)
 		{
-			ScaledHeight = Platform.GraphicEnv.Size.x;
-			ScaledWidth = Platform.GraphicEnv.Size.y;
+			ScaledWidth = Platform.GraphicEnv.Size.x;
+			ScaledHeight = Platform.GraphicEnv.Size.y;
 
 			if(scaleForced <= 0)
 			{

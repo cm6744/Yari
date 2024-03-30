@@ -35,6 +35,16 @@ namespace Yari.Native.OpenGL
 
 		public long Nanotime => (long) (GLFW.GetTime() * 1000_000_000);
 
+		public unsafe void Swap()
+		{
+			GLFW.SwapBuffers(GLDevice.Window);
+		}
+
+		public void Prepare()
+		{
+			//Nothing to do in opengl.
+		}
+
 	}
 
 }

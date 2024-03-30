@@ -1,4 +1,5 @@
-﻿using Yari.Input;
+﻿using System;
+using Yari.Input;
 
 namespace Yari.Native.OpenGL
 {
@@ -8,8 +9,8 @@ namespace Yari.Native.OpenGL
 
 		public static long InputCheckTicks;
 
-		long PressOccur;
-		int Press;
+		long PressOccur = -1;
+		byte Press;
 
 		public void Fire()
 		{
@@ -30,12 +31,13 @@ namespace Yari.Native.OpenGL
 				return 0;
 			}
 
-			return (int) (InputCheckTicks - PressOccur);
+			return (int) (InputCheckTicks - PressOccur - 1);
 		}
 
 		public bool Pressed()
 		{
-			return Press == 1 && PressOccur == InputCheckTicks;
+			//A strange delay. In java these same codes work well...
+			return Press == 1 && PressOccur + 1 == InputCheckTicks;
 		}
 
 		public bool Holding()

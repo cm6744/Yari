@@ -47,6 +47,11 @@ namespace Yari.Draw
 
 		public GlyphBounds getBounds(string text, float maxWidth, bool useMinWidth)
 		{
+			if(string.IsNullOrWhiteSpace(text))
+			{
+				return new GlyphBounds("", 0, 16);
+			}
+
 			int width = 0;
 			int lineWidth = 0;
 			int height = 0;
@@ -81,7 +86,7 @@ namespace Yari.Draw
 			}
 
 			height += lineHeight;
-			width = System.Math.Max(lineWidth, width);
+			width = Math.Max(lineWidth, width);
 
 			return new GlyphBounds(text, width, height);
 		}

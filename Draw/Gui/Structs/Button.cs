@@ -8,8 +8,8 @@ namespace Yari.Draw.Gui.Structs
 	public class Button : Component
 	{
 
-		public static InputObserver LEFT_CODE = InputState.Instance.Observe(Keycode.BUTTON_LEFT);
-		public static InputObserver RIGHT_CODE = InputState.Instance.Observe(Keycode.BUTTON_RIGHT);
+		public static InputObserver LEFT_CODE = Platform.InputState.Observe(Keycode.BUTTON_LEFT);
+		public static InputObserver RIGHT_CODE = Platform.InputState.Observe(Keycode.BUTTON_RIGHT);
 
 		public static int DEFAULT_PRESS_DELAY = 2;
 
@@ -23,7 +23,7 @@ namespace Yari.Draw.Gui.Structs
 		private int pressDelay;
 		private bool cursorOn;
 
-		public new void Input(InputState input, vec2 cursor)
+		public override void Input(InputState input, rvec2 cursor)
 		{
 			cursorOn = false;
 
@@ -45,12 +45,12 @@ namespace Yari.Draw.Gui.Structs
 			}
 		}
 
-		public new void Update()
+		public override void Update()
 		{
 			pressDelay--;
 		}
 
-		public void onRender(DrawBatch batch)
+		public override void Render(DrawBatch batch)
 		{
 			if(Texture3Line == null)
 			{

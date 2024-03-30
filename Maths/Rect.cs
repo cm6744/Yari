@@ -4,21 +4,32 @@
 	public struct Rect
 	{
 
-		public readonly float x;
-		public readonly float y;
-		public readonly float w;
-		public readonly float h;
+		public float x;
+		public float y;
+		public float w;
+		public float h;
 
-		public Rect(float x, float y, float w, float h)
+		public Rect(float x, float y, float w, float h, bool center = false)
 		{
 			this.w = w;
 			this.h = h;
-			this.x = x;
-			this.y = y;
+
+			if(!center)
+			{
+				this.x = x;
+				this.y = y;
+			}
+			else
+			{
+				this.x = x - w / 2;
+				this.y = y - h / 2;
+			}
 		}
 
 		public float xp => x + w;
 		public float yp => y + w;
+		public float xc => x + w / 2;
+		public float yc => y + w / 2;
 
 		public bool Interacts(Rect rect)
 		{
@@ -43,6 +54,11 @@
 		}
 
 		public bool Contains(vec2 vec)
+		{
+			return Contains(vec.x, vec.y);
+		}
+
+		public bool Contains(rvec2 vec)
 		{
 			return Contains(vec.x, vec.y);
 		}

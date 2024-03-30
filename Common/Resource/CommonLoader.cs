@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Resources;
-using System;
 using Yari.Codec;
 
-namespace Yari.Common
+namespace Yari.Common.Resource
 {
 
 	public abstract class CommonLoader
@@ -19,15 +17,15 @@ namespace Yari.Common
 
 		protected List<CommonLoader> Children = new List<CommonLoader>();
 
-		protected string Namespace;
-		protected YariCoreResources Resources;
-		protected YariCoreI18n I18n;
+		public string Namespace;
+		public ResMapper ResMapper;
+		public Localer Localer;
 
 		protected CommonLoader(Namespace space)
 		{
 			Namespace = space.Name;
-			Resources = space.Resources;
-			I18n = space.I18n;
+			ResMapper = space.ResMapper;
+			Localer = space.Localer;
 		}
 
 		public void SubLoader(CommonLoader loader)
@@ -152,46 +150,6 @@ namespace Yari.Common
 		}
 
 		protected abstract void ExpandTask(Identity resource, FileHandler file, bool preLoad);
-
-	}
-
-	public class YariCoreResources
-	{
-
-		private Dictionary<string, object> ResDict = new();
-
-		public void Load(string key, object o)
-		{
-			ResDict[key] = o;
-		}
-
-		public void Unload(string key)
-		{
-			ResDict.Remove(key);
-		}
-
-		public T Get<T>(string key)
-		{
-			return (T) ResDict[key];
-		}
-
-	}
-
-	public class YariCoreI18n
-	{
-
-		public Dictionary<string, BinaryCompound> Langs = new();
-		public string LangKey = "EN_US";
-
-		public void Load(string key, BinaryCompound compound)
-		{
-			Langs[key] = compound;
-		}
-
-		public string Get(string key)
-		{
-			return Langs[LangKey].GetString(key);
-		}
 
 	}
 

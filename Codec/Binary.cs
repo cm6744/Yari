@@ -47,7 +47,13 @@ namespace Yari.Codec
 				return;
 			}
 
-			Map = Map.Concat(compound.Map).ToDictionary(k => k.Key, v => v.Value);
+			foreach(KeyValuePair<string, object> pair in compound.Map)
+			{
+				if(!Map.ContainsKey(pair.Key))
+				{
+					Map[pair.Key] = pair.Value;
+				}
+			}
 		}
 
 		public T Get<T>(string key)
@@ -94,7 +100,6 @@ namespace Yari.Codec
 		{
 			return Get<int[]>(key);
 		}
-
 
 		public BinaryCompound GetCompound(string key)
 		{
@@ -177,6 +182,46 @@ namespace Yari.Codec
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public string GetString(int i)
+		{
+			return Get<string>(i);
+		}
+
+		public double GetDouble(int i)
+		{
+			return Get<double>(i);
+		}
+
+		public float GetFloat(int i)
+		{
+			return Get<float>(i);
+		}
+
+		public int GetInt(int i)
+		{
+			return Get<int>(i);
+		}
+
+		public byte GetByte(int i)
+		{
+			return Get<byte>(i);
+		}
+
+		public bool GetBool(int i)
+		{
+			return Get<bool>(i);
+		}
+
+		public byte[] GetBytes(int i)
+		{
+			return Get<byte[]>(i);
+		}
+
+		public int[] GetInts(int i)
+		{
+			return Get<int[]>(i);
 		}
 
 	}

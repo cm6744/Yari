@@ -322,6 +322,12 @@ namespace Yari.Codec
 
 		//Constructors
 
+		public static int DefaultCapacity = 64;
+
+		public ByteBuffer() : base(DefaultCapacity)
+		{
+		}
+
 		public ByteBuffer(int cap) : base(cap)
 		{
 		}

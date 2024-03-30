@@ -7,10 +7,10 @@ using Yari.Codec;
 using Yari.Common;
 using Yari.Common.Manage;
 
-namespace Yari.Native.OpenAL
+namespace Yari.Native.TKAL
 {
 
-	public class ALAudioData : AudioData
+	public class TALAudioData : AudioData
 	{
 
 		public static void InitALDevice()
@@ -19,7 +19,7 @@ namespace Yari.Native.OpenAL
 			ALContext context = ALC.CreateContext(device, (int[]) null);
 			ALC.MakeContextCurrent(context);
 
-			Reference.FREE.OnHoldReferred(() =>
+			Finalisation.FREE.OnHoldReferred(() =>
 			{
 				ALC.DestroyContext(context);
 				ALC.CloseDevice(device);
@@ -31,9 +31,9 @@ namespace Yari.Native.OpenAL
 		public int Id;
 		public int Length;
 
-		private ALAudioData() { }
+		private TALAudioData() { }
 
-		public static unsafe ALAudioData Read(FileHandler handler)
+		public static unsafe TALAudioData Read(FileHandler handler)
 		{
 			ReadOnlySpan<byte> file = File.ReadAllBytes(handler.Path);
 
@@ -160,12 +160,12 @@ namespace Yari.Native.OpenAL
 				}
 			}
 
-			Common.Manage.Reference.FREE.OnHoldReferred(() =>
+			Common.Manage.Finalisation.FREE.OnHoldReferred(() =>
 			{
 				AL.DeleteBuffer(buffer);
 			});
 
-			ALAudioData aad = new ALAudioData();
+			TALAudioData aad = new TALAudioData();
 
 			aad.Id = buffer;
 
@@ -174,7 +174,7 @@ namespace Yari.Native.OpenAL
 
 		public AudioClip CreateClip()
 		{
-			return new ALAudioClip(this);
+			return new TALAudioClip(this);
 		}
 
 		public float GetLengthInMill()

@@ -139,10 +139,17 @@ namespace Yari.Draw
 		public abstract void Clear();
 		public abstract void UseCamera(PerspectiveCamera camera);
 
+		public abstract void EndCamera(PerspectiveCamera camera);
+
 		//Font Rendering:
 
 		public void Draw(string text, float x, float y, float maxWidth)
 		{
+			if(string.IsNullOrWhiteSpace(text))
+			{
+				return;
+			}
+
 			int fontHeight = (int) (Font.YSize * Font.Scale);
 
 			float drawX = x;

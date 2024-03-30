@@ -148,6 +148,11 @@ namespace Yari.Native.OpenGL
 				(v, v2) = (v2, v);
 			}
 
+			if(glt.IsFB)
+			{
+				(v, v2) = (v2, v);
+			}
+
 			//RT
 			Vertices[Idx++] = (x3);
 			Vertices[Idx++] = (y3);
@@ -401,16 +406,31 @@ namespace Yari.Native.OpenGL
 		public override void UseCamera(PerspectiveCamera camera)
 		{
 			Flush();
-
 			Projection.ToAffine(camera.CombinedAffine);
 			UniProjection.SetMat4(Projection);
+		}
+
+		private static PerspectiveCamera NullCam = new PerspectiveCamera();
+
+		public override void EndCamera(PerspectiveCamera camera)
+		{
+			NullCam.Viewport.w = Platform.GraphicEnv.Size.x;
+			NullCam.Viewport.h = Platform.GraphicEnv.Size.y;
+			NullCam.ToCenter();
+			NullCam.Push();
+			UseCamera(NullCam);
 		}
 
 		//-----
 
 		private static GLShaderProgram GetDefaultShader()
 		{
-			string vert = "#version 150 core\n" +
+			const string attrs = "{" +
+			                     "	i_position = [2, 8, 0];" +
+			                     "	i_color = [4, 8, 2];" +
+			                     "	i_texCoord = [2, 8, 6];" +
+			                     "}";
+			const string vert = "#version 150 core\n" +
 			              "\n" +
 			              "in vec2 i_position;\n" +
 			              "in vec4 i_color;\n" +
@@ -427,7 +447,7 @@ namespace Yari.Native.OpenGL
 			              "\n" +
 			              "    gl_Position = u_proj * vec4(i_position, 0.0, 1.0);\n" +
 			              "}\n";
-			string frag = "#version 150 core\n" +
+			const string frag = "#version 150 core\n" +
 			              "\n" +
 			              "in vec4 o_color;\n" +
 			              "in vec2 o_texCoord;\n" +
@@ -440,38 +460,30 @@ namespace Yari.Native.OpenGL
 			              "    vec4 col = texture(u_texture, o_texCoord);\n" +
 			              "    fragColor = o_color * col;\n" +
 			              "}";
-			return ShaderBuilds.Build(vert, frag, (program) =>
-			{
-				Attribute posAttrib = program.GetAttribute("i_position");
-				posAttrib.Enable();
-				Attribute colAttrib = program.GetAttribute("i_color");
-				colAttrib.Enable();
-				Attribute texAttrib = program.GetAttribute("i_texCoord");
-				texAttrib.Enable();
-
-				posAttrib.PtrFloat(2, 8, 0);
-				colAttrib.PtrFloat(4, 8, 2);
-				texAttrib.PtrFloat(2, 8, 6);
-			});
+			return ShaderBuilds.Build(vert, frag, attrs);
 		}
 
 		private static GLShaderProgram GetDefaultShaderShape()
 		{
-			string vert = "#version 150 core\n" +
-			              "\n" +
-			              "in vec2 i_position;\n" +
-			              "in vec4 i_color;\n" +
-			              "\n" +
-			              "out vec4 o_color;\n" +
-			              "\n" +
-			              "uniform mat4 u_proj;\n" +
-			              "\n" +
-			              "void main() {\n" +
-			              "    o_color = i_color;\n" +
-			              "\n" +
-			              "    gl_Position = u_proj * vec4(i_position, 0.0, 1.0);\n" +
-			              "}\n";
-			string frag = "#version 150 core\n" +
+			const string attrs = "{" +
+			                     "	i_position = [2, 8, 0];" +
+			                     "	i_color = [4, 8, 2];" +
+			                     "}";
+			const string vert = "#version 150 core\n" +
+			                    "\n" +
+			                    "in vec2 i_position;\n" +
+			                    "in vec4 i_color;\n" +
+			                    "\n" +
+			                    "out vec4 o_color;\n" +
+			                    "\n" +
+			                    "uniform mat4 u_proj;\n" +
+			                    "\n" +
+			                    "void main() {\n" +
+			                    "    o_color = i_color;\n" +
+			                    "\n" +
+			                    "    gl_Position = u_proj * vec4(i_position, 0.0, 1.0);\n" +
+			                    "}\n";
+			const string frag = "#version 150 core\n" +
 			              "\n" +
 			              "in vec4 o_color;\n" +
 			              "\n" +
@@ -480,16 +492,7 @@ namespace Yari.Native.OpenGL
 			              "void main() {\n" +
 			              "    fragColor = o_color;\n" +
 			              "}";
-			return ShaderBuilds.Build(vert, frag, (program) =>
-			{
-				Attribute posAttrib = program.GetAttribute("i_position");
-				posAttrib.Enable();
-				Attribute colAttrib = program.GetAttribute("i_color");
-				colAttrib.Enable();
-
-				posAttrib.PtrFloat(2, 6, 0);
-				colAttrib.PtrFloat(4, 6, 2);
-			});
+			return ShaderBuilds.Build(vert, frag, attrs);
 		}
 
 	}

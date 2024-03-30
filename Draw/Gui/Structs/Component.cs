@@ -20,7 +20,7 @@ namespace Yari.Draw.Gui.Structs
 
 		public virtual void Render(DrawBatch batch) { }
 
-		public virtual void Input(InputState input, vec2 cursor) { }
+		public virtual void Input(InputState input, rvec2 cursor) { }
 
 	}
 

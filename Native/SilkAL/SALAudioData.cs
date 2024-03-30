@@ -145,7 +145,7 @@ namespace Yari.Native.SilkAL
 				}
 			}
 
-			Common.Manage.Reference.FREE.OnHoldReferred(() =>
+			Common.Manage.Finalisation.FREE.OnHoldReferred(() =>
 			{
 				AL.DeleteBuffer(buffer);
 			});

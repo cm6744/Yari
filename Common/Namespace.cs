@@ -1,12 +1,14 @@
-﻿namespace Yari.Common
+﻿using Yari.Common.Resource;
+
+namespace Yari.Common
 {
 
 	public class Namespace
 	{
 
 		public string Name;
-		public YariCoreI18n I18n = new YariCoreI18n();
-		public YariCoreResources Resources = new YariCoreResources();
+		public Localer Localer = new Localer();
+		public ResMapper ResMapper = new ResMapper();
 
 		public Namespace(string name)
 		{

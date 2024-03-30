@@ -112,8 +112,8 @@ namespace Yari.Native.OpenGL
 			GLFW.SetCursorPosCallback(Window, (_, x, y) =>
 			{
 				GLInputState state = (GLInputState) Platform.InputState;
-				state.Cursor[0] = (float) x;
-				state.Cursor[1] = (float) (Platform.GraphicEnv.Size.y - y);
+				state.Cursor.x = (float) x;
+				state.Cursor.y = (float) (Platform.GraphicEnv.Size.y - y);
 			});
 			GLFW.SetScrollCallback(Window, (_, x, y) =>
 			{

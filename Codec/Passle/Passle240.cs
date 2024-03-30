@@ -218,7 +218,7 @@ namespace Yari.Codec.Passle
 				ch = code[pos];
 			}
 
-			string numberStr = code.Substring(start, pos);
+			string numberStr = code.Substring(start, pos - start);
 
 			if(int.TryParse(numberStr, out int ov))
 			{
