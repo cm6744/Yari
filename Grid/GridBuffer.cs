@@ -1,19 +1,21 @@
 ﻿using System;
-using Yari.Common;
+using Yari.Common.Registry;
 
 namespace Yari.Grid
 {
 
-	public class GridBuffer<T> where T : Identifiable
+	public class GridBuffer<T> where T : IPalettable
 	{
 
 		public GridBufferSuggestion Suggestion;
 		public byte[] Bytes;
-		public IdentityRegister<T> Palette;
+		public Palette<T> Palette;
+		public T Default;
 
-		public GridBuffer(IdentityRegister<T> register, GridBufferSuggestion suggestion = null)
+		public GridBuffer(Palette<T> palette, T defval, GridBufferSuggestion suggestion = null)
 		{
-			Palette = register;
+			Palette = palette;
+			Default = defval;
 
 			if(suggestion == null) suggestion = GridBufferSuggestion.DefSuggestion;
 
@@ -52,19 +54,26 @@ namespace Yari.Grid
 			return ri;
 		}
 
-		public void Set(Grid grid, T obj)
+		public T Set(Grid grid, T obj)
 		{
-			Set(grid.GridX, grid.GridY, grid.GridZ, obj);
+			return Set(grid.GridX, grid.GridY, grid.GridZ, obj);
 		}
 
-		public void Set(int x, int y, int z, T obj)
+		public T Set(IGrid grid, int z, T obj)
+		{
+			return Set(grid.GridX, grid.GridY, z, obj);
+		}
+
+		public T Set(int x, int y, int z, T obj)
 		{
 			int idx = Index(x, y, z);
 			if(idx < 0 || idx >= Bytes.Length)
 			{
-				return;
+				return Default;
 			}
-			WriteBytes(idx, obj.Registry.Id);
+			T old = Palette[ReadBytes(idx)];
+			WriteBytes(idx, obj.PaletteId);
+			return old;
 		}
 
 		public T Get(Grid grid)
@@ -72,12 +81,17 @@ namespace Yari.Grid
 			return Get(grid.GridX, grid.GridY, grid.GridZ);
 		}
 
+		public T Get(IGrid grid, int z)
+		{
+			return Get(grid.GridX, grid.GridY, z);
+		}
+
 		public T Get(int x, int y, int z)
 		{
 			int idx = Index(x, y, z);
 			if(idx < 0 || idx >= Bytes.Length)
 			{
-				return Palette.DefaultValue;
+				return Default;
 			}
 			return Palette[ReadBytes(idx)];
 		}

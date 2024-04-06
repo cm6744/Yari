@@ -1,10 +1,12 @@
-﻿namespace Yari.Maths
+﻿using Yari.Maths.Structs;
+
+namespace Yari.Maths
 {
 
 	public class Mthc
 	{
 
-		public static vec4 HsvToRgb(float hue, float saturation, float value)
+		public static vec3 HsvToRgb(float hue, float saturation, float value)
 		{
 			int i = (int) (hue * 6.0F) % 6;
 			float f = hue * 6.0F - (float) i;
@@ -49,7 +51,7 @@
 					break;
 			}
 
-			return new vec4(f4, f5, f6, 1);
+			return new vec3(f4, f5, f6);
 		}
 
 	}

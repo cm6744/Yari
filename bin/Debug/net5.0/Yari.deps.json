@@ -9,11 +9,8 @@
       "Yari/1.0.0": {
         "dependencies": {
           "OpenTK": "4.8.2",
-          "Silk.NET.OpenAL": "2.20.0",
-          "Silk.NET.OpenAL.Extensions.Soft": "2.20.0",
-          "Silk.NET.OpenAL.Soft.Native": "1.21.1.2",
-          "StbImageSharp": "2.27.13",
-          "System.Windows.Extensions": "4.6.0"
+          "Silk.NET.Vulkan": "2.20.0",
+          "StbImageSharp": "2.27.13"
         },
         "runtime": {
           "Yari.dll": {}
@@ -47,26 +44,6 @@
           "lib/netstandard2.0/Microsoft.Extensions.DependencyModel.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
-      "Microsoft.NETCore.Platforms/3.0.0": {},
-      "Microsoft.Win32.SystemEvents/4.6.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.0.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll": {
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.700.19.46214"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.700.19.46214"
           }
         }
       },
@@ -230,52 +207,14 @@
           }
         }
       },
-      "Silk.NET.OpenAL/2.20.0": {
+      "Silk.NET.Vulkan/2.20.0": {
         "dependencies": {
-          "Silk.NET.Core": "2.20.0",
-          "System.Buffers": "4.5.1",
-          "System.Numerics.Vectors": "4.5.0"
+          "Silk.NET.Core": "2.20.0"
         },
         "runtime": {
-          "lib/net5.0/Silk.NET.OpenAL.dll": {
+          "lib/net5.0/Silk.NET.Vulkan.dll": {
             "assemblyVersion": "2.20.0.0",
             "fileVersion": "2.20.0.0"
-          }
-        }
-      },
-      "Silk.NET.OpenAL.Extensions.Soft/2.20.0": {
-        "dependencies": {
-          "Silk.NET.Core": "2.20.0",
-          "Silk.NET.OpenAL": "2.20.0"
-        },
-        "runtime": {
-          "lib/net5.0/Silk.NET.OpenAL.Extensions.Soft.dll": {
-            "assemblyVersion": "2.20.0.0",
-            "fileVersion": "2.20.0.0"
-          }
-        }
-      },
-      "Silk.NET.OpenAL.Soft.Native/1.21.1.2": {
-        "runtimeTargets": {
-          "runtimes/linux-x64/native/libopenal.so": {
-            "rid": "linux-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/osx-x64/native/libopenal.dylib": {
-            "rid": "osx-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x64/native/soft_oal.dll": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "1.21.1.0"
-          },
-          "runtimes/win-x86/native/soft_oal.dll": {
-            "rid": "win-x86",
-            "assetType": "native",
-            "fileVersion": "1.21.1.0"
           }
         }
       },
@@ -288,32 +227,6 @@
         }
       },
       "System.Buffers/4.5.1": {},
-      "System.Drawing.Common/4.6.0": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.0.0",
-          "Microsoft.Win32.SystemEvents": "4.6.0"
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.Drawing.Common.dll": {
-            "assemblyVersion": "4.0.0.1",
-            "fileVersion": "4.6.26919.2"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll": {
-            "rid": "unix",
-            "assetType": "runtime",
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.700.19.46214"
-          },
-          "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.700.19.46214"
-          }
-        }
-      },
       "System.Memory/4.5.5": {},
       "System.Numerics.Vectors/4.5.0": {},
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {
@@ -353,26 +266,7 @@
           }
         }
       },
-      "System.Threading.Tasks.Extensions/4.5.4": {},
-      "System.Windows.Extensions/4.6.0": {
-        "dependencies": {
-          "System.Drawing.Common": "4.6.0"
-        },
-        "runtime": {
-          "lib/netcoreapp3.0/System.Windows.Extensions.dll": {
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.700.19.46214"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netcoreapp3.0/System.Windows.Extensions.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "4.700.19.46214"
-          }
-        }
-      }
+      "System.Threading.Tasks.Extensions/4.5.4": {}
     }
   },
   "libraries": {
@@ -408,20 +302,6 @@
       "sha512": "sha512-NSmDw3K0ozNDgShSIpsZcbFIzBX4w28nDag+TfaQujkXGazBm+lid5onlWoCBy4VsLxqnnKjEBbGSJVWJMf43g==",
       "path": "microsoft.extensions.dependencymodel/8.0.0",
       "hashPath": "microsoft.extensions.dependencymodel.8.0.0.nupkg.sha512"
-    },
-    "Microsoft.NETCore.Platforms/3.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-TsETIgVJb/AKoYfSP+iCxkuly5d3inZjTdx/ItZLk2CxY85v8083OBS3uai84kK3/baLnS5/b5XGs6zR7SuuHQ==",
-      "path": "microsoft.netcore.platforms/3.0.0",
-      "hashPath": "microsoft.netcore.platforms.3.0.0.nupkg.sha512"
-    },
-    "Microsoft.Win32.SystemEvents/4.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Edg+pFW5C8WJb680Za2kTV8TqUi6Ahl/WldRVoOVJ23UQLpDHFspa+umgFjkWZw24ETsU99Cg+ErZz683M4chg==",
-      "path": "microsoft.win32.systemevents/4.6.0",
-      "hashPath": "microsoft.win32.systemevents.4.6.0.nupkg.sha512"
     },
     "OpenTK/4.8.2": {
       "type": "package",
@@ -507,26 +387,12 @@
       "path": "silk.net.core/2.20.0",
       "hashPath": "silk.net.core.2.20.0.nupkg.sha512"
     },
-    "Silk.NET.OpenAL/2.20.0": {
+    "Silk.NET.Vulkan/2.20.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RpRuHuVx4Ms5ZiEGfu7Fi6lSyhtxYGxApw+rn2RVvuFTtlFmy5tf+a5pvJHW7eEoYOgUzZRS4P3S6jM9QkbwYw==",
-      "path": "silk.net.openal/2.20.0",
-      "hashPath": "silk.net.openal.2.20.0.nupkg.sha512"
-    },
-    "Silk.NET.OpenAL.Extensions.Soft/2.20.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-ZAycy1LKiVLuwtQmams/9WjDBiQtYgDYhvIjM+r0R6YaJPk6RGWtpBDo0CCXuCV24vIBfPHnIM/0tnP007hkPA==",
-      "path": "silk.net.openal.extensions.soft/2.20.0",
-      "hashPath": "silk.net.openal.extensions.soft.2.20.0.nupkg.sha512"
-    },
-    "Silk.NET.OpenAL.Soft.Native/1.21.1.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-8kFOTuP1T/zUd/iGS8H6pdLcXz4uGoiQQJSddUuLt00A6Zs1K0dyaQ4zNQT+p2M7afyoMY1O0XCycsVvgX16Gg==",
-      "path": "silk.net.openal.soft.native/1.21.1.2",
-      "hashPath": "silk.net.openal.soft.native.1.21.1.2.nupkg.sha512"
+      "sha512": "sha512-Hoz78z0GqajqeO//n7oM/qRJcqYFDPULkbLVO/Lp99rEQCUPR8cTsiY6JE6bO24eFB81kO9pZC/tjQE/9rpNMA==",
+      "path": "silk.net.vulkan/2.20.0",
+      "hashPath": "silk.net.vulkan.2.20.0.nupkg.sha512"
     },
     "StbImageSharp/2.27.13": {
       "type": "package",
@@ -541,13 +407,6 @@
       "sha512": "sha512-Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
       "path": "system.buffers/4.5.1",
       "hashPath": "system.buffers.4.5.1.nupkg.sha512"
-    },
-    "System.Drawing.Common/4.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2A3spjjoPZnvpVh/sDTzd+0H8ZqTdr+hH/6obB8MMfG81EJ85PmxCKDBxhBVQiA25PliKAZ1sKogDcq9mSnFEA==",
-      "path": "system.drawing.common/4.6.0",
-      "hashPath": "system.drawing.common.4.6.0.nupkg.sha512"
     },
     "System.Memory/4.5.5": {
       "type": "package",
@@ -590,13 +449,6 @@
       "sha512": "sha512-zteT+G8xuGu6mS+mzDzYXbzS7rd3K6Fjb9RiZlYlJPam2/hU7JCBZBVEcywNuR+oZ1ncTvc/cq0faRr3P01OVg==",
       "path": "system.threading.tasks.extensions/4.5.4",
       "hashPath": "system.threading.tasks.extensions.4.5.4.nupkg.sha512"
-    },
-    "System.Windows.Extensions/4.6.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-GL4izk0KgeyXklUOHViAk7y1IOYVYcn8nDpJZgcCqNzTGv2xd+8rgGgMKMo8G9nvfEuRCrNxWnGc74EiuYH2YA==",
-      "path": "system.windows.extensions/4.6.0",
-      "hashPath": "system.windows.extensions.4.6.0.nupkg.sha512"
     }
   }
 }

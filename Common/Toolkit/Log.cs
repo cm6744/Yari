@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading;
+using Yari.Codec;
+using Yari.Common.Manage;
 
 namespace Yari.Common.Toolkit
 {
 
 	public class Log
 	{
-
-		public static bool _UseConsoleOutput = true;
-		public static bool _PrintClassName = true;
 
 		const string
 			DEBUG = "DEBUG",
@@ -20,52 +21,87 @@ namespace Yari.Common.Toolkit
 			FATAL = "FATAL",
 			STACKTRACE = "STACKTRACE";
 
-		public static List<string> _LogStack = new List<string>();
+		private static StreamWriter outw;
 
-		static void Print(string level, string info)
+		public static void StartStreamWriting(FileHandler file)
 		{
-			string className = "UNKNOWN";
-
-			if(_PrintClassName)
+			if(!file.Exists())
 			{
-				StackTrace stacks = new StackTrace(1);
-				StackFrame frame = stacks.GetFrame(1);
-
-				if(frame != null)
-				{
-					MethodBase method = frame.GetMethod();
-
-					if(method != null && method.ReflectedType != null)
-					{
-						className = method.ReflectedType.Name;
-					}
-				}
+				file.Mkfile();
 			}
 			else
 			{
-				className = "-";
+				file.Delete();
+				file.Mkfile();//Reflush
+			}
+			outw = new StreamWriter(file.Path, true, Encoding.UTF8);
+		}
+
+		public static void TryEndStreamWriting()
+		{
+			outw.Close();
+			outw = null;
+		}
+
+		static void Print(string level, string info)
+		{
+			string className = "-";
+
+			StackTrace stacks = new StackTrace(1);
+			StackFrame frame = stacks.GetFrame(1);
+
+			if(frame != null)
+			{
+				MethodBase method = frame.GetMethod();
+
+				if(method != null && method.ReflectedType != null)
+				{
+					className = method.ReflectedType.Name;
+
+					if(className.StartsWith('<')) className = "Inside-run";
+				}
 			}
 
 			string threadName = Thread.CurrentThread.Name;
 
 			if(string.IsNullOrWhiteSpace(threadName))
 			{
-				threadName = "UNKNOWN";
+				threadName = Thread.CurrentThread.IsThreadPoolThread ? "EXEC" : "-";
 			}
 
-			string time = System.DateTime.Now.ToString("u");
+			string time = DateTime.Now.ToString("u");
 
 			string outs = $"[{level}] [{threadName}] [{className}] [{time}] {info}";
 
-			if(_UseConsoleOutput)
+			switch(level)
 			{
-				Console.WriteLine(outs);
+				case DEBUG:
+					Console.ForegroundColor = ConsoleColor.DarkGray;
+					break;
+				case INFO:
+					Console.ForegroundColor = ConsoleColor.White;
+					break;
+				case WARN:
+					Console.ForegroundColor = ConsoleColor.DarkRed;
+					break;
+				case FATAL:
+					Console.ForegroundColor = ConsoleColor.Red;
+					break;
+				case STACKTRACE:
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					break;
 			}
+			Console.WriteLine(outs);
 
-			if(level != DEBUG)
+			if(outw != null)
 			{
-				_LogStack.Add(outs);
+				outw.WriteLine(outs);
 			}
+		}
+
+		public static void Debug(string info)
+		{
+			Print(DEBUG, info);
 		}
 
 		public static void Info(string info)

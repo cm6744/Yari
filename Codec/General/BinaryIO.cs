@@ -75,7 +75,7 @@ namespace Yari.Codec.General
 					BinaryList lst = (BinaryList) o;
 					output.WriteByte(lst.Type);
 					output.WriteInt(lst.Count);
-					foreach(object v in lst)
+					foreach(object v in lst.Values)
 					{
 						EncodePrimitive(v, output);
 					}
@@ -198,7 +198,7 @@ namespace Yari.Codec.General
 
 		public static void Write(BinaryCompound compound, FileHandler file)
 		{
-			if(!file.Exists()) file.MkDocs();
+			if(!file.Exists()) file.Mkfile();
 
 			ByteBuffer buffer = new ByteBuffer();
 			Encode(compound, buffer);

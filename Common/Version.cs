@@ -6,7 +6,7 @@ namespace Yari.Common
 	public class Version : IComparable<Version>
 	{
 
-		public string Full;
+		public string FullName;
 		public string Prefix;
 		public bool Snapshot;
 		public bool Stable;
@@ -14,7 +14,7 @@ namespace Yari.Common
 
 		public Version(string code, int iteration)
 		{
-			Full = code;
+			FullName = code;
 			Prefix = code[code.IndexOf('-')..];
 			Snapshot = Prefix.Contains("snapshot", StringComparison.OrdinalIgnoreCase);
 			Stable = !Snapshot;

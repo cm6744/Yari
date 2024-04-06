@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 
-namespace Yari.Common
+namespace Yari.Common.Registry
 {
 
 	public class IdentityRegister<T> : IEnumerable<T> where T : Identifiable

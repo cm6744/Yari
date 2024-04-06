@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Yari.Common.Manage;
 using Yari.Common.Toolkit;
 using Yari.Draw;
@@ -13,31 +14,38 @@ namespace Yari.Common
 		public static readonly Version Version = new Version("stable-1.0.0", 1);
 
 		//Backends to implement
-		public static GraphicEnv GraphicEnv;
+		public static GraphicEnvironment Graph;
 		public static InputState InputState;
-		public static DrawBatch DrawBatch;
+		public static DrawBatch Batch;
 
 		public static readonly Lifecycle Lifecycle = new Lifecycle();
 
 		public static bool IsExited;
 		public static int Ticks;
 		public static int Tps, Fps;
+		public static int DTps { get; private set; }
 
-		public static void RunStandardLifecycle(int tps, int chaseback = 1, bool syncRender = false)
+		public static void RunStandard(int tps, int chaseback = 1, bool syncRender = false)
 		{
+			Thread.CurrentThread.Name = "MAIN";
+
 			float renderPartialTicks = 0f;
-			long lastSyncSysClock = GraphicEnv.Nanotime;
+			long lastSyncSysClock = Graph.Nanotime;
 			float tickLength = 1_000_000_000f / tps;
 			int framesT = 0, framesR = 0;
-			long lastCalcClock = GraphicEnv.Millitime;
+			long lastCalcClock = Graph.Millitime;
+
+			DTps = tps;
 
 			Lifecycle.TaskLoad.Invoke();
+
+			TickSchedule schedule = new TickSchedule();
 
 			try
 			{
 				while(!IsExited)
 				{
-					long i = GraphicEnv.Nanotime;
+					long i = Graph.Nanotime;
 					float elapsedPartialTicks = (i - lastSyncSysClock) / tickLength;
 					lastSyncSysClock = i;
 					renderPartialTicks += elapsedPartialTicks;
@@ -48,9 +56,11 @@ namespace Yari.Common
 					{
 						framesT++;
 						Ticks++;
+						schedule.DeltaSecond = 1f / tps;
+						schedule.Ticks = Ticks;
 
 						InputState.StartRoll();
-						Lifecycle.TaskTick.Invoke();
+						Lifecycle.TaskTick.Invoke(schedule);
 						InputState.EndRoll();
 
 						if(!syncRender)
@@ -58,26 +68,20 @@ namespace Yari.Common
 							continue;
 						}
 
-						GraphicEnv.Prepare();
-						Lifecycle.TaskRender.Invoke(renderPartialTicks);
-						GraphicEnv.Swap();
-						framesR++;
+						DrawAndSwap();
 					}
 
 					if(!syncRender)
 					{
-						GraphicEnv.Prepare();
-						Lifecycle.TaskRender.Invoke(renderPartialTicks);
-						GraphicEnv.Swap();
-						framesR++;
+						DrawAndSwap();
 					}
 
-					if(GraphicEnv.Millitime - lastCalcClock < 1000)
+					if(Graph.Millitime - lastCalcClock < 1000)
 					{
 						continue;
 					}
 
-					lastCalcClock = GraphicEnv.Millitime;
+					lastCalcClock = Graph.Millitime;
 					Tps = framesT;
 					Fps = framesR;
 					framesT = framesR = 0;
@@ -89,7 +93,17 @@ namespace Yari.Common
 			}
 			finally
 			{
-				Finalisation.FREE.OnFinalized();
+				Finalization.FREE.OnFinalized();
+			}
+
+			return;
+
+			void DrawAndSwap()
+			{
+				Graph.Prepare();
+				Lifecycle.TaskRender.Invoke(renderPartialTicks);
+				Graph.Swap();
+				framesR++;
 			}
 		}
 

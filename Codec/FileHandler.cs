@@ -4,34 +4,34 @@ using System.IO;
 namespace Yari.Codec
 {
 
-	//In control of files and folders without "/" contained.
+	//Control files and folders without "/" contained.
 	//You should consider the file type when using because it has no handler for error.
 	public interface FileHandler
 	{
 
 		public string Path { get; }
 
-		bool IsFolder();
+		bool IsDirectory();
 
-		bool IsDocument();
+		bool IsFile();
 
 		string Format();
 
 		string Name();
 
-		FileHandler Enter(string name);
+		FileHandler Goto(string name);
 
 		FileHandler Exit();
 
-		FileHandler[] Folders();
+		FileHandler[] Directories();
 
-		FileHandler[] Documents();
+		FileHandler[] Files();
 
 		bool Exists();
 
 		void Mkdirs();
 
-		void MkDocs();
+		void Mkfile();
 
 		void Delete();
 
@@ -45,7 +45,12 @@ namespace Yari.Codec
 
 		public FileHandlerImpl(string file)
 		{
-			File = file;
+			File = file.Replace('\\', '/');
+
+			if(File.EndsWith('/'))
+			{
+				File = File.Substring(0, File.Length - 1);
+			}
 
 			Doc = System.IO.File.Exists(file);
 			Fol = Directory.Exists(file);
@@ -63,7 +68,7 @@ namespace Yari.Codec
 			}
 		}
 
-		public FileHandler[] Documents()
+		public FileHandler[] Files()
 		{
 			List<FileHandler> files = new List<FileHandler>();
 
@@ -75,7 +80,7 @@ namespace Yari.Codec
 			return files.ToArray();
 		}
 
-		public FileHandler Enter(string name)
+		public FileHandler Goto(string name)
 		{
 			string call;
 
@@ -103,7 +108,7 @@ namespace Yari.Codec
 			return new FileHandlerImpl(call);
 		}
 
-		public FileHandler[] Folders()
+		public FileHandler[] Directories()
 		{
 			List<FileHandler> files = new List<FileHandler>();
 
@@ -121,27 +126,35 @@ namespace Yari.Codec
 			return File.Substring(idx + 1);
 		}
 
-		public bool IsDocument()
+		public bool IsFile()
 		{
 			return Doc;
 		}
 
 		public string Path => File;
 
-		public bool IsFolder()
+		public bool IsDirectory()
 		{
 			return Fol;
 		}
 
 		public void Mkdirs()
 		{
-			new DirectoryInfo(File).Create();
+			DirectoryInfo info = new DirectoryInfo(File);
+			if(!info.Exists)
+			{
+				info.Create();
+			}
 		}
 
-		public void MkDocs()
+		public void Mkfile()
 		{
 			Exit().Mkdirs();
-			new FileInfo(File).Create().Close();
+			FileInfo info = new FileInfo(File);
+			if(!info.Exists)
+			{
+				info.Create().Close();
+			}
 		}
 
 		public string Name()

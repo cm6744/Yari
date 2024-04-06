@@ -1,24 +1,39 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.IO;
-using Silk.NET.OpenAL;
+using OpenTK.Audio.OpenAL;
 using Yari.Audio;
 using Yari.Codec;
+using Yari.Common;
+using Yari.Common.Manage;
 
-namespace Yari.Native.SilkAL
+namespace Yari.Native.OpenAL
 {
 
-	public class SALAudioData : AudioData
+	public class ALAudioData : AudioData
 	{
 
-		public static AL AL => SilkAL.AL;
+		public static void InitALDevice()
+		{
+			ALDevice device = ALC.OpenDevice(null);
+			ALContext context = ALC.CreateContext(device, (int[]) null);
+			ALC.MakeContextCurrent(context);
 
-		public uint Id;
+			Finalization.FREE.OnHoldReferred(() =>
+			{
+				ALC.DestroyContext(context);
+				ALC.CloseDevice(device);
+			});
+
+			Platform.Lifecycle.TaskTick += (_) => AudioClip.CheckClipStates();
+		}
+
+		public int Id;
 		public int Length;
 
-		private SALAudioData() { }
+		private ALAudioData() { }
 
-		public static unsafe SALAudioData Read(FileHandler handler)
+		public static unsafe ALAudioData Read(FileHandler handler)
 		{
 			ReadOnlySpan<byte> file = File.ReadAllBytes(handler.Path);
 
@@ -43,14 +58,10 @@ namespace Yari.Native.SilkAL
 				throw new Exception("Only support Wave file!");
 			}
 
-			short numChannels = -1;
 			int sampleRate = -1;
-			int byteRate = -1;
-			short blockAlign = -1;
-			short bitsPerSample = -1;
-			BufferFormat format = 0;
+			ALFormat format = 0;
 
-			uint buffer = AL.GenBuffer();
+			int buffer = AL.GenBuffer();
 
 			while(index + 4 < file.Length)
 			{
@@ -73,26 +84,26 @@ namespace Yari.Native.SilkAL
 							}
 							else
 							{
-								numChannels = BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
+								short numChannels = BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
 								index += 2;
 								sampleRate = BinaryPrimitives.ReadInt32LittleEndian(file.Slice(index, 4));
 								index += 4;
-								byteRate = BinaryPrimitives.ReadInt32LittleEndian(file.Slice(index, 4));
+								BinaryPrimitives.ReadInt32LittleEndian(file.Slice(index, 4));
 								index += 4;
-								blockAlign = BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
+								BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
 								index += 2;
-								bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
+								short bitsPerSample = BinaryPrimitives.ReadInt16LittleEndian(file.Slice(index, 2));
 								index += 2;
 
 								if(numChannels == 1)
 								{
 									if(bitsPerSample == 8)
 									{
-										format = BufferFormat.Mono8;
+										format = ALFormat.Mono8;
 									}
 									else if(bitsPerSample == 16)
 									{
-										format = BufferFormat.Mono16;
+										format = ALFormat.Mono16;
 									}
 									else
 									{
@@ -103,11 +114,11 @@ namespace Yari.Native.SilkAL
 								{
 									if(bitsPerSample == 8)
 									{
-										format = BufferFormat.Stereo8;
+										format = ALFormat.Stereo8;
 									}
 									else if(bitsPerSample == 16)
 									{
-										format = BufferFormat.Stereo16;
+										format = ALFormat.Stereo16;
 									}
 									else
 									{
@@ -145,12 +156,12 @@ namespace Yari.Native.SilkAL
 				}
 			}
 
-			Common.Manage.Finalisation.FREE.OnHoldReferred(() =>
+			Finalization.FREE.OnHoldReferred(() =>
 			{
 				AL.DeleteBuffer(buffer);
 			});
 
-			SALAudioData aad = new SALAudioData();
+			ALAudioData aad = new ALAudioData();
 
 			aad.Id = buffer;
 
@@ -159,7 +170,7 @@ namespace Yari.Native.SilkAL
 
 		public AudioClip CreateClip()
 		{
-			return new SALAudioClip(this);
+			return new ALAudioClip(this);
 		}
 
 		public float GetLengthInMill()

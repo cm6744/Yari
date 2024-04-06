@@ -7,6 +7,8 @@ namespace Yari.Maths
 	public abstract class Rand
 	{
 
+		public static readonly Rand Global = new RandCsp();
+
 		public bool Next()
 		{
 			return NextFloat() <= 0.5f;

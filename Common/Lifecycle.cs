@@ -3,7 +3,7 @@
 
 	public delegate void RunRender(float partial);
 
-	public delegate void RunTick();
+	public delegate void RunTick(TickSchedule schedule);
 
 	public delegate void Resize(int ow, int oh, int w, int h);
 
@@ -14,7 +14,7 @@
 
 		public Load TaskLoad = () => { };
 		public RunRender TaskRender = (partial) => { };
-		public RunTick TaskTick = () => { };
+		public RunTick TaskTick = (s) => { };
 		public Resize TaskResize = (ow1, oh1, w1, w2) => { };
 
 	}

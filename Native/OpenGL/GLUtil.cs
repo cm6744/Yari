@@ -1,7 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Numerics;
 using OpenTK.Mathematics;
-using Yari.Maths;
+using Yari.Maths.Structs;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Yari.Native.OpenGL

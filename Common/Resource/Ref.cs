@@ -1,7 +1,7 @@
 ﻿namespace Yari.Common.Resource
 {
 
-	public class Ref<T>
+	public struct Ref<T>
 	{
 
 		public T Value => CheckedGet();
@@ -9,12 +9,13 @@
 
 		private T ValueOptional;
 		public string Key;
-		private ResManager<T> Getter;
+		private AssetManager<T> Getter;
 
-		public Ref(ResManager<T> resources, string key)
+		public Ref(AssetManager<T> resources, string key)
 		{
 			Getter = resources;
 			Key = key;
+			ValueOptional = default(T);
 		}
 
 		private T CheckedGet()

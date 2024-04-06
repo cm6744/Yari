@@ -19,9 +19,12 @@ namespace Yari.Codec
 			Log.Info($"FileSystem is opened at {CurPath}. Check if resources put correctly.");
 		}
 
-		public static void AsReleaseSource()
+		//The test source is easier to manage.
+		//When sharing a release version do not invoke this.
+		public static void AsTestSource()
 		{
-			CurPath = Environment.CurrentDirectory.Replace("Debug", "Release");
+			int idx = CurPath.LastIndexOf("bin", StringComparison.Ordinal);
+			CurPath = CurPath.Substring(0, idx - 1) + "/.Run";//Get rid of the annoying '/', so - 1
 			Log.Info($"FileSystem is retargeted at {CurPath}. Do not contain \"Debug\" in your game path!");
 		}
 
@@ -30,7 +33,7 @@ namespace Yari.Codec
 			return new FileHandlerImpl(path);
 		}
 
-		public static FileHandler GetResource(string path)
+		public static FileHandler GetLocal(string path)
 		{
 			return new FileHandlerImpl(CurPath + "/" + path);
 		}

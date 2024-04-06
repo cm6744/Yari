@@ -22,10 +22,10 @@ namespace Yari.Native.OpenGL
 
 		public static unsafe Window* Window;
 
-		public static GraphicsDeviceSettings Settings;
+		public static GLDeviceSettings Settings;
 		public static int Pw, Ph;
 		
-		public static void LoadSettings(GraphicsDeviceSettings s)
+		public static void LoadSettings(GLDeviceSettings s)
 		{
 			Settings = s;
 			Pw = (int) s.Size.x;
@@ -65,10 +65,11 @@ namespace Yari.Native.OpenGL
 
 		public static unsafe void OnLoad()
 		{
-			Platform.GraphicEnv = new GLGraphicEnv();
+			Platform.Graph = new GLGraphicEnvironment();
 			Platform.InputState = new GLInputState();
+			Platform.Batch = new GLDrawBatch(DrawBatch.DefaultSize);
 
-			Platform.Lifecycle.TaskTick += GLFW.PollEvents;
+			Platform.Lifecycle.TaskTick += (_) => GLFW.PollEvents();
 
 			GLFW.SetWindowCloseCallback(Window, (_) =>
 			{
@@ -113,7 +114,7 @@ namespace Yari.Native.OpenGL
 			{
 				GLInputState state = (GLInputState) Platform.InputState;
 				state.Cursor.x = (float) x;
-				state.Cursor.y = (float) (Platform.GraphicEnv.Size.y - y);
+				state.Cursor.y = (float) (Platform.Graph.Size.y - y);
 			});
 			GLFW.SetScrollCallback(Window, (_, x, y) =>
 			{

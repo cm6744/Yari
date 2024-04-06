@@ -1,6 +1,7 @@
 ﻿using Yari.Codec;
+using Yari.Common;
 using Yari.Input;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Draw.Gui.Structs
 {
@@ -8,7 +9,14 @@ namespace Yari.Draw.Gui.Structs
 	public abstract class Component
 	{
 
-		public Rect Bound = new Rect();
+		public static int FastActTime = Platform.DTps * 3 / 2;
+
+		public static InputObserver LEFT_CODE = Platform.InputState.Observe(Keycode.BUTTON_LEFT);
+		public static InputObserver RIGHT_CODE = Platform.InputState.Observe(Keycode.BUTTON_RIGHT);
+		public static InputObserver CTRL_CODE = Platform.InputState.Observe(Keycode.KEY_LEFT_CONTROL);
+		public static InputObserver SHIFT_CODE = Platform.InputState.Observe(Keycode.KEY_LEFT_SHIFT);
+		
+		public AxisAlignedSized Bound = new AxisAlignedSized();
 		public BinaryCompound PersistentData = new BinaryCompound();
 		public int IdxInScreen;
 
@@ -16,9 +24,9 @@ namespace Yari.Draw.Gui.Structs
 
 		public virtual void SaveData() { }
 
-		public virtual void Update() { }
+		public virtual void Update(TickSchedule schedule) { }
 
-		public virtual void Render(DrawBatch batch) { }
+		public virtual void Draw(DrawBatch batch) { }
 
 		public virtual void Input(InputState input, rvec2 cursor) { }
 

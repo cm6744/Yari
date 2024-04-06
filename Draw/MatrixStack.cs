@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Draw
 {

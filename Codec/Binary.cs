@@ -8,7 +8,6 @@ namespace Yari.Codec
 
 	public interface IBinary
 	{
-
 	}
 
 	public class BinaryCompound : IBinary
@@ -30,6 +29,40 @@ namespace Yari.Codec
 			IsReadOnly = isReadOnly;
 		}
 
+		public T Get<T>(string key)
+		{
+			return (T) Map.GetValueOrDefault(key, default);
+		}
+
+		public void Set(string key, object v)
+		{
+			if(IsReadOnly)
+			{
+				return;
+			}
+
+			Map[key] = v;
+		}
+
+		public bool Has(string key)
+		{
+			return Map.ContainsKey(key);
+		}
+
+		public bool Try<T>(string key, out T valout)
+		{
+			if(Map.ContainsKey(key))
+			{
+				valout = Get<T>(key);
+				return true;
+			}
+
+			valout = default;
+			return false;
+		}
+
+		//Wrapped Operations
+
 		public void Clear()
 		{
 			if(IsReadOnly)
@@ -47,7 +80,7 @@ namespace Yari.Codec
 				return;
 			}
 
-			foreach(KeyValuePair<string, object> pair in compound.Map)
+			foreach(var pair in compound.Map)
 			{
 				if(!Map.ContainsKey(pair.Key))
 				{
@@ -56,101 +89,96 @@ namespace Yari.Codec
 			}
 		}
 
-		public T Get<T>(string key)
+		public BinaryCompound Copy()
 		{
-			return (T) Map[key];
-		}
+			BinaryCompound compound = new BinaryCompound();
 
-		public string GetString(string key)
-		{
-			return Get<string>(key);
-		}
-
-		public double GetDouble(string key)
-		{
-			return Get<double>(key);
-		}
-
-		public float GetFloat(string key)
-		{
-			return Get<float>(key);
-		}
-
-		public int GetInt(string key)
-		{
-			return Get<int>(key);
-		}
-
-		public byte GetByte(string key)
-		{
-			return Get<byte>(key);
-		}
-
-		public bool GetBool(string key)
-		{
-			return Get<bool>(key);
-		}
-
-		public byte[] GetBytes(string key)
-		{
-			return Get<byte[]>(key);
-		}
-
-		public int[] GetInts(string key)
-		{
-			return Get<int[]>(key);
-		}
-
-		public BinaryCompound GetCompound(string key)
-		{
-			return Get<BinaryCompound>(key);
-		}
-
-		public BinaryList GetList(string key)
-		{
-			return Get<BinaryList>(key);
-		}
-
-		public void Set(string key, object v)
-		{
-			if(IsReadOnly)
+			foreach(KeyValuePair<string, object> pair in Map)
 			{
-				return;
+				switch(pair.Value)
+				{
+					case BinaryCompound c1:
+						compound.Set(pair.Key, c1.Copy());
+						break;
+					case BinaryList l1:
+						compound.Set(pair.Key, l1.Copy());
+						break;
+					default:
+						compound.Set(pair.Key, pair.Value);
+						break;
+				}
 			}
 
-			Map[key] = v;
+			return compound;
+		}
+
+		public bool Compare(BinaryCompound compound)
+		{
+			if(Map.Count != compound.Map.Count)
+			{
+				return false;
+			}
+
+			foreach(var kv in compound.Map)
+			{
+				object o1 = kv.Value;
+				object o2 = Map[kv.Key];
+
+				if(o1.GetType() != o2.GetType())
+				{
+					return false;
+				}
+
+				bool eq;
+				switch(o2)
+				{
+					case BinaryCompound c1:
+						eq = c1.Compare((BinaryCompound) o1);
+						break;
+					case BinaryList l1:
+						eq = l1.Compare((BinaryList) o1);
+						break;
+					default:
+						eq = o1.Equals(o2);
+						break;
+				}
+
+				if(!eq) return false;
+			}
+
+			return true;
 		}
 
 	}
 
-	public class BinaryList : IBinary, IEnumerable<object>
+	public class BinaryList : IBinary
 	{
 
-		public List<object> List;
+		public List<object> Values;
 
 		public byte Type
 		{
 			get
 			{
-				if(List == null || List.Count == 0)
+				if(Values == null || Values.Count == 0)
 				{
 					return 0;
 				}
 
-				return BinaryIO.GetId(List[0]);
+				return BinaryIO.GetId(Values[0]);
 			}
 		}
 
-		public int Count => List.Count;
+		public int Count => Values.Count;
 
 		public BinaryList(List<object> ListCpy)
 		{
-			List = ListCpy;
+			Values = ListCpy;
 		}
 
 		public BinaryList()
 		{
-			List = new List<object>();
+			Values = new List<object>();
 		}
 
 		public object this[int index]
@@ -159,69 +187,79 @@ namespace Yari.Codec
 			set => Set(index, value);
 		}
 
+		public BinaryList Copy()
+		{
+			BinaryList lst = new BinaryList();
+
+			foreach(object o in Values)
+			{
+				switch(o)
+				{
+					case BinaryCompound c1:
+						lst.Add(c1.Copy());
+						break;
+					case BinaryList l1:
+						lst.Add(l1.Copy());
+						break;
+					default:
+						lst.Add(o);
+						break;
+				}
+			}
+
+			return lst;
+		}
+
 		public T Get<T>(int i)
 		{
-			return (T) List[i];
+			return (T) Values[i];
 		}
 
 		public void Add(object v)
 		{
-			List.Add(v);
+			Values.Add(v);
 		}
 
 		public void Set(int i, object v)
 		{
-			List[i] = v;
+			Values[i] = v;
 		}
 
-		public IEnumerator<object> GetEnumerator()
+		public bool Compare(BinaryList list)
 		{
-			return List.GetEnumerator();
-		}
+			if(Values.Count != list.Values.Count)
+			{
+				return false;
+			}
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
+			for(int i = 0; i < list.Count; i++)
+			{
+				object o1 = this[i];
+				object o2 = list[i];
 
-		public string GetString(int i)
-		{
-			return Get<string>(i);
-		}
+				if(o1.GetType() != o2.GetType())
+				{
+					return false;
+				}
 
-		public double GetDouble(int i)
-		{
-			return Get<double>(i);
-		}
+				bool eq;
+				switch(o2)
+				{
+					case BinaryCompound c1:
+						eq = c1.Compare((BinaryCompound) o1);
+						break;
+					case BinaryList l1:
+						eq = l1.Compare((BinaryList) o1);
+						break;
+					default:
+						eq = o1.Equals(o2);
+						break;
+				}
 
-		public float GetFloat(int i)
-		{
-			return Get<float>(i);
-		}
+				if(!eq) return false;
+			}
 
-		public int GetInt(int i)
-		{
-			return Get<int>(i);
-		}
-
-		public byte GetByte(int i)
-		{
-			return Get<byte>(i);
-		}
-
-		public bool GetBool(int i)
-		{
-			return Get<bool>(i);
-		}
-
-		public byte[] GetBytes(int i)
-		{
-			return Get<byte[]>(i);
-		}
-
-		public int[] GetInts(int i)
-		{
-			return Get<int[]>(i);
+			return true;
 		}
 
 	}

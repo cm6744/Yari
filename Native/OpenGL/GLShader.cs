@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Numerics;
 using OpenTK.Compute.OpenCL;
@@ -9,8 +10,7 @@ using Yari.Codec.General;
 using Yari.Codec.Passle;
 using Yari.Common.Manage;
 using Yari.Draw;
-using Yari.Maths;
-using static Silk.NET.Core.Native.WinString;
+using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
 {
@@ -20,12 +20,11 @@ namespace Yari.Native.OpenGL
 
 		public int id;
 		public Setup SetupDele;
-		public BinaryCompound AutoSetupf;
-
+		
 		public GLShaderProgram(Setup setup)
 		{
 			SetupDele = setup;
-			Finalisation.FREE.OnHoldReferred(Release);
+			Finalization.FREE.OnHoldReferred(Release);
 		}
 
 		public Attribute GetAttribute(string attr)
@@ -51,19 +50,6 @@ namespace Yari.Native.OpenGL
 		public override void Setup()
 		{
 			SetupDele?.Invoke(this);
-
-			if(AutoSetupf == null)
-			{
-				return;
-			}
-
-			foreach(KeyValuePair<string, object> entry in AutoSetupf.Map)
-			{
-				Attribute attrib = GetAttribute(entry.Key);
-				attrib.Enable();
-				BinaryList arr = (BinaryList) entry.Value;
-				attrib.PtrFloat(arr.GetInt(0), arr.GetInt(1), arr.GetInt(2));
-			}
 		}
 
 		public void Release()
@@ -81,13 +67,24 @@ namespace Yari.Native.OpenGL
 
 		public Attribute(int id)
 		{
-			this.id = (int) id;
+			this.id = id;
+		}
+
+		public void Ptr(VertexAttribPointerType type, int sizeb, int strideb, int offb)
+		{
+			GL.VertexAttribPointer(id, sizeb, type, false, strideb, offb);
 		}
 
 		public void PtrFloat(int size, int stride, int offset)
 		{
 			GL.VertexAttribPointer(id, size, VertexAttribPointerType.Float, false,
 				stride * sizeof(float), offset * sizeof(float));
+		}
+
+		public void PtrByte(int size, int stride, int offset)
+		{
+			GL.VertexAttribPointer(id, size, VertexAttribPointerType.UnsignedByte, false,
+				stride * sizeof(byte), offset * sizeof(byte));
 		}
 
 		public void Enable()
@@ -157,8 +154,7 @@ namespace Yari.Native.OpenGL
 				//if not using this way to read, it won't keep "\n", which shaders needs.
 				string vert = StringIO.Read(new FileHandlerImpl(path + ".vert"));
 				string frag = StringIO.Read(new FileHandlerImpl(path + ".frag"));
-				string setupf = StringIO.Read(new FileHandlerImpl(path + ".spf"));
-				return Build(vert, frag, setupf, shaderSetup);
+				return Build(vert, frag, shaderSetup);
 			}
 			catch(IOException)
 			{
@@ -166,9 +162,10 @@ namespace Yari.Native.OpenGL
 			}
 		}
 
-		public static GLShaderProgram Build(string vertex, string fragment, string setupf = null, Setup shaderSetup = null)
+		public static GLShaderProgram Build(string vertex, string fragment, Setup shaderSetup = null)
 		{
-			GLShaderProgram shader = new GLShaderProgram(shaderSetup) { id = GL.CreateProgram() };
+			GLShaderProgram shader = new GLShaderProgram(shaderSetup);
+			shader.id = GL.CreateProgram();
 
 			int vert = BuildShaderPart(vertex, ShaderType.VertexShader);
 			int frag = BuildShaderPart(fragment, ShaderType.FragmentShader);
@@ -187,12 +184,6 @@ namespace Yari.Native.OpenGL
 
 			GL.DeleteShader(vert);
 			GL.DeleteShader(frag);
-
-			if(setupf != null)
-			{
-				BinaryCompound compound = PassleIO.ReadRaw(setupf);
-				shader.AutoSetupf = compound;
-			}
 			
 			return shader;
 		}

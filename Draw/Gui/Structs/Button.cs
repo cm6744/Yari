@@ -1,15 +1,12 @@
 ﻿using Yari.Common;
 using Yari.Input;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Draw.Gui.Structs
 {
 
 	public class Button : Component
 	{
-
-		public static InputObserver LEFT_CODE = Platform.InputState.Observe(Keycode.BUTTON_LEFT);
-		public static InputObserver RIGHT_CODE = Platform.InputState.Observe(Keycode.BUTTON_RIGHT);
 
 		public static int DEFAULT_PRESS_DELAY = 2;
 
@@ -45,12 +42,12 @@ namespace Yari.Draw.Gui.Structs
 			}
 		}
 
-		public override void Update()
+		public override void Update(TickSchedule schedule)
 		{
 			pressDelay--;
 		}
 
-		public override void Render(DrawBatch batch)
+		public override void Draw(DrawBatch batch)
 		{
 			if(Texture3Line == null)
 			{
@@ -67,7 +64,7 @@ namespace Yari.Draw.Gui.Structs
 					batch.Draw(Icons[0], Bound);
 				}
 
-				batch.Draw(Text, Bound.x, Bound.yp + 4, Align.CENTER);
+				batch.Draw(Text, Bound.xcentral, Bound.y + 4, Align.CENTER);
 			}
 			else
 			{

@@ -1,8 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL;
-using Silk.NET.Core.Native;
 using Yari.Codec;
 using Yari.Draw;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
 {
@@ -24,9 +23,9 @@ namespace Yari.Native.OpenGL
 			GL.BindTexture(TextureTarget.Texture2D, tid);
 
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-				(int) GraphicsDeviceSettings.FilterMag);
+				(int) GLDeviceSettings.FilterMag);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-				(int) GraphicsDeviceSettings.FilterMin);
+				(int) GLDeviceSettings.FilterMin);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
 				(int) TextureWrapMode.Repeat);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,

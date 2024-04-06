@@ -47,33 +47,6 @@
           "buildTransitive/netcoreapp2.0/Microsoft.Extensions.DependencyModel.targets": {}
         }
       },
-      "Microsoft.NETCore.Platforms/3.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard1.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard1.0/_._": {}
-        }
-      },
-      "Microsoft.Win32.SystemEvents/4.6.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.0.0"
-        },
-        "compile": {
-          "ref/netstandard2.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "OpenTK/4.8.2": {
         "type": "package",
         "dependencies": {
@@ -246,58 +219,16 @@
           "lib/net5.0/Silk.NET.Core.dll": {}
         }
       },
-      "Silk.NET.OpenAL/2.20.0": {
+      "Silk.NET.Vulkan/2.20.0": {
         "type": "package",
         "dependencies": {
-          "Silk.NET.Core": "2.20.0",
-          "System.Buffers": "4.5.1",
-          "System.Numerics.Vectors": "4.5.0"
+          "Silk.NET.Core": "2.20.0"
         },
         "compile": {
-          "lib/net5.0/Silk.NET.OpenAL.dll": {}
+          "lib/net5.0/Silk.NET.Vulkan.dll": {}
         },
         "runtime": {
-          "lib/net5.0/Silk.NET.OpenAL.dll": {}
-        }
-      },
-      "Silk.NET.OpenAL.Extensions.Soft/2.20.0": {
-        "type": "package",
-        "dependencies": {
-          "Silk.NET.Core": "2.20.0",
-          "Silk.NET.OpenAL": "2.20.0"
-        },
-        "compile": {
-          "lib/net5.0/Silk.NET.OpenAL.Extensions.Soft.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/Silk.NET.OpenAL.Extensions.Soft.dll": {}
-        }
-      },
-      "Silk.NET.OpenAL.Soft.Native/1.21.1.2": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/linux-x64/native/libopenal.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/osx-x64/native/libopenal.dylib": {
-            "assetType": "native",
-            "rid": "osx-x64"
-          },
-          "runtimes/win-x64/native/soft_oal.dll": {
-            "assetType": "native",
-            "rid": "win-x64"
-          },
-          "runtimes/win-x86/native/soft_oal.dll": {
-            "assetType": "native",
-            "rid": "win-x86"
-          }
+          "lib/net5.0/Silk.NET.Vulkan.dll": {}
         }
       },
       "StbImageSharp/2.27.13": {
@@ -316,29 +247,6 @@
         },
         "runtime": {
           "lib/netcoreapp2.0/_._": {}
-        }
-      },
-      "System.Drawing.Common/4.6.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.0.0",
-          "Microsoft.Win32.SystemEvents": "4.6.0"
-        },
-        "compile": {
-          "ref/netcoreapp3.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/System.Drawing.Common.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll": {
-            "assetType": "runtime",
-            "rid": "unix"
-          },
-          "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
         }
       },
       "System.Memory/4.5.5": {
@@ -415,24 +323,6 @@
         },
         "runtime": {
           "lib/netcoreapp2.1/_._": {}
-        }
-      },
-      "System.Windows.Extensions/4.6.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Drawing.Common": "4.6.0"
-        },
-        "compile": {
-          "ref/netcoreapp3.0/System.Windows.Extensions.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp3.0/System.Windows.Extensions.dll": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/netcoreapp3.0/System.Windows.Extensions.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
         }
       }
     }
@@ -579,52 +469,6 @@
         "microsoft.extensions.dependencymodel.8.0.0.nupkg.sha512",
         "microsoft.extensions.dependencymodel.nuspec",
         "useSharedDesignerContext.txt"
-      ]
-    },
-    "Microsoft.NETCore.Platforms/3.0.0": {
-      "sha512": "TsETIgVJb/AKoYfSP+iCxkuly5d3inZjTdx/ItZLk2CxY85v8083OBS3uai84kK3/baLnS5/b5XGs6zR7SuuHQ==",
-      "type": "package",
-      "path": "microsoft.netcore.platforms/3.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/netstandard1.0/_._",
-        "microsoft.netcore.platforms.3.0.0.nupkg.sha512",
-        "microsoft.netcore.platforms.nuspec",
-        "runtime.json",
-        "useSharedDesignerContext.txt",
-        "version.txt"
-      ]
-    },
-    "Microsoft.Win32.SystemEvents/4.6.0": {
-      "sha512": "Edg+pFW5C8WJb680Za2kTV8TqUi6Ahl/WldRVoOVJ23UQLpDHFspa+umgFjkWZw24ETsU99Cg+ErZz683M4chg==",
-      "type": "package",
-      "path": "microsoft.win32.systemevents/4.6.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net461/Microsoft.Win32.SystemEvents.dll",
-        "lib/net461/Microsoft.Win32.SystemEvents.xml",
-        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
-        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.4.6.0.nupkg.sha512",
-        "microsoft.win32.systemevents.nuspec",
-        "ref/net461/Microsoft.Win32.SystemEvents.dll",
-        "ref/net461/Microsoft.Win32.SystemEvents.xml",
-        "ref/net472/Microsoft.Win32.SystemEvents.dll",
-        "ref/net472/Microsoft.Win32.SystemEvents.xml",
-        "ref/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
-        "ref/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "runtimes/win/lib/netcoreapp2.0/Microsoft.Win32.SystemEvents.dll",
-        "runtimes/win/lib/netcoreapp2.0/Microsoft.Win32.SystemEvents.xml",
-        "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll",
-        "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.xml",
-        "useSharedDesignerContext.txt",
-        "version.txt"
       ]
     },
     "OpenTK/4.8.2": {
@@ -816,65 +660,30 @@
         "silkdotnet_v3.png"
       ]
     },
-    "Silk.NET.OpenAL/2.20.0": {
-      "sha512": "RpRuHuVx4Ms5ZiEGfu7Fi6lSyhtxYGxApw+rn2RVvuFTtlFmy5tf+a5pvJHW7eEoYOgUzZRS4P3S6jM9QkbwYw==",
+    "Silk.NET.Vulkan/2.20.0": {
+      "sha512": "Hoz78z0GqajqeO//n7oM/qRJcqYFDPULkbLVO/Lp99rEQCUPR8cTsiY6JE6bO24eFB81kO9pZC/tjQE/9rpNMA==",
       "type": "package",
-      "path": "silk.net.openal/2.20.0",
+      "path": "silk.net.vulkan/2.20.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "lib/net5.0/Silk.NET.OpenAL.dll",
-        "lib/net5.0/Silk.NET.OpenAL.xml",
-        "lib/netcoreapp3.1/Silk.NET.OpenAL.dll",
-        "lib/netcoreapp3.1/Silk.NET.OpenAL.xml",
-        "lib/netstandard2.0/Silk.NET.OpenAL.dll",
-        "lib/netstandard2.0/Silk.NET.OpenAL.xml",
-        "lib/netstandard2.1/Silk.NET.OpenAL.dll",
-        "lib/netstandard2.1/Silk.NET.OpenAL.xml",
-        "silk.net.openal.2.20.0.nupkg.sha512",
-        "silk.net.openal.nuspec",
-        "silkdotnet_v3.png"
-      ]
-    },
-    "Silk.NET.OpenAL.Extensions.Soft/2.20.0": {
-      "sha512": "ZAycy1LKiVLuwtQmams/9WjDBiQtYgDYhvIjM+r0R6YaJPk6RGWtpBDo0CCXuCV24vIBfPHnIM/0tnP007hkPA==",
-      "type": "package",
-      "path": "silk.net.openal.extensions.soft/2.20.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "lib/net5.0/Silk.NET.OpenAL.Extensions.Soft.dll",
-        "lib/net5.0/Silk.NET.OpenAL.Extensions.Soft.xml",
-        "lib/netcoreapp3.1/Silk.NET.OpenAL.Extensions.Soft.dll",
-        "lib/netcoreapp3.1/Silk.NET.OpenAL.Extensions.Soft.xml",
-        "lib/netstandard2.0/Silk.NET.OpenAL.Extensions.Soft.dll",
-        "lib/netstandard2.0/Silk.NET.OpenAL.Extensions.Soft.xml",
-        "lib/netstandard2.1/Silk.NET.OpenAL.Extensions.Soft.dll",
-        "lib/netstandard2.1/Silk.NET.OpenAL.Extensions.Soft.xml",
-        "silk.net.openal.extensions.soft.2.20.0.nupkg.sha512",
-        "silk.net.openal.extensions.soft.nuspec",
-        "silkdotnet_v3.png"
-      ]
-    },
-    "Silk.NET.OpenAL.Soft.Native/1.21.1.2": {
-      "sha512": "8kFOTuP1T/zUd/iGS8H6pdLcXz4uGoiQQJSddUuLt00A6Zs1K0dyaQ4zNQT+p2M7afyoMY1O0XCycsVvgX16Gg==",
-      "type": "package",
-      "path": "silk.net.openal.soft.native/1.21.1.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "build/net461/Silk.NET.OpenAL.Soft.Native.targets",
-        "lib/net461/_._",
-        "lib/netstandard2.0/_._",
-        "runtimes/linux-x64/native/libopenal.so",
-        "runtimes/osx-x64/native/libopenal.dylib",
-        "runtimes/win-x64/native/soft_oal.dll",
-        "runtimes/win-x86/native/soft_oal.dll",
-        "silk.net.openal.soft.native.1.21.1.2.nupkg.sha512",
-        "silk.net.openal.soft.native.nuspec",
+        "build/net7.0-ios16.1/Silk.NET.Vulkan.targets",
+        "build/net7.0-maccatalyst16.1/Silk.NET.Vulkan.targets",
+        "lib/net5.0/Silk.NET.Vulkan.dll",
+        "lib/net5.0/Silk.NET.Vulkan.xml",
+        "lib/net7.0-ios16.1/Silk.NET.Vulkan.dll",
+        "lib/net7.0-ios16.1/Silk.NET.Vulkan.xml",
+        "lib/net7.0-maccatalyst16.1/Silk.NET.Vulkan.dll",
+        "lib/net7.0-maccatalyst16.1/Silk.NET.Vulkan.xml",
+        "lib/netcoreapp3.1/Silk.NET.Vulkan.dll",
+        "lib/netcoreapp3.1/Silk.NET.Vulkan.xml",
+        "lib/netstandard2.0/Silk.NET.Vulkan.dll",
+        "lib/netstandard2.0/Silk.NET.Vulkan.xml",
+        "lib/netstandard2.1/Silk.NET.Vulkan.dll",
+        "lib/netstandard2.1/Silk.NET.Vulkan.xml",
+        "silk.net.vulkan.2.20.0.nupkg.sha512",
+        "silk.net.vulkan.nuspec",
         "silkdotnet_v3.png"
       ]
     },
@@ -918,45 +727,6 @@
         "ref/uap10.0.16299/_._",
         "system.buffers.4.5.1.nupkg.sha512",
         "system.buffers.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
-      ]
-    },
-    "System.Drawing.Common/4.6.0": {
-      "sha512": "2A3spjjoPZnvpVh/sDTzd+0H8ZqTdr+hH/6obB8MMfG81EJ85PmxCKDBxhBVQiA25PliKAZ1sKogDcq9mSnFEA==",
-      "type": "package",
-      "path": "system.drawing.common/4.6.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net461/System.Drawing.Common.dll",
-        "lib/netstandard2.0/System.Drawing.Common.dll",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "ref/MonoAndroid10/_._",
-        "ref/MonoTouch10/_._",
-        "ref/net461/System.Drawing.Common.dll",
-        "ref/netcoreapp3.0/System.Drawing.Common.dll",
-        "ref/netcoreapp3.0/System.Drawing.Common.xml",
-        "ref/netstandard2.0/System.Drawing.Common.dll",
-        "ref/xamarinios10/_._",
-        "ref/xamarinmac20/_._",
-        "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._",
-        "runtimes/unix/lib/netcoreapp2.0/System.Drawing.Common.dll",
-        "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll",
-        "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.xml",
-        "runtimes/win/lib/netcoreapp2.0/System.Drawing.Common.dll",
-        "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll",
-        "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.xml",
-        "system.drawing.common.4.6.0.nupkg.sha512",
-        "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
@@ -1200,37 +970,13 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "System.Windows.Extensions/4.6.0": {
-      "sha512": "GL4izk0KgeyXklUOHViAk7y1IOYVYcn8nDpJZgcCqNzTGv2xd+8rgGgMKMo8G9nvfEuRCrNxWnGc74EiuYH2YA==",
-      "type": "package",
-      "path": "system.windows.extensions/4.6.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/netcoreapp3.0/System.Windows.Extensions.dll",
-        "lib/netcoreapp3.0/System.Windows.Extensions.xml",
-        "ref/netcoreapp3.0/System.Windows.Extensions.dll",
-        "ref/netcoreapp3.0/System.Windows.Extensions.xml",
-        "runtimes/win/lib/netcoreapp3.0/System.Windows.Extensions.dll",
-        "runtimes/win/lib/netcoreapp3.0/System.Windows.Extensions.xml",
-        "system.windows.extensions.4.6.0.nupkg.sha512",
-        "system.windows.extensions.nuspec",
-        "useSharedDesignerContext.txt",
-        "version.txt"
-      ]
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "OpenTK >= 4.8.2",
-      "Silk.NET.OpenAL >= 2.20.0",
-      "Silk.NET.OpenAL.Extensions.Soft >= 2.20.0",
-      "Silk.NET.OpenAL.Soft.Native >= 1.21.1.2",
-      "StbImageSharp >= 2.27.13",
-      "System.Windows.Extensions >= 4.6.0"
+      "Silk.NET.Vulkan >= 2.20.0",
+      "StbImageSharp >= 2.27.13"
     ]
   },
   "packageFolders": {
@@ -1277,25 +1023,13 @@
             "target": "Package",
             "version": "[4.8.2, )"
           },
-          "Silk.NET.OpenAL": {
+          "Silk.NET.Vulkan": {
             "target": "Package",
             "version": "[2.20.0, )"
-          },
-          "Silk.NET.OpenAL.Extensions.Soft": {
-            "target": "Package",
-            "version": "[2.20.0, )"
-          },
-          "Silk.NET.OpenAL.Soft.Native": {
-            "target": "Package",
-            "version": "[1.21.1.2, )"
           },
           "StbImageSharp": {
             "target": "Package",
             "version": "[2.27.13, )"
-          },
-          "System.Windows.Extensions": {
-            "target": "Package",
-            "version": "[4.6.0, )"
           }
         },
         "imports": [

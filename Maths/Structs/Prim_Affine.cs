@@ -1,4 +1,4 @@
-﻿namespace Yari.Maths
+﻿namespace Yari.Maths.Structs
 {
 
 	public class affine
@@ -115,12 +115,21 @@
 			m12 = invDet * tmp12;
 		}
 
+		public rvec2 ApplyTo(rvec2 vec)
+		{
+			float x = vec.x;
+			float y = vec.y;
+			vec.x = m00 * x + m01 * y + m02;
+			vec.y = m10 * x + m11 * y + m12;
+			return vec;
+		}
+
 		public vec2 ApplyTo(ref vec2 vec)
 		{
 			float x = vec.x;
 			float y = vec.y;
-			vec.x = (m00 * x + m01 * y + m02);
-			vec.y = (m10 * x + m11 * y + m12);
+			vec.x = m00 * x + m01 * y + m02;
+			vec.y = m10 * x + m11 * y + m12;
 			return vec;
 		}
 

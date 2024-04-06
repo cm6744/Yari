@@ -40,7 +40,7 @@ namespace Yari.Common
 
 		public void Dispose()
 		{
-			timer.Dispose();
+			timer?.Dispose();
 		}
 
 	}

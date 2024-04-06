@@ -7,7 +7,7 @@ namespace Yari.Common.Resource
 	public class Localer
 	{
 
-		public Dictionary<string, BinaryCompound> Langs = new();
+		public Dictionary<string, BinaryCompound> Langs = new Dictionary<string, BinaryCompound>();
 		public string LangKey = "EN_US";
 
 		public void Load(string key, BinaryCompound compound)
@@ -17,7 +17,13 @@ namespace Yari.Common.Resource
 
 		public string Get(string key)
 		{
-			return Langs[LangKey].GetString(key);
+			if(!Langs.ContainsKey(LangKey))
+			{
+				return key;
+			}
+
+			BinaryCompound compound = Langs[LangKey];
+			return compound.Has(key) ? compound.Get<string>(key) : key;
 		}
 
 	}

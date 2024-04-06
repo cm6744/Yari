@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Yari.Codec;
+using Yari.Common.Registry;
 
 namespace Yari.Common.Resource
 {
@@ -7,10 +8,12 @@ namespace Yari.Common.Resource
 	public abstract class CommonLoader
 	{
 
-		protected float Progress;
-		protected float Total;
-		protected float Run;
-		protected bool Done;
+		public float Progress;
+		public float Total;
+		public float Run;
+		protected bool DoneBasically;
+		public int AsyncCount;
+		public virtual bool Done => DoneBasically && AsyncCount <= 0;
 
 		protected Queue<Runnable> PreLoadTasks = new Queue<Runnable>();
 		protected Queue<Runnable> Tasks = new Queue<Runnable>();
@@ -18,14 +21,16 @@ namespace Yari.Common.Resource
 		protected List<CommonLoader> Children = new List<CommonLoader>();
 
 		public string Namespace;
-		public ResMapper ResMapper;
-		public Localer Localer;
+		public readonly AssetMapper Mapper;
+		public readonly Localer Localer;
 
-		protected CommonLoader(Namespace space)
+		public FileHandler Filebase = FileSystem.GetAbsolute("");
+
+		protected CommonLoader(string namespc, AssetMapper mapper, Localer localer)
 		{
-			Namespace = space.Name;
-			ResMapper = space.ResMapper;
-			Localer = space.Localer;
+			Namespace = namespc;
+			Mapper = mapper;
+			Localer = localer;
 		}
 
 		public void SubLoader(CommonLoader loader)
@@ -43,17 +48,7 @@ namespace Yari.Common.Resource
 				Tasks.Enqueue(loaderTask);
 			}
 
-			Done = false;
-		}
-
-		public void Enqueue(Runnable task, bool preLoad)
-		{
-			Enqueue0(task, preLoad);
-		}
-
-		public void Enqueue(Runnable task)
-		{
-			Enqueue0(task, false);
+			DoneBasically = false;
 		}
 
 		void Enqueue0(Runnable task, bool preLoad)
@@ -62,7 +57,7 @@ namespace Yari.Common.Resource
 			{
 				Tasks.Enqueue(task);
 				++Total;
-				Done = false;
+				DoneBasically = false;
 			}
 			else
 			{
@@ -87,7 +82,7 @@ namespace Yari.Common.Resource
 		{
 			if(Tasks.Count == 0)
 			{
-				Done = true;
+				DoneBasically = true;
 				Progress = 1;
 			}
 			else
@@ -103,44 +98,72 @@ namespace Yari.Common.Resource
 			Total = Tasks.Count;
 			Run = 0;
 			Progress = 0;
-			Done = false;
+			DoneBasically = false;
 		}
 
-		public void PreLoad(FileHandler fileBase, FileHandler file)
+		public void Enqueue(Runnable task, bool preLoad)
 		{
-			string resName = file.Path.Replace(fileBase.Path + "/", "");
-			AddLoadTask(resName, file, true);
+			Enqueue0(task, preLoad);
 		}
 
-		public void Scan(FileHandler fileBase)
+		public void Enqueue(Runnable task)
 		{
-			Scan(fileBase, fileBase);
+			Enqueue0(task, false);
 		}
 
-		public void Scan(FileHandler fileBase, FileHandler startPos)
+		public void PreEnqueue(Runnable task)
 		{
-			string basef = startPos.Path;
-			FileHandler[] files = fileBase.Folders();
+			Enqueue0(task, true);
+		}
+
+		public void AsyncEnqueue(Runnable task)
+		{
+			AsyncCount++;
+			Enqueue0(() =>
+			{
+				new Coroutine(() =>
+				{
+					task.Invoke();
+					AsyncCount--;
+				}).Start();
+			}, true);
+		}
+
+		public void Load(FileHandler file, bool preload)
+		{
+			string resName = file.Path.Replace(Filebase.Path + "/", "");
+			AddLoadTask(resName, file, preload);
+		}
+
+		public void Load(FileHandler file)
+		{
+			Load(file, false);
+		}
+
+		public void PreLoad(FileHandler file)
+		{
+			Load(file, true);
+		}
+
+		public void Scan(bool preload)
+		{
+			Scan(Filebase, preload);
+		}
+
+		public void Scan(FileHandler startPos, bool preload)
+		{
+			FileHandler[] files = startPos.Directories();
 
 			foreach(FileHandler file in files)
 			{
-				if(file.IsFolder())
-				{
-					Scan(file, startPos);
-				}
-				else if(file.IsDocument())
-				{
-					string resName = file.Path.Replace(basef + "/", "");
-					AddLoadTask(resName, file, false);
-				}
+				Scan(file, preload);
 			}
 
-			files = fileBase.Documents();
+			files = startPos.Files();
 
 			foreach(FileHandler file in files)
 			{
-				string resName = file.Path.Replace(basef + "/", "");
-				AddLoadTask(resName, file, false);
+				Load(file, preload);
 			}
 		}
 

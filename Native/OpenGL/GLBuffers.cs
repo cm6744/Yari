@@ -19,7 +19,7 @@ namespace Yari.Native.OpenGL
 
 			GL.BufferData(type, data.Length * sizeof(T), data, BufferUsageHint.DynamicDraw);
 
-			Finalisation.FREE.OnHoldReferred(() => GL.DeleteBuffer(Id));
+			Finalization.FREE.OnHoldReferred(() => GL.DeleteBuffer(Id));
 		}
 
 		public void Bind()
@@ -56,7 +56,7 @@ namespace Yari.Native.OpenGL
 			vbo.Bind();
 			ebo?.Bind();
 
-			Finalisation.FREE.OnHoldReferred(() => GL.DeleteVertexArray(Id));
+			Finalization.FREE.OnHoldReferred(() => GL.DeleteVertexArray(Id));
 		}
 
 		public void Bind()

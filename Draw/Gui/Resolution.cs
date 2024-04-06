@@ -12,15 +12,14 @@ namespace Yari.Draw.Gui
 
 		public Resolution(Screen curScreen, float scaleForced = 0, bool limitInt = false)
 		{
-			ScaledWidth = Platform.GraphicEnv.Size.x;
-			ScaledHeight = Platform.GraphicEnv.Size.y;
+			ScaledWidth = Platform.Graph.Size.x;
+			ScaledHeight = Platform.Graph.Size.y;
 
 			if(scaleForced <= 0)
 			{
 				ScaleFactor = 0.5f;
 
-				while(ScaleFactor < 1.5f
-				      && ScaledWidth / (ScaleFactor + 1) >= 320
+				while(ScaleFactor < 1.5f && ScaledWidth / (ScaleFactor + 1) >= 320
 				      && ScaledHeight / (ScaleFactor + 1) >= 240)
 				{
 					ScaleFactor += 0.5f;
@@ -50,6 +49,8 @@ namespace Yari.Draw.Gui
 
 			ScaledWidth /= ScaleFactor;
 			ScaledHeight /= ScaleFactor;
+
+			curScreen?.Resolve(this);
 		}
 
 	}

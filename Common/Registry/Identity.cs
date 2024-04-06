@@ -1,4 +1,4 @@
-﻿namespace Yari.Common
+﻿namespace Yari.Common.Registry
 {
 
 	public struct Identity
@@ -21,18 +21,23 @@
 
 		public Identity(string path, int id = NullId)
 		{
-			if(!path.Contains('.'))
+			if(!path.Contains(':'))
 			{
 				Namespace = DefaultNamespace;
 				Key = path;
 			}
 			else
 			{
-				string[] arr = path.Split('.');
+				string[] arr = path.Split(':');
 				Namespace = arr[0];
 				Key = arr[1];
 			}
 			Id = id;
+		}
+
+		public bool Insideof(string path)
+		{
+			return Key.StartsWith(path);
 		}
 
 		public override bool Equals(object obj)
@@ -63,6 +68,13 @@
 		public static bool operator !=(Identity i1, Identity i2)
 		{
 			return !(i1 == i2);
+		}
+
+		public string Path => ToString();
+
+		public override string ToString()
+		{
+			return Namespace + ":" + Key;
 		}
 
 	}

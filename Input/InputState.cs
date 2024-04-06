@@ -1,6 +1,6 @@
 ﻿using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Input
 {
@@ -18,7 +18,7 @@ namespace Yari.Input
 
 		void PushToClipboard(string text);
 
-		string getTextInput();
+		string GetTextInput();
 
 		void ConsumeTextInput();
 

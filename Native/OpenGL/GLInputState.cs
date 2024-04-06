@@ -2,6 +2,7 @@
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Yari.Input;
 using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
 {
@@ -41,7 +42,7 @@ namespace Yari.Native.OpenGL
 			GLFW.SetClipboardString(GLDevice.Window, text);
 		}
 
-		public string getTextInput()
+		public string GetTextInput()
 		{
 			return PileChars;
 		}

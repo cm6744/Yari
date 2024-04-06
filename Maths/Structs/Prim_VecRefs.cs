@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Yari.Maths
+namespace Yari.Maths.Structs
 {
 
 	public class rvec2
@@ -22,6 +22,12 @@ namespace Yari.Maths
 		{
 			x = rvec[0];
 			y = rvec[1];
+		}
+
+		public void Copy(rvec2 vec)
+		{
+			x = vec.x;
+			y = vec.y;
 		}
 
 		public static rvec2 operator +(rvec2 rvec1, rvec2 rvec2)

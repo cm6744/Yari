@@ -1,36 +1,37 @@
 ﻿using System;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using Yari.Draw;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
 {
 
-	public class GLGraphicEnv : GraphicEnv
+	public class GLGraphicEnvironment : GraphicEnvironment
 	{
 
-		public vec2 Size
+		public unsafe vec2 Size
 		{
 			get
 			{
-				unsafe
-				{
-					GLFW.GetWindowSize(GLDevice.Window, out int x, out int y);
-					return new vec2(x, y);
-				}
+				GLFW.GetWindowSize(GLDevice.Window, out int x, out int y);
+				return new vec2(x, y);
 			}
+			set => GLFW.SetWindowSize(GLDevice.Window, (int) value.x, (int) value.y);
 		}
 
-		public vec2 Pos 
+		public unsafe vec2 Pos 
 		{
 			get
 			{
-				unsafe
-				{
-					GLFW.GetWindowPos(GLDevice.Window, out int x, out int y);
-					return new vec2(x, y);
-				}
+				GLFW.GetWindowPos(GLDevice.Window, out int x, out int y);
+				return new vec2(x, y);
 			}
+			set => GLFW.SetWindowPos(GLDevice.Window, (int) value.x, (int) value.y);
+		}
+
+		public unsafe bool Decorated
+		{
+			set => GLFW.SetWindowAttrib(GLDevice.Window, WindowAttribute.Decorated, value);
 		}
 
 		public long Nanotime => (long) (GLFW.GetTime() * 1000_000_000);

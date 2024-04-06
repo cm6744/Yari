@@ -1,14 +1,16 @@
-﻿using Yari.Maths;
+﻿using Yari.Maths.Structs;
 
 namespace Yari.Draw
 {
 
-	public interface GraphicEnv
+	public interface GraphicEnvironment
 	{
 
-		vec2 Size { get; }
+		vec2 Size { get; set; }
 
-		vec2 Pos { get; }
+		vec2 Pos { get; set; }
+
+		bool Decorated { set; }
 
 		long Nanotime { get; }
 

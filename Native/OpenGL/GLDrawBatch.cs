@@ -3,6 +3,7 @@ using OpenTK.Graphics.OpenGL;
 using Yari.Common;
 using Yari.Draw;
 using Yari.Maths;
+using Yari.Maths.Structs;
 using Texture = Yari.Draw.Texture;
 
 namespace Yari.Native.OpenGL
@@ -30,7 +31,6 @@ namespace Yari.Native.OpenGL
 
 		private PrimitiveType NowType;
 
-		public GLTexture TextureColorFill;
 		public int MinVertexBufSize = 256;
 
 		public GLDrawBatch(int size)
@@ -52,7 +52,7 @@ namespace Yari.Native.OpenGL
 			UniTexture = ProgramDefault.GetUniform("u_texture");
 
 			//Get as default
-			ViewportArray = new vec4(0, 0, Platform.GraphicEnv.Size.x, Platform.GraphicEnv.Size.y);
+			ViewportArray = new vec4(0, 0, Platform.Graph.Size.x, Platform.Graph.Size.y);
 		}
 
 		public void Load(GLShaderProgram program)
@@ -109,6 +109,8 @@ namespace Yari.Native.OpenGL
 		public override void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
 			float srcWidth, float srcHeight)
 		{
+			if(texture == null) return;
+
 			GLTexture glt = (GLTexture) texture;
 
 			CheckTransformAndCap();
@@ -280,11 +282,6 @@ namespace Yari.Native.OpenGL
 			NewVertex(6);
 		}
 
-		public override void FillTex(float x, float y, float width, float height)
-		{
-			Draw(TextureColorFill, x, y, width, height);
-		}
-
 		public override void CheckTransformAndCap()
 		{
 			if(Vertices.Length - Idx < MinVertexBufSize)
@@ -414,8 +411,8 @@ namespace Yari.Native.OpenGL
 
 		public override void EndCamera(PerspectiveCamera camera)
 		{
-			NullCam.Viewport.w = Platform.GraphicEnv.Size.x;
-			NullCam.Viewport.h = Platform.GraphicEnv.Size.y;
+			NullCam.Viewport.w = Platform.Graph.Size.x;
+			NullCam.Viewport.h = Platform.Graph.Size.y;
 			NullCam.ToCenter();
 			NullCam.Push();
 			UseCamera(NullCam);
@@ -425,11 +422,6 @@ namespace Yari.Native.OpenGL
 
 		private static GLShaderProgram GetDefaultShader()
 		{
-			const string attrs = "{" +
-			                     "	i_position = [2, 8, 0];" +
-			                     "	i_color = [4, 8, 2];" +
-			                     "	i_texCoord = [2, 8, 6];" +
-			                     "}";
 			const string vert = "#version 150 core\n" +
 			              "\n" +
 			              "in vec2 i_position;\n" +
@@ -460,15 +452,23 @@ namespace Yari.Native.OpenGL
 			              "    vec4 col = texture(u_texture, o_texCoord);\n" +
 			              "    fragColor = o_color * col;\n" +
 			              "}";
-			return ShaderBuilds.Build(vert, frag, attrs);
+			return ShaderBuilds.Build(vert, frag, program =>
+			{
+				Attribute posAttrib = program.GetAttribute("i_position");
+				posAttrib.Enable();
+				Attribute colAttrib = program.GetAttribute("i_color");
+				colAttrib.Enable();
+				Attribute texAttrib = program.GetAttribute("i_texCoord");
+				texAttrib.Enable();
+
+				posAttrib.Ptr(VertexAttribPointerType.Float, 2, 32, 0);
+				colAttrib.Ptr(VertexAttribPointerType.Float, 4, 32, 8);
+				texAttrib.Ptr(VertexAttribPointerType.Float, 2, 32, 24);
+			});
 		}
 
 		private static GLShaderProgram GetDefaultShaderShape()
 		{
-			const string attrs = "{" +
-			                     "	i_position = [2, 8, 0];" +
-			                     "	i_color = [4, 8, 2];" +
-			                     "}";
 			const string vert = "#version 150 core\n" +
 			                    "\n" +
 			                    "in vec2 i_position;\n" +
@@ -479,8 +479,7 @@ namespace Yari.Native.OpenGL
 			                    "uniform mat4 u_proj;\n" +
 			                    "\n" +
 			                    "void main() {\n" +
-			                    "    o_color = i_color;\n" +
-			                    "\n" +
+								"    o_color = i_color;\n" +
 			                    "    gl_Position = u_proj * vec4(i_position, 0.0, 1.0);\n" +
 			                    "}\n";
 			const string frag = "#version 150 core\n" +
@@ -492,7 +491,16 @@ namespace Yari.Native.OpenGL
 			              "void main() {\n" +
 			              "    fragColor = o_color;\n" +
 			              "}";
-			return ShaderBuilds.Build(vert, frag, attrs);
+			return ShaderBuilds.Build(vert, frag, program =>
+			{
+				Attribute posAttrib = program.GetAttribute("i_position");
+				posAttrib.Enable();
+				Attribute colAttrib = program.GetAttribute("i_color");
+				colAttrib.Enable();
+				
+				posAttrib.Ptr(VertexAttribPointerType.Float, 2, 24, 0);
+				colAttrib.Ptr(VertexAttribPointerType.Float, 4, 24, 8);
+			});
 		}
 
 	}

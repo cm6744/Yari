@@ -52,23 +52,23 @@ namespace Yari.Native.OpenGL
 			);
 
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-				(int) GraphicsDeviceSettings.FilterMag);
+				(int) GLDeviceSettings.FilterMag);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-				(int) GraphicsDeviceSettings.FilterMin);
+				(int) GLDeviceSettings.FilterMin);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS,
-				(int) GraphicsDeviceSettings.Wrap);
+				(int) GLDeviceSettings.Wrap);
 			GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT,
-				(int) GraphicsDeviceSettings.Wrap);
+				(int) GLDeviceSettings.Wrap);
 
-			if(GraphicsDeviceSettings.MipmapLevel > 0)
+			if(GLDeviceSettings.MipmapLevel > 0)
 			{
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureBaseLevel, 0);
 				GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMaxLevel,
-					GraphicsDeviceSettings.MipmapLevel);
+					GLDeviceSettings.MipmapLevel);
 				GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
 			}
 
-			Finalisation.FREE.OnHoldReferred(() => GL.DeleteTexture(Id));
+			Finalization.FREE.OnHoldReferred(() => GL.DeleteTexture(Id));
 		}
 
 	}

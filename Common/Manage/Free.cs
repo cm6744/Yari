@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using Yari.Common.Registry;
 using Yari.Common.Toolkit;
 
 namespace Yari.Common.Manage
 {
 
-	public class Finalisation
+	public class Finalization
 	{
 
-		public static Finalisation FREE = new Finalisation();
+		public static Finalization FREE = new Finalization();
 
 		private List<Runnable> ToRelease = new List<Runnable>();
 
@@ -24,18 +25,19 @@ namespace Yari.Common.Manage
 			if(this == FREE)
 			{
 				Log.Info("Final disposing ended. GLOBAL-FREE was cleared.");
+				Log.TryEndStreamWriting();
 			}
 		}
 
 
-		private static Dictionary<Identity, Finalisation> ShortNatives = new Dictionary<Identity, Finalisation>();
+		private static Dictionary<Identity, Finalization> ShortNatives = new Dictionary<Identity, Finalization>();
 
 		//Provides a short-time native manager, and you're supposed to free it by yourself when its usage ends.
-		public static Finalisation GetFree(Identity key)
+		public static Finalization GetFree(Identity key)
 		{
 			if(!ShortNatives.ContainsKey(key))
 			{
-				ShortNatives[key] = new Finalisation();
+				ShortNatives[key] = new Finalization();
 			}
 
 			return ShortNatives[key];

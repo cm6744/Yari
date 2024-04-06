@@ -6,10 +6,10 @@ using Yari.Draw;
 namespace Yari.Common.Resource
 {
 
-	public class ResManager<T>
+	public class AssetManager<T>
 	{
 
-		private Dictionary<string, T> ResDict = new();
+		private Dictionary<string, T> ResDict = new Dictionary<string, T>();
 
 		public void Load(string key, T o)
 		{
@@ -23,7 +23,7 @@ namespace Yari.Common.Resource
 
 		public T Get(string key)
 		{
-			return ResDict[key];
+			return ResDict.GetValueOrDefault(key, default);
 		}
 
 		public Ref<T> Refer(string key)

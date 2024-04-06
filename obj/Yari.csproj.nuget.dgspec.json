@@ -45,25 +45,13 @@
               "target": "Package",
               "version": "[4.8.2, )"
             },
-            "Silk.NET.OpenAL": {
+            "Silk.NET.Vulkan": {
               "target": "Package",
               "version": "[2.20.0, )"
-            },
-            "Silk.NET.OpenAL.Extensions.Soft": {
-              "target": "Package",
-              "version": "[2.20.0, )"
-            },
-            "Silk.NET.OpenAL.Soft.Native": {
-              "target": "Package",
-              "version": "[1.21.1.2, )"
             },
             "StbImageSharp": {
               "target": "Package",
               "version": "[2.27.13, )"
-            },
-            "System.Windows.Extensions": {
-              "target": "Package",
-              "version": "[4.6.0, )"
             }
           },
           "imports": [

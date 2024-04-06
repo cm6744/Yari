@@ -1,12 +1,15 @@
 ﻿using System.Drawing;
 using System;
 using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Draw
 {
 
 	public abstract class DrawBatch
 	{
+
+		public static int DefaultSize = 1024 * 8;
 
 		public affine Transform = new affine();
 		public matrix4 Projection = new matrix4();
@@ -17,7 +20,9 @@ namespace Yari.Draw
 		public int DrawCalls = 0;
 		public vec4 ViewportArray;
 		public Font Font;
-
+		public FontCarver FontCarver = new DefaultFontCarver();
+		public Texture Texfil;
+		
 		public abstract void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
 			float srcWidth, float srcHeight);
 
@@ -36,12 +41,12 @@ namespace Yari.Draw
 			Draw(tex, x, y, tex.Width, tex.Height, 0, 0, tex.Width, tex.Height);
 		}
 
-		public void Draw(Texture tex, Rect rect, float sx, float sy, float sw, float sh)
+		public void Draw(Texture tex, Maths.Structs.AxisAlignedSized rect, float sx, float sy, float sw, float sh)
 		{
 			Draw(tex, rect.x, rect.y, rect.w, rect.h, sx, sy, sw, sh);
 		}
 
-		public void Draw(Texture tex, Rect rect)
+		public void Draw(Texture tex, Maths.Structs.AxisAlignedSized rect)
 		{
 			Draw(tex, rect.x, rect.y, rect.w, rect.h);
 		}
@@ -51,7 +56,7 @@ namespace Yari.Draw
 			icon.Draw(this, x, y, w, h);
 		}
 
-		public void Draw(Icon icon, Rect rect)
+		public void Draw(Icon icon, Maths.Structs.AxisAlignedSized rect)
 		{
 			Draw(icon, rect.x, rect.y, rect.w, rect.h);
 		}
@@ -60,7 +65,10 @@ namespace Yari.Draw
 
 		//This method use the textured mode to present a rectangle.
 		//Sometimes this is a much better choice.
-		public abstract void FillTex(float x, float y, float width, float height);
+		public void FillTex(float x, float y, float width, float height)
+		{
+			Draw(Texfil, x, y, width, height);
+		}
 
 		//Invoke this before you start each object rendering with your own write verts.
 		public abstract void CheckTransformAndCap();
@@ -143,64 +151,25 @@ namespace Yari.Draw
 
 		//Font Rendering:
 
-		public void Draw(string text, float x, float y, float maxWidth)
+		public void Draw(string text, float x, float y, float maxWidth = int.MaxValue)
 		{
-			if(string.IsNullOrWhiteSpace(text))
-			{
-				return;
-			}
-
-			int fontHeight = (int) (Font.YSize * Font.Scale);
-
-			float drawX = x;
-			float drawY = y;
-
-			bool newLine = false;
-
-			for(int i = 0; i < text.Length; i++)
-			{
-				char ch = text[i];
-				if(ch == '\n' || newLine)
-				{
-					drawY -= fontHeight;
-					drawX = x;
-					newLine = false;
-					continue;
-				}
-
-				if(ch == '\r')
-				{
-					continue;
-				}
-
-				int w = (int) (Font.GlyphWidth[ch] * Font.Scale);
-				if(drawX - x + w >= maxWidth)
-				{
-					newLine = true;
-					i -= (int) (2 * Font.Scale); //correct index
-					continue;
-				}
-
-				Draw(Font.texture[Font.Locate(ch)], drawX, drawY, w, fontHeight,
-					Font.GlyphX[ch], Font.GlyphY[ch], Font.GlyphWidth[ch], Font.YSize);
-				drawX += w;
-			}
+			FontCarver.Draw(this, Font, text, x, y, maxWidth);
 		}
 
-		public void Draw(string text, float x, float y, Align align)
+		public void Draw(string text, float x, float y, Align align, float maxWidth = int.MaxValue)
 		{
-			GlyphBounds bounds = Font.getBounds(text);
+			GlyphBounds bounds = Font.GetBounds(text);
 
 			switch(align)
 			{
 				case Align.LEFT:
-					Draw(text, x, y, int.MaxValue);
+					Draw(text, x, y, maxWidth);
 					break;
 				case Align.RIGHT:
-					Draw(text, (x - bounds.Width), y, int.MaxValue);
+					Draw(text, (x - bounds.Width), y, maxWidth);
 					break;
 				case Align.CENTER:
-					Draw(text, (x - bounds.Width / 2F), y, int.MaxValue);
+					Draw(text, (x - bounds.Width / 2.0F), y, maxWidth);
 					break;
 			}
 		}

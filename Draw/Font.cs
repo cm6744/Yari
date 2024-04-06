@@ -27,10 +27,10 @@ namespace Yari.Draw
 			Font font = new Font();
 			font.texture = textures;
 			font.Locate = locator;
-			font.GlyphX = compound.GetInts("ArrayX");
-			font.GlyphY = compound.GetInts("ArrayY");
-			font.GlyphWidth = compound.GetInts("ArrayWidth");
-			font.YSize = compound.GetInt("Height");
+			font.GlyphX = compound.Get<int[]>("ArrayX");
+			font.GlyphY = compound.Get<int[]>("ArrayY");
+			font.GlyphWidth = compound.Get<int[]>("ArrayWidth");
+			font.YSize = compound.Get<int>("Height");
 
 			return font;
 		}
@@ -45,7 +45,7 @@ namespace Yari.Draw
 		public LocatePage Locate;
 		public float Scale = 1f;
 
-		public GlyphBounds getBounds(string text, float maxWidth, bool useMinWidth)
+		public GlyphBounds GetBounds(string text, float maxWidth)
 		{
 			if(string.IsNullOrWhiteSpace(text))
 			{
@@ -61,17 +61,13 @@ namespace Yari.Draw
 			for(int i = 0; i < text.Length; i++)
 			{
 				char c = text[i];
+
 				if(c == '\n' || needNewLine)
 				{
 					height += lineHeight;
-					width = useMinWidth ? System.Math.Min(lineWidth, width) : System.Math.Max(lineWidth, width);
+					width = Math.Max(lineWidth, width);
 					lineWidth = 0;
 					needNewLine = false;
-					continue;
-				}
-
-				if(c == '\r')
-				{
 					continue;
 				}
 
@@ -91,14 +87,9 @@ namespace Yari.Draw
 			return new GlyphBounds(text, width, height);
 		}
 
-		public GlyphBounds getBounds(string text, float maxWidth)
+		public GlyphBounds GetBounds(string text)
 		{
-			return getBounds(text, maxWidth, false);
-		}
-
-		public GlyphBounds getBounds(string text)
-		{
-			return getBounds(text, int.MaxValue);
+			return GetBounds(text, int.MaxValue);
 		}
 
 	}

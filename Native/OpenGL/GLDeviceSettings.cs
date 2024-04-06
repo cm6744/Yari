@@ -1,19 +1,16 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
-using Yari.Maths;
+using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
 {
 
-	public class GraphicsDeviceSettings
+	public class GLDeviceSettings
 	{
 
 		public vec2 Size = new vec2(128, 128);
-		public bool Fullframe;
-
-		public int Stencil = 1;
-		public int Samples = 1;
-		public string Title = "Yari OpenTK";
+		
+		public string Title = "Yari OpenGL";
 		public bool Floating = false;
 		public bool Resizable = true;
 		public bool Decorated = true;

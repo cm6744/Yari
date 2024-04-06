@@ -45,7 +45,8 @@ namespace Yari.Common.Manage
 	public class Eventbus
 	{
 
-		private static readonly Dictionary<EventType, EventSubscriber> Dict = new();
+		private static readonly Dictionary<EventType, EventSubscriber> Dict =
+			new Dictionary<EventType, EventSubscriber>();
 
 		public static void Observe(EventType type, EventSubscriber subs)
 		{
