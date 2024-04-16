@@ -20,7 +20,7 @@ namespace Yari.Draw.Gui.Structs
 		public TextConvert TextRelinker = (f) => f.ToString("%.2f", CultureInfo.InvariantCulture);
 
 		Button decrease, increase;
-		AxisAlignedSized decRect, incRect;
+		box4 decRect, incRect;
 		int scrollBuf;
 
 		public SlidePad(Button dec, Button inc)
@@ -43,8 +43,8 @@ namespace Yari.Draw.Gui.Structs
 
 		public void Correct()
 		{
-			decRect.Pos = new vec2(Bound.x, Bound.y);
-			incRect.Pos = new vec2(Bound.xprom - incRect.w, Bound.y);
+			decRect.Locate(Bound.x, Bound.y);
+			incRect.Locate(Bound.xprom - incRect.w, Bound.y);
 		}
 
 		private void Check()
@@ -60,7 +60,7 @@ namespace Yari.Draw.Gui.Structs
 			}
 		}
 
-		public override void Input(InputState input, rvec2 cursor)
+		public override void Input(InputState input, mutvec2 cursor)
 		{
 			float scr = input.GetCursorScroll();
 

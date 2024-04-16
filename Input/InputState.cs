@@ -8,7 +8,7 @@ namespace Yari.Input
 	public interface InputState
 	{
 
-		public rvec2 Cursor { get; }
+		public mutvec2 Cursor { get; }
 
 		InputObserver Observe(Keycode code);
 

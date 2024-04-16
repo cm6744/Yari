@@ -3,7 +3,7 @@
 namespace Yari.Common
 {
 
-	public class Version : IComparable<Version>
+	public class VersionInfo : IComparable<VersionInfo>
 	{
 
 		public string FullName;
@@ -12,7 +12,7 @@ namespace Yari.Common
 		public bool Stable;
 		public int Iteration;
 
-		public Version(string code, int iteration)
+		public VersionInfo(string code, int iteration)
 		{
 			FullName = code;
 			Prefix = code[code.IndexOf('-')..];
@@ -22,7 +22,7 @@ namespace Yari.Common
 			Iteration = iteration;
 		}
 
-		public int CompareTo(Version other)
+		public int CompareTo(VersionInfo other)
 		{
 			if(other.Iteration < Iteration) return 1;
 			if(other.Iteration == Iteration) return 0;

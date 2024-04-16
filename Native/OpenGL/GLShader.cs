@@ -27,14 +27,14 @@ namespace Yari.Native.OpenGL
 			Finalization.FREE.OnHoldReferred(Release);
 		}
 
-		public Attribute GetAttribute(string attr)
+		public ShaderAttribute GetAttribute(string attr)
 		{
-			return new Attribute(GL.GetAttribLocation(id, attr));
+			return new ShaderAttribute(GL.GetAttribLocation(id, attr));
 		}
 
-		public Uniform GetUniform(string name)
+		public ShaderUniform GetUniform(string name)
 		{
-			return new Uniform(GL.GetUniformLocation(id, name));
+			return new ShaderUniform(GL.GetUniformLocation(id, name));
 		}
 
 		public override void Bind()
@@ -60,12 +60,12 @@ namespace Yari.Native.OpenGL
 
 	}
 
-	public struct Attribute
+	public struct ShaderAttribute
 	{
 
 		private int id;
 
-		public Attribute(int id)
+		public ShaderAttribute(int id)
 		{
 			this.id = id;
 		}
@@ -94,12 +94,12 @@ namespace Yari.Native.OpenGL
 
 	}
 
-	public struct Uniform
+	public struct ShaderUniform
 	{
 
 		private int id;
 
-		public Uniform(int id)
+		public ShaderUniform(int id)
 		{
 			this.id = id;
 		}

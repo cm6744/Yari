@@ -1,11 +1,14 @@
 ﻿namespace Yari.Draw
 {
 
-	public struct TexturePart : Icon
+	public struct TexturePart : DimesionalIcon
 	{
 
 		public Texture Texture;
 		public float u, v, uw, vh;
+
+		public int Width => (int) uw;
+		public int Height => (int) vh;
 
 		public static TexturePart BySize(Texture tex, float u, float v, float uw, float vh)
 		{

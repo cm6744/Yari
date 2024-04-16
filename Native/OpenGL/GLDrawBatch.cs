@@ -18,18 +18,14 @@ namespace Yari.Native.OpenGL
 		public VertArrayObject<float, int> Vao;
 		public BufferObject<float> Vbo;
 
-		public GLShaderProgram Program;
 		public GLShaderProgram ProgramDefault;
-		public GLShaderProgram ProgramShape;
-
-		Uniform UniTexture;
-		Uniform UniProjection;
+	
+		ShaderUniform UniTexture;
+		ShaderUniform UniProjection;
 
 		int TextureID;
 		float InvTexWidth;
 		float InvTexHeight;
-
-		private PrimitiveType NowType;
 
 		public int MinVertexBufSize = 256;
 
@@ -45,7 +41,6 @@ namespace Yari.Native.OpenGL
 			Vao = new VertArrayObject<float, int>(Vbo, null);
 
 			ProgramDefault = GetDefaultShader();
-			ProgramShape = GetDefaultShaderShape();
 
 			Load(ProgramDefault);
 
@@ -74,36 +69,14 @@ namespace Yari.Native.OpenGL
 			Load(ProgramDefault);
 		}
 
-		public override void PrimitiveMode(Primitives primitives)
-		{
-			Flush();
-
-			NowType = primitives switch
-			{
-				Primitives.Triangles => PrimitiveType.Triangles,
-				Primitives.Lines => PrimitiveType.Lines,
-				Primitives.Point => PrimitiveType.Points
-			};
-		}
-
 		public override void UseShader(ShaderProgram program)
 		{
 			Load((GLShaderProgram) program);
 		}
 
-		public override void FragMode(Frags mode)
+		public override void UseDefaultShader()
 		{
-			Flush();
-
-			switch(mode)
-			{
-				case Frags.Textured:
-					Load(ProgramDefault);
-					break;
-				case Frags.ColorFill:
-					Load(ProgramShape);
-					break;
-			}
+			Load(ProgramDefault);
 		}
 
 		public override void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
@@ -126,14 +99,37 @@ namespace Yari.Native.OpenGL
 
 			TextureID = id;
 
-			float x1 = x + Transform.m02;
-			float y1 = y + Transform.m12;
-			float x2 = x + Transform.m01 * height + Transform.m02;
-			float y2 = y + Transform.m11 * height + Transform.m12;
-			float x3 = x + Transform.m00 * width + Transform.m01 * height + Transform.m02;
-			float y3 = y + Transform.m10 * width + Transform.m11 * height + Transform.m12;
-			float x4 = x + Transform.m00 * width + Transform.m02;
-			float y4 = y + Transform.m10 * width + Transform.m12;
+			float x1;
+			float y1;
+			float x2;
+			float y2;
+			float x3;
+			float y3;
+			float x4;
+			float y4;
+
+			if(!Matrices.IsEmpty)
+			{
+				x1 = x + Transform.m02;
+				y1 = y + Transform.m12;
+				x2 = x + Transform.m01 * height + Transform.m02;
+				y2 = y + Transform.m11 * height + Transform.m12;
+				x3 = x + Transform.m00 * width + Transform.m01 * height + Transform.m02;
+				y3 = y + Transform.m10 * width + Transform.m11 * height + Transform.m12;
+				x4 = x + Transform.m00 * width + Transform.m02;
+				y4 = y + Transform.m10 * width + Transform.m12;
+			}
+			else
+			{
+				x1 = x;
+				y1 = y;
+				x2 = x;
+				y2 = y + height;
+				x3 = x + width;
+				y3 = y + height;
+				x4 = x + width;
+				y4 = y;
+			}
 
 			float u = (srcX) * InvTexWidth;
 			float v = (srcY) * InvTexHeight;
@@ -165,25 +161,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (u2);
 			Vertices[Idx++] = (v);
 
-			//RD
-			Vertices[Idx++] = (x4);
-			Vertices[Idx++] = (y4);
-			Vertices[Idx++] = (Color[3].x);
-			Vertices[Idx++] = (Color[3].y);
-			Vertices[Idx++] = (Color[3].z);
-			Vertices[Idx++] = (Color[3].w);
-			Vertices[Idx++] = (u2);
-			Vertices[Idx++] = (v2);
-
-			//LT
-			Vertices[Idx++] = (x2);
-			Vertices[Idx++] = (y2);
-			Vertices[Idx++] = (Color[1].x);
-			Vertices[Idx++] = (Color[1].y);
-			Vertices[Idx++] = (Color[1].z);
-			Vertices[Idx++] = (Color[1].w);
-			Vertices[Idx++] = (u);
-			Vertices[Idx++] = (v);
+			VertAppenders[2]?.Invoke(this);
 
 			//RD
 			Vertices[Idx++] = (x4);
@@ -195,15 +173,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (u2);
 			Vertices[Idx++] = (v2);
 
-			//LD
-			Vertices[Idx++] = (x1);
-			Vertices[Idx++] = (y1);
-			Vertices[Idx++] = (Color[0].x);
-			Vertices[Idx++] = (Color[0].y);
-			Vertices[Idx++] = (Color[0].z);
-			Vertices[Idx++] = (Color[0].w);
-			Vertices[Idx++] = (u);
-			Vertices[Idx++] = (v2);
+			VertAppenders[3]?.Invoke(this);
 
 			//LT
 			Vertices[Idx++] = (x2);
@@ -215,29 +185,7 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (u);
 			Vertices[Idx++] = (v);
 
-			NewVertex(6);
-		}
-
-		public override void Fill(float x, float y, float width, float height)
-		{
-			CheckTransformAndCap();
-
-			float x1 = x + Transform.m02;
-			float y1 = y + Transform.m12;
-			float x2 = x + Transform.m01 * height + Transform.m02;
-			float y2 = y + Transform.m11 * height + Transform.m12;
-			float x3 = x + Transform.m00 * width + Transform.m01 * height + Transform.m02;
-			float y3 = y + Transform.m10 * width + Transform.m11 * height + Transform.m12;
-			float x4 = x + Transform.m00 * width + Transform.m02;
-			float y4 = y + Transform.m10 * width + Transform.m12;
-
-			//RT
-			Vertices[Idx++] = (x3);
-			Vertices[Idx++] = (y3);
-			Vertices[Idx++] = (Color[2].x);
-			Vertices[Idx++] = (Color[2].y);
-			Vertices[Idx++] = (Color[2].z);
-			Vertices[Idx++] = (Color[2].w);
+			VertAppenders[1]?.Invoke(this);
 
 			//RD
 			Vertices[Idx++] = (x4);
@@ -246,22 +194,10 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[3].y);
 			Vertices[Idx++] = (Color[3].z);
 			Vertices[Idx++] = (Color[3].w);
+			Vertices[Idx++] = (u2);
+			Vertices[Idx++] = (v2);
 
-			//LT
-			Vertices[Idx++] = (x2);
-			Vertices[Idx++] = (y2);
-			Vertices[Idx++] = (Color[1].x);
-			Vertices[Idx++] = (Color[1].y);
-			Vertices[Idx++] = (Color[1].z);
-			Vertices[Idx++] = (Color[1].w);
-
-			//RD
-			Vertices[Idx++] = (x4);
-			Vertices[Idx++] = (y4);
-			Vertices[Idx++] = (Color[3].x);
-			Vertices[Idx++] = (Color[3].y);
-			Vertices[Idx++] = (Color[3].z);
-			Vertices[Idx++] = (Color[3].w);
+			VertAppenders[3]?.Invoke(this);
 
 			//LD
 			Vertices[Idx++] = (x1);
@@ -270,6 +206,10 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[0].y);
 			Vertices[Idx++] = (Color[0].z);
 			Vertices[Idx++] = (Color[0].w);
+			Vertices[Idx++] = (u);
+			Vertices[Idx++] = (v2);
+
+			VertAppenders[0]?.Invoke(this);
 
 			//LT
 			Vertices[Idx++] = (x2);
@@ -278,6 +218,10 @@ namespace Yari.Native.OpenGL
 			Vertices[Idx++] = (Color[1].y);
 			Vertices[Idx++] = (Color[1].z);
 			Vertices[Idx++] = (Color[1].w);
+			Vertices[Idx++] = (u);
+			Vertices[Idx++] = (v);
+
+			VertAppenders[1]?.Invoke(this);
 
 			NewVertex(6);
 		}
@@ -351,12 +295,13 @@ namespace Yari.Native.OpenGL
 
 			UniTexture.SetTexUnit(TextureID, 0);
 			UniProjection.SetMat4(Projection);
+			UniformAppender?.Invoke(this);
 
 			Vao.Bind();
 			Vbo.Bind();
 			Vbo.UpdateBuffer(0, Vertices);
 
-			GL.DrawArrays(NowType, 0, (int) NumVertices);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, (int) NumVertices);
 
 			Program.Unbind();
 
@@ -411,8 +356,7 @@ namespace Yari.Native.OpenGL
 
 		public override void EndCamera(PerspectiveCamera camera)
 		{
-			NullCam.Viewport.w = Platform.Graph.Size.x;
-			NullCam.Viewport.h = Platform.Graph.Size.y;
+			NullCam.Viewport.Set(0, 0, Platform.Graph.Size.x, Platform.Graph.Size.y);
 			NullCam.ToCenter();
 			NullCam.Push();
 			UseCamera(NullCam);
@@ -454,52 +398,16 @@ namespace Yari.Native.OpenGL
 			              "}";
 			return ShaderBuilds.Build(vert, frag, program =>
 			{
-				Attribute posAttrib = program.GetAttribute("i_position");
+				ShaderAttribute posAttrib = program.GetAttribute("i_position");
 				posAttrib.Enable();
-				Attribute colAttrib = program.GetAttribute("i_color");
+				ShaderAttribute colAttrib = program.GetAttribute("i_color");
 				colAttrib.Enable();
-				Attribute texAttrib = program.GetAttribute("i_texCoord");
+				ShaderAttribute texAttrib = program.GetAttribute("i_texCoord");
 				texAttrib.Enable();
 
 				posAttrib.Ptr(VertexAttribPointerType.Float, 2, 32, 0);
 				colAttrib.Ptr(VertexAttribPointerType.Float, 4, 32, 8);
 				texAttrib.Ptr(VertexAttribPointerType.Float, 2, 32, 24);
-			});
-		}
-
-		private static GLShaderProgram GetDefaultShaderShape()
-		{
-			const string vert = "#version 150 core\n" +
-			                    "\n" +
-			                    "in vec2 i_position;\n" +
-			                    "in vec4 i_color;\n" +
-			                    "\n" +
-			                    "out vec4 o_color;\n" +
-			                    "\n" +
-			                    "uniform mat4 u_proj;\n" +
-			                    "\n" +
-			                    "void main() {\n" +
-								"    o_color = i_color;\n" +
-			                    "    gl_Position = u_proj * vec4(i_position, 0.0, 1.0);\n" +
-			                    "}\n";
-			const string frag = "#version 150 core\n" +
-			              "\n" +
-			              "in vec4 o_color;\n" +
-			              "\n" +
-			              "out vec4 fragColor;\n" +
-			              "\n" +
-			              "void main() {\n" +
-			              "    fragColor = o_color;\n" +
-			              "}";
-			return ShaderBuilds.Build(vert, frag, program =>
-			{
-				Attribute posAttrib = program.GetAttribute("i_position");
-				posAttrib.Enable();
-				Attribute colAttrib = program.GetAttribute("i_color");
-				colAttrib.Enable();
-				
-				posAttrib.Ptr(VertexAttribPointerType.Float, 2, 24, 0);
-				colAttrib.Ptr(VertexAttribPointerType.Float, 4, 24, 8);
 			});
 		}
 

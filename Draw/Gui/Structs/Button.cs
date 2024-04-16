@@ -20,7 +20,7 @@ namespace Yari.Draw.Gui.Structs
 		private int pressDelay;
 		private bool cursorOn;
 
-		public override void Input(InputState input, rvec2 cursor)
+		public override void Input(InputState input, mutvec2 cursor)
 		{
 			cursorOn = false;
 

@@ -11,7 +11,7 @@ namespace Yari.Common
 	public class Platform
 	{
 
-		public static readonly Version Version = new Version("stable-1.0.0", 1);
+		public static readonly VersionInfo Version = new VersionInfo("stable-1.0.0", 1);
 
 		//Backends to implement
 		public static GraphicEnvironment Graph;

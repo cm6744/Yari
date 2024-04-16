@@ -16,7 +16,7 @@ namespace Yari.Draw.Gui.Structs
 		public static InputObserver CTRL_CODE = Platform.InputState.Observe(Keycode.KEY_LEFT_CONTROL);
 		public static InputObserver SHIFT_CODE = Platform.InputState.Observe(Keycode.KEY_LEFT_SHIFT);
 		
-		public AxisAlignedSized Bound = new AxisAlignedSized();
+		public box4 Bound = new box4();
 		public BinaryCompound PersistentData = new BinaryCompound();
 		public int IdxInScreen;
 
@@ -28,7 +28,7 @@ namespace Yari.Draw.Gui.Structs
 
 		public virtual void Draw(DrawBatch batch) { }
 
-		public virtual void Input(InputState input, rvec2 cursor) { }
+		public virtual void Input(InputState input, mutvec2 cursor) { }
 
 	}
 

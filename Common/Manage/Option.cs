@@ -36,10 +36,12 @@ namespace Yari.Common.Manage
 
 		public string Key;
 		public Options Group;
+		public object Defval;
 
-		public Option(string key)
+		public Option(string key, object defval)
 		{
 			Key = key;
+			Defval = defval;
 		}
 
 		public void Set(object o)
@@ -49,47 +51,11 @@ namespace Yari.Common.Manage
 
 		public T Get<T>()
 		{
-			return Group.Values.Get<T>(Key);
-		}
-
-		public string GetString()
-		{
-			return Get<string>();
-		}
-
-		public double GetDouble()
-		{
-			return Get<double>();
-		}
-
-		public float GetFloat()
-		{
-			return Get<float>();
-		}
-
-		public int GetInt()
-		{
-			return Get<int>();
-		}
-
-		public byte GetByte()
-		{
-			return Get<byte>();
-		}
-
-		public bool GetBool()
-		{
-			return Get<bool>();
-		}
-
-		public byte[] GetBytes()
-		{
-			return Get<byte[]>();
-		}
-
-		public int[] GetInts()
-		{
-			return Get<int[]>();
+			if(Group.Values.Try<T>(Key, out T val))
+			{
+				return val;
+			}
+			return (T) Defval;
 		}
 
 	}

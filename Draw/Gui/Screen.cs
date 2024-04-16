@@ -72,8 +72,8 @@ namespace Yari.Draw.Gui
 
 		public void Resolve(Resolution res)
 		{
-			Size = new vec2(res.ScaledWidth, res.ScaledHeight);
-			ScaleFactor = res.ScaleFactor;
+			Size = new vec2(res.Xsize, res.Ysize);
+			ScaleFactor = res.Factor;
 
 			Reflush();
 		}
@@ -102,7 +102,7 @@ namespace Yari.Draw.Gui
 
 		public virtual void OnClosed() { }
 
-		public virtual void Input(InputState state, rvec2 cursor)
+		public virtual void Input(InputState state, mutvec2 cursor)
 		{
 			foreach(Component comp in Components.Values)
 			{

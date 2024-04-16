@@ -14,14 +14,24 @@ namespace Yari.Draw
 		public affine Transform = new affine();
 		public matrix4 Projection = new matrix4();
 		public MatrixStack Matrices = new MatrixStack();
+
 		public bool FlipX;
 		public bool FlipY;
+
 		public vec4[] Color = new vec4[4];
-		public int DrawCalls = 0;
+
+		protected int DrawCalls = 0;
 		public vec4 ViewportArray;
+
 		public Font Font;
 		public FontCarver FontCarver = new DefaultFontCarver();
+
 		public Texture Texfil;
+
+		public VertexAppender[] VertAppenders = new VertexAppender[4];
+		public UniformAppender UniformAppender;
+
+		public ShaderProgram Program;
 		
 		public abstract void Draw(Texture texture, float x, float y, float width, float height, float srcX, float srcY,
 			float srcWidth, float srcHeight);
@@ -41,12 +51,12 @@ namespace Yari.Draw
 			Draw(tex, x, y, tex.Width, tex.Height, 0, 0, tex.Width, tex.Height);
 		}
 
-		public void Draw(Texture tex, Maths.Structs.AxisAlignedSized rect, float sx, float sy, float sw, float sh)
+		public void Draw(Texture tex, box4 rect, float sx, float sy, float sw, float sh)
 		{
 			Draw(tex, rect.x, rect.y, rect.w, rect.h, sx, sy, sw, sh);
 		}
 
-		public void Draw(Texture tex, Maths.Structs.AxisAlignedSized rect)
+		public void Draw(Texture tex, box4 rect)
 		{
 			Draw(tex, rect.x, rect.y, rect.w, rect.h);
 		}
@@ -56,12 +66,10 @@ namespace Yari.Draw
 			icon.Draw(this, x, y, w, h);
 		}
 
-		public void Draw(Icon icon, Maths.Structs.AxisAlignedSized rect)
+		public void Draw(Icon icon, box4 rect)
 		{
 			Draw(icon, rect.x, rect.y, rect.w, rect.h);
 		}
-
-		public abstract void Fill(float x, float y, float width, float height);
 
 		//This method use the textured mode to present a rectangle.
 		//Sometimes this is a much better choice.
@@ -70,7 +78,6 @@ namespace Yari.Draw
 			Draw(Texfil, x, y, width, height);
 		}
 
-		//Invoke this before you start each object rendering with your own write verts.
 		public abstract void CheckTransformAndCap();
 
 		public abstract void Write(float v);
@@ -86,12 +93,6 @@ namespace Yari.Draw
 		public abstract void WriteTransformed(vec2 vec);
 
 		public abstract void NewVertex(int v);
-
-		public abstract void PrimitiveMode(Primitives primitives);
-
-		public abstract void UseShader(ShaderProgram program);
-
-		public abstract void FragMode(Frags mode);
 
 		public abstract void Flush();
 
@@ -146,8 +147,19 @@ namespace Yari.Draw
 		public abstract void ScissorEnd();
 		public abstract void Clear();
 		public abstract void UseCamera(PerspectiveCamera camera);
-
 		public abstract void EndCamera(PerspectiveCamera camera);
+		public abstract void UseShader(ShaderProgram program);
+		public abstract void UseDefaultShader();
+
+		public void UseVertAppenders(VertexAppender[] appds)
+		{
+			Array.Copy(appds, VertAppenders, 4);
+		}
+
+		public void EndVertAppenders()
+		{
+			VertAppenders[0] = VertAppenders[1] = VertAppenders[2] = VertAppenders[3] = null;
+		}
 
 		//Font Rendering:
 
@@ -176,21 +188,7 @@ namespace Yari.Draw
 
 	}
 
-	public enum Primitives
-	{
-
-		Triangles,
-		Lines,
-		Point
-
-	}
-
-	public enum Frags
-	{
-
-		Textured,
-		ColorFill
-
-	}
+	public delegate void VertexAppender(DrawBatch batch);
+	public delegate void UniformAppender(DrawBatch batch);
 
 }

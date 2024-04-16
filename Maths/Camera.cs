@@ -10,14 +10,12 @@ namespace Yari.Maths
 		public float ScaleX = 1.0f;
 		public float ScaleY = 1.0f;
 		public float Rotation = 0.0f;
-		public AxisAlignedSized Viewport = new AxisAlignedSized();
+		public rect4 Viewport = new rect4();
 		public affine CombinedAffine = new affine();
 		public affine InvertedAffine = new affine();
 		public affine ProjectionAffine = new affine();
 		protected affine TranslationAffine = new affine();
 		public bool ShouldSeeCenter = false;
-
-		public AxisAlignedSized CacheDim { get; private set; } = new AxisAlignedSized();
 
 		public bool IsInSight(float x, float y, float w, float h, ref vec4 vp)
 		{
@@ -46,7 +44,6 @@ namespace Yari.Maths
 			CombinedAffine.Mul(TranslationAffine);
 			InvertedAffine.Set(CombinedAffine);
 			InvertedAffine.Invert();
-			CacheDim = new AxisAlignedSized(w: Viewport.w, h: Viewport.h, x: Center.x - Viewport.w / 2.0f, y: Center.y - Viewport.h / 2.0f);
 			ShouldSeeCenter = false;
 		}
 
@@ -55,21 +52,21 @@ namespace Yari.Maths
 			ShouldSeeCenter = true;
 		}
 
-		public void Project(rvec2 v, vec4 scrCoords)
+		public void Project(mutvec2 v, vec4 scrCoords)
 		{
 			CombinedAffine.ApplyTo(v);
 			v.x = scrCoords.z * (v.x + 1) / 2 + scrCoords.x;
 			v.y = scrCoords.w * (v.y + 1) / 2 + scrCoords.y;
 		}
 
-		public void Unproject(rvec2 v, vec4 scrCoords)
+		public void Unproject(mutvec2 v, vec4 scrCoords)
 		{
 			v.x = 2.0f * (v.x - scrCoords.x) / scrCoords.z - 1.0f;
 			v.y = 2.0f * (v.y - scrCoords.y) / scrCoords.w - 1.0f;
 			InvertedAffine.ApplyTo(v);
 		}
 
-		private readonly rvec2 tmp = new rvec2();
+		private readonly mutvec2 tmp = new mutvec2();
 
 		public float ToWldX(float x, vec4 scrCoords)
 		{

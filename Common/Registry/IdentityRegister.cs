@@ -5,13 +5,13 @@ using System.Collections;
 namespace Yari.Common.Registry
 {
 
-	public class IdentityRegister<T> : IEnumerable<T> where T : Identifiable
+	public class IdentityRegister<T> where T : Identifiable
 	{
 
-		private List<T> IdList = new List<T>();
-		private Dictionary<Identity, T> IdMap = new Dictionary<Identity, T>();
+		public List<T> IdList = new List<T>();
+		public Dictionary<Identity, T> IdMap = new Dictionary<Identity, T>();
 
-		int NextId = 1;
+		public int NextId = 1;
 
 		private Queue<Runnable> delayedRegistry = new Queue<Runnable>();
 
@@ -22,6 +22,7 @@ namespace Yari.Common.Registry
 				o.Registry = new Identity(idt.Namespace, idt.Key, 0);
 				IdList.Add(o);
 				IdMap[o.Registry] = o;
+				o.OnRegistry();
 			});
 
 			return o;
@@ -35,6 +36,7 @@ namespace Yari.Common.Registry
 				IdList.Add(o);
 				IdMap[o.Registry] = o;
 				NextId++;
+				o.OnRegistry();
 			});
 
 			return o;
@@ -81,16 +83,6 @@ namespace Yari.Common.Registry
 		public Dictionary<Identity, T> Mapped()
 		{
 			return IdMap;
-		}
-
-		public IEnumerator<T> GetEnumerator()
-		{
-			return IdList.GetEnumerator();
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
 		}
 
 	}

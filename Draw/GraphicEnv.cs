@@ -6,6 +6,8 @@ namespace Yari.Draw
 	public interface GraphicEnvironment
 	{
 
+		string Title { set; }
+
 		vec2 Size { get; set; }
 
 		vec2 Pos { get; set; }

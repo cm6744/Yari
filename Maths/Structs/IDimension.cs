@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Yari.Maths.Structs
 {
 
-	public interface IFourCoords
+	public interface IDimension
 	{
 
 		public float x { get; }

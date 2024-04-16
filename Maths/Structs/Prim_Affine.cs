@@ -115,7 +115,7 @@
 			m12 = invDet * tmp12;
 		}
 
-		public rvec2 ApplyTo(rvec2 vec)
+		public mutvec2 ApplyTo(mutvec2 vec)
 		{
 			float x = vec.x;
 			float y = vec.y;

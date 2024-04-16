@@ -4,20 +4,20 @@ using Yari.Common.Registry;
 namespace Yari.Grid
 {
 
-	public class GridBuffer<T> where T : IPalettable
+	public class TileMap<T> where T : IPalettable
 	{
 
-		public GridBufferSuggestion Suggestion;
+		public TileMapScale Suggestion;
 		public byte[] Bytes;
 		public Palette<T> Palette;
 		public T Default;
 
-		public GridBuffer(Palette<T> palette, T defval, GridBufferSuggestion suggestion = null)
+		public TileMap(Palette<T> palette, T defval, TileMapScale suggestion = null)
 		{
 			Palette = palette;
 			Default = defval;
 
-			if(suggestion == null) suggestion = GridBufferSuggestion.DefSuggestion;
+			if(suggestion == null) suggestion = TileMapScale.DefSuggestion;
 
 			Suggestion = suggestion;
 			Bytes = new byte[Suggestion.SizeInBytes];
@@ -54,20 +54,15 @@ namespace Yari.Grid
 			return ri;
 		}
 
-		public T Set(Grid grid, T obj)
+		public T Set(IPos grid, T obj)
 		{
-			return Set(grid.GridX, grid.GridY, grid.GridZ, obj);
-		}
-
-		public T Set(IGrid grid, int z, T obj)
-		{
-			return Set(grid.GridX, grid.GridY, z, obj);
+			return Set(grid.TileX, grid.TileY, grid.TileZ, obj);
 		}
 
 		public T Set(int x, int y, int z, T obj)
 		{
 			int idx = Index(x, y, z);
-			if(idx < 0 || idx >= Bytes.Length)
+			if(idx < 0 || idx + 3 >= Bytes.Length)
 			{
 				return Default;
 			}
@@ -76,20 +71,15 @@ namespace Yari.Grid
 			return old;
 		}
 
-		public T Get(Grid grid)
+		public T Get(IPos grid)
 		{
-			return Get(grid.GridX, grid.GridY, grid.GridZ);
-		}
-
-		public T Get(IGrid grid, int z)
-		{
-			return Get(grid.GridX, grid.GridY, z);
+			return Get(grid.TileX, grid.TileY, grid.TileZ);
 		}
 
 		public T Get(int x, int y, int z)
 		{
 			int idx = Index(x, y, z);
-			if(idx < 0 || idx >= Bytes.Length)
+			if(idx < 0 || idx + 3 >= Bytes.Length)
 			{
 				return Default;
 			}
@@ -98,10 +88,10 @@ namespace Yari.Grid
 
 	}
 
-	public class GridBufferSuggestion
+	public class TileMapScale
 	{
 
-		public static GridBufferSuggestion DefSuggestion = new GridBufferSuggestion(16, 16, 2);
+		public static TileMapScale DefSuggestion = new TileMapScale(16, 16, 2);
 
 		public int SizeX;
 		public int SizeY;
@@ -109,7 +99,7 @@ namespace Yari.Grid
 		public int Size;
 		public int SizeInBytes;
 
-		public GridBufferSuggestion(int x, int y, int z)
+		public TileMapScale(int x, int y, int z)
 		{
 			SizeX = x;
 			SizeY = y;

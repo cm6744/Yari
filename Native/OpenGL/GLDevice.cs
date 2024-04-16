@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime;
 using OpenTK.Graphics.ES30;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using StbImageSharp;
 using Yari.Audio;
 using Yari.Common;
 using Yari.Common.Manage;
@@ -51,6 +53,29 @@ namespace Yari.Native.OpenGL
 			float x = (vm->Width - Settings.Size.x) / 2;
 			float y = (vm->Height - Settings.Size.y) / 2;
 			GLFW.SetWindowPos(Window, (int) x, (int) y);
+
+			if(Settings.Cursor != null)
+			{
+				ImageResult result = ImageResult.FromMemory(File.ReadAllBytes(Settings.Cursor.Path), ColorComponents.RedGreenBlueAlpha);
+
+				fixed(byte* ptr = result.Data)
+				{
+					Image cimg = new Image(result.Width, result.Height, ptr);
+					Cursor* cptr = GLFW.CreateCursor(cimg, Settings.Hotspot.xi, Settings.Hotspot.yi);
+					GLFW.SetCursor(Window, cptr);
+				}
+			}
+
+			if(Settings.Icon != null)
+			{
+				ImageResult result = ImageResult.FromMemory(File.ReadAllBytes(Settings.Icon.Path), ColorComponents.RedGreenBlueAlpha);
+
+				fixed(byte* ptr = result.Data)
+				{
+					Image cimg = new Image(result.Width, result.Height, ptr);
+					GLFW.SetWindowIcon(Window, new ReadOnlySpan<Image>(new Image[] { cimg }));
+				}
+			}
 
 			if(Settings.Maximized) GLFW.MaximizeWindow(Window);
 

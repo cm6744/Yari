@@ -103,6 +103,10 @@ namespace Yari.Maths.Structs
 			this.z = z;
 		}
 
+		public vec3(IReadOnlyList<float> list) : this(list[0], list[1], list[2])
+		{
+		}
+
 		public static vec3 operator +(vec3 vec1, vec3 vec2)
 		{
 			return new vec3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
@@ -167,6 +171,10 @@ namespace Yari.Maths.Structs
 			this.y = y;
 			this.z = z;
 			this.w = w;
+		}
+
+		public vec4(IReadOnlyList<float> list) : this(list[0], list[1], list[2], list[3])
+		{
 		}
 
 		public static vec4 operator +(vec4 vec1, vec4 vec2)

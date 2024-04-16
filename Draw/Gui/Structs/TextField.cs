@@ -39,7 +39,7 @@ namespace Yari.Draw.Gui.Structs
 			clock++;
 		}
 
-		public override void Input(InputState input, rvec2 cursor)
+		public override void Input(InputState input, mutvec2 cursor)
 		{
 			cursorOn = false;
 
@@ -166,7 +166,7 @@ namespace Yari.Draw.Gui.Structs
 				batch.NormalizeColor();
 				float x = Bound.xcentral + bounds.Width + 6;
 				float y = Bound.ycentral + 2;
-				batch.Fill(x, y, 1, bounds.Height);
+				batch.FillTex(x, y, 1, bounds.Height);
 			}
 
 			batch.NormalizeColor();

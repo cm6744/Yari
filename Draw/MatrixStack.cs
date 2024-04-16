@@ -29,6 +29,8 @@ namespace Yari.Draw
 		affine[] TempMats;
 		Stack<affine> Stack = new Stack<affine>();
 
+		public bool IsEmpty => Stack.Count == 1;//Top0 is never removed.
+
 		public void Push()
 		{
 			int take = Stack.Count;

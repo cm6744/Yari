@@ -6,17 +6,8 @@ namespace Yari.Maths
 	public class Mth
 	{
 
-		private static readonly float[] SinTable = new float[0x10000];
 		private const float DTR = (float) (Math.PI / 180F);
 		private const float RTD = 1 / DTR;
-
-		static Mth()
-		{
-			for(int i = 0; i < 0x10000; i++)
-			{
-				SinTable[i] = (float) Math.Sin((i * Math.PI * 2.0) / 65536.0);
-			}
-		}
 
 		public static float Sqrt(float v)
 		{
@@ -50,12 +41,12 @@ namespace Yari.Maths
 
 		public static float SinRad(float v)
 		{
-			return SinTable[(int) (v * 10430.38F) & 0xffff];
+			return (float) Math.Sin(v);
 		}
 
 		public static float CosRad(float v)
 		{
-			return SinTable[(int) (v * 10430.38F + 16384F) & 0xffff];
+			return (float) Math.Cos(v);
 		}
 
 		public static float SinDeg(float v)
@@ -79,6 +70,11 @@ namespace Yari.Maths
 		}
 
 		public static float Clamp(float v, float min, float max)
+		{
+			return v < min ? min : Math.Min(v, max);
+		}
+
+		public static int Clamp(int v, int min, int max)
 		{
 			return v < min ? min : Math.Min(v, max);
 		}

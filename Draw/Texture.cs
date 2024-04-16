@@ -8,6 +8,14 @@
 
 	}
 
+	public interface DimesionalIcon : Icon
+	{
+
+		public int Width { get; } 
+		public int Height { get; }
+
+	}
+
 	public class IconNull : Icon
 	{
 
@@ -17,10 +25,11 @@
 
 	}
 
-	public abstract class Texture : Icon
+	public abstract class Texture : DimesionalIcon
 	{
 
-		public int Width, Height;
+		public int Width { get; set; }
+		public int Height { get; set; }
 
 		public void Draw(DrawBatch batch, float x, float y, float w, float h)
 		{

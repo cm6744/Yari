@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL;
 using Yari.Common.Manage;
 
 namespace Yari.Native.OpenGL

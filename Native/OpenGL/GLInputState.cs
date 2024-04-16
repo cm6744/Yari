@@ -13,7 +13,7 @@ namespace Yari.Native.OpenGL
 		public Dictionary<int, GLInputObserver> Observers = new Dictionary<int, GLInputObserver>();
 		public string PileChars = "";
 		public float Scroll;
-		public rvec2 Cursor { get; } = new rvec2();
+		public mutvec2 Cursor { get; } = new mutvec2();
 
 		public InputObserver Observe(Keycode code)
 		{

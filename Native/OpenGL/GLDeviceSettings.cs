@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using OpenTK.Graphics.OpenGL;
+using Yari.Codec;
+using Yari.Draw;
 using Yari.Maths.Structs;
 
 namespace Yari.Native.OpenGL
@@ -16,8 +18,8 @@ namespace Yari.Native.OpenGL
 		public bool Decorated = true;
 		public bool AutoIconify = true;
 		public bool Maximized = false;
-		public GLTexture Icon;
-		public GLTexture Cursor;
+		public FileHandler Icon;
+		public FileHandler Cursor;
 		public vec2 Hotspot = new vec2(0, 0);
 
 		public static int MipmapLevel = 0;
