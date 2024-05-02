@@ -96,19 +96,14 @@ namespace Yari.Draw
 
 		public abstract void Flush();
 
-		public void Color4(float r, float g, float b, float a)
+		public void Color4(float r, float g, float b, float a = 1)
 		{
 			Color[0] = Color[1] = Color[2] = Color[3] = new vec4(r, g, b, a);
 		}
 
-		public void Color4(vec3 vec3, float a)
+		public void Color4(vec3 vec3, float a = 1)
 		{
 			Color[0] = Color[1] = Color[2] = Color[3] = new vec4(vec3.x, vec3.y, vec3.z, a);
-		}
-
-		public void Color4(vec3 vec3)
-		{
-			Color[0] = Color[1] = Color[2] = Color[3] = new vec4(vec3.x, vec3.y, vec3.z, 1);
 		}
 
 		public void Color4(vec4 color)
@@ -116,19 +111,14 @@ namespace Yari.Draw
 			Color[0] = Color[1] = Color[2] = Color[3] = color;
 		}
 
-		public void Merge4(float r, float g, float b, float a)
+		public void Merge4(float r, float g, float b, float a = 1)
 		{
 			Color[0] = Color[1] = Color[2] = Color[3] *= new vec4(r, g, b, a);
 		}
 
-		public void Merge4(vec3 vec3, float a)
+		public void Merge4(vec3 vec3, float a = 1)
 		{
 			Color[0] = Color[1] = Color[2] = Color[3] *= new vec4(vec3.x, vec3.y, vec3.z, a);
-		}
-
-		public void Merge4(vec3 vec3)
-		{
-			Color[0] = Color[1] = Color[2] = Color[3] *= new vec4(vec3.x, vec3.y, vec3.z, 1);
 		}
 
 		public void Merge4(vec4 color)

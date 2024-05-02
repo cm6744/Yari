@@ -6,7 +6,7 @@ using Yari.Draw;
 namespace Yari.Common.Resource
 {
 
-	public class AssetManager<T>
+	public class IdentityManager<T>
 	{
 
 		private Dictionary<string, T> ResDict = new Dictionary<string, T>();

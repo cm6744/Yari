@@ -4,23 +4,23 @@ using Yari.Maths;
 namespace Yari.Grid
 {
 
-	//1 Chunk = 16 Tile;
-	//1 Grid = 16 Pixel;
-	//1 Pixel => N Precise;
-	public interface IPos
+	public static class Posing
 	{
 
-		public float PreciseX { get; }
-		public float PreciseY { get; }
-		public int PixelX { get; }
-		public int PixelY { get; }
-		public int TileX { get; }
-		public int TileY { get; }
-		public int UnitX { get; }
-		public int UnitY { get; }
+		public static float Distance(IPos pos1, IPos pos2)
+		{
+			return Mth.Sqrt(Mth.Pow(pos1.x - pos2.x, 2) + Mth.Pow(pos1.y - pos2.y, 2));
+		}
 
-		//Default impl at z = 1.
-		public int TileZ => 1;
+		public static float PointRad(IPos pos1, IPos pos2)
+		{
+			return Mth.AtanRad(pos2.y - pos1.y, pos2.x - pos1.x);
+		}
+
+		public static float PointDeg(IPos pos1, IPos pos2)
+		{
+			return Mth.AtanDeg(pos2.y - pos1.y, pos2.x - pos1.x);
+		}
 
 		public static int ToCoord(int tile)
 		{
@@ -29,29 +29,45 @@ namespace Yari.Grid
 
 	}
 
+	//1 Chunk = 16 Tile;
+	//1 Grid = 16 Pixel;
+	//1 Pixel => N Precise;
+	public interface IPos
+	{
+
+		public float x { get; }
+		public float y { get; }
+		public int TileX { get; }
+		public int TileY { get; }
+		public int UnitX { get; }
+		public int UnitY { get; }
+
+		//Default impl at z = 1.
+		public int TileZ => 1;
+
+	}
+
 	public struct PrecisePos : IPos
 	{
 
 		public PrecisePos(IPos grid)
 		{
-			PreciseX = grid.PreciseX;
-			PreciseY = grid.PreciseY;
+			x = grid.x;
+			y = grid.y;
 		}
 
 		public PrecisePos(float x, float y)
 		{
-			PreciseX = x;
-			PreciseY = y;
+			this.x = x;
+			this.y = y;
 		}
 
-		public float PreciseX { get; }
-		public float PreciseY { get; }
-		public int PixelX => Mth.Floor(PreciseX);
-		public int PixelY => Mth.Floor(PreciseY);
-		public int TileX => Mth.Floor(PixelX / 16f);
-		public int TileY => Mth.Floor(PixelY / 16f);
-		public int UnitX => Mth.Floor(PixelX / 16f / 16f);
-		public int UnitY => Mth.Floor(PixelY / 16f / 16f);
+		public float x { get; }
+		public float y { get; }
+		public int TileX => Mth.Floor(x);
+		public int TileY => Mth.Floor(y);
+		public int UnitX => Mth.Floor(TileX / 16f);
+		public int UnitY => Mth.Floor(TileY / 16f);
 
 		public override bool Equals(object obj)
 		{
@@ -60,27 +76,27 @@ namespace Yari.Grid
 
 		public bool Equals(PrecisePos other)
 		{
-			return PreciseX.Equals(other.PreciseX) && PreciseY.Equals(other.PreciseY);
+			return x.Equals(other.x) && y.Equals(other.y);
 		}
 
 		public override int GetHashCode()
 		{
-			return HashCode.Combine(PreciseX, PreciseY);
+			return HashCode.Combine(x, y);
 		}
 
 		public static PrecisePos operator +(PrecisePos p1, PrecisePos p2)
 		{
-			return new PrecisePos(p1.PreciseX + p2.PreciseX, p1.PreciseY + p2.PreciseY);
+			return new PrecisePos(p1.x + p2.x, p1.y + p2.y);
 		}
 
 		public static PrecisePos operator -(PrecisePos p1, PrecisePos p2)
 		{
-			return new PrecisePos(p1.PreciseX - p2.PreciseX, p1.PreciseY - p2.PreciseY);
+			return new PrecisePos(p1.x - p2.x, p1.y - p2.y);
 		}
 
 		public static PrecisePos operator -(PrecisePos p)
 		{
-			return new PrecisePos(-p.PreciseX, -p.PreciseY);
+			return new PrecisePos(-p.x, -p.y);
 		}
 
 		public static bool operator ==(PrecisePos p1, PrecisePos p2)
@@ -89,72 +105,6 @@ namespace Yari.Grid
 		}
 
 		public static bool operator !=(PrecisePos p1, PrecisePos p2)
-		{
-			return !p1.Equals(p2);
-		}
-
-	}
-
-	public struct PixPos : IPos
-	{
-
-		public PixPos(IPos grid)
-		{
-			PixelX = grid.PixelX;
-			PixelY = grid.PixelY;
-		}
-
-		public PixPos(int x, int y)
-		{
-			PixelX = x;
-			PixelY = y;
-		}
-
-		public float PreciseX => PixelX;
-		public float PreciseY => PixelY;
-		public int PixelX { get; }
-		public int PixelY { get; }
-		public int TileX => Mth.Floor(PixelX / 16f);
-		public int TileY => Mth.Floor(PixelY / 16f);
-		public int UnitX => Mth.Floor(PixelX / 16f / 16f);
-		public int UnitY => Mth.Floor(PixelY / 16f / 16f);
-
-		public override bool Equals(object obj)
-		{
-			return obj is PixPos other && Equals(other);
-		}
-
-		public bool Equals(PixPos other)
-		{
-			return PixelX == other.PixelX && PixelY == other.PixelY;
-		}
-
-		public override int GetHashCode()
-		{
-			return HashCode.Combine(PixelX, PixelY);
-		}
-
-		public static PixPos operator +(PixPos p1, PixPos p2)
-		{
-			return new PixPos(p1.PixelX + p2.PixelX, p1.PixelY + p2.PixelY);
-		}
-
-		public static PixPos operator -(PixPos p1, PixPos p2)
-		{
-			return new PixPos(p1.PixelX - p2.PixelX, p1.PixelY - p2.PixelY);
-		}
-
-		public static PixPos operator -(PixPos p)
-		{
-			return new PixPos(-p.PixelX, -p.PixelY);
-		}
-
-		public static bool operator ==(PixPos p1, PixPos p2)
-		{
-			return p1.Equals(p2);
-		}
-
-		public static bool operator !=(PixPos p1, PixPos p2)
 		{
 			return !p1.Equals(p2);
 		}
@@ -194,10 +144,8 @@ namespace Yari.Grid
 			TileZ = DefaultZDep;
 		}
 
-		public float PreciseX => PixelX;
-		public float PreciseY => PixelY;
-		public int PixelX => TileX * 16;
-		public int PixelY => TileY * 16;
+		public float x => TileX + 0.5f;
+		public float y => TileY + 0.5f;
 		public int TileX { get; }
 		public int TileY { get; }
 		public int TileZ { get; }
@@ -246,25 +194,23 @@ namespace Yari.Grid
 
 	}
 
-	public struct ChunkPos : IPos
+	public struct UnitPos : IPos
 	{
 
-		public ChunkPos(IPos grid)
+		public UnitPos(IPos grid)
 		{
 			UnitX = grid.UnitX;
 			UnitY = grid.UnitY;
 		}
 
-		public ChunkPos(int x, int y)
+		public UnitPos(int x, int y)
 		{
 			UnitX = x;
 			UnitY = y;
 		}
 
-		public float PreciseX => PixelX;
-		public float PreciseY => PixelY;
-		public int PixelX => TileX * 16;
-		public int PixelY => TileY * 16;
+		public float x => TileX;
+		public float y => TileY;
 		public int TileX => UnitX * 16;
 		public int TileY => UnitY * 16;
 		public int UnitX { get; }
@@ -272,10 +218,10 @@ namespace Yari.Grid
 
 		public override bool Equals(object obj)
 		{
-			return obj is ChunkPos other && Equals(other);
+			return obj is UnitPos other && Equals(other);
 		}
 
-		public bool Equals(ChunkPos other)
+		public bool Equals(UnitPos other)
 		{
 			return UnitX == other.UnitX && UnitY == other.UnitY;
 		}
@@ -285,27 +231,27 @@ namespace Yari.Grid
 			return HashCode.Combine(UnitX, UnitY);
 		}
 
-		public static ChunkPos operator +(ChunkPos p1, ChunkPos p2)
+		public static UnitPos operator +(UnitPos p1, UnitPos p2)
 		{
-			return new ChunkPos(p1.UnitX + p2.UnitX, p1.UnitY + p2.UnitY);
+			return new UnitPos(p1.UnitX + p2.UnitX, p1.UnitY + p2.UnitY);
 		}
 
-		public static ChunkPos operator -(ChunkPos p1, ChunkPos p2)
+		public static UnitPos operator -(UnitPos p1, UnitPos p2)
 		{
-			return new ChunkPos(p1.UnitX - p2.UnitX, p1.UnitY - p2.UnitY);
+			return new UnitPos(p1.UnitX - p2.UnitX, p1.UnitY - p2.UnitY);
 		}
 
-		public static ChunkPos operator -(ChunkPos p)
+		public static UnitPos operator -(UnitPos p)
 		{
-			return new ChunkPos(-p.UnitX, -p.UnitY);
+			return new UnitPos(-p.UnitX, -p.UnitY);
 		}
 
-		public static bool operator ==(ChunkPos p1, ChunkPos p2)
+		public static bool operator ==(UnitPos p1, UnitPos p2)
 		{
 			return p1.Equals(p2);
 		}
 
-		public static bool operator !=(ChunkPos p1, ChunkPos p2)
+		public static bool operator !=(UnitPos p1, UnitPos p2)
 		{
 			return !p1.Equals(p2);
 		}

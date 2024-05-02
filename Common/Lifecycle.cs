@@ -15,7 +15,7 @@
 		public static float PartialTicks;
 
 		public Load TaskLoad = () => { };
-		public RunRender TaskRender = (partial) => { PartialTicks = partial; };
+		public RunRender TaskRender = (partial) => { };
 		public RunTick TaskTick = (s) => { };
 		public Resize TaskResize = (ow1, oh1, w1, w2) => { };
 

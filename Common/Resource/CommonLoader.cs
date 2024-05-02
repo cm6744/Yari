@@ -21,12 +21,12 @@ namespace Yari.Common.Resource
 		protected List<CommonLoader> Children = new List<CommonLoader>();
 
 		public string Namespace;
-		public readonly AssetMapper Mapper;
+		public readonly IdentityAtlas Mapper;
 		public readonly Localer Localer;
 
 		public FileHandler Filebase = FileSystem.GetAbsolute("");
 
-		protected CommonLoader(string namespc, AssetMapper mapper, Localer localer)
+		protected CommonLoader(string namespc, IdentityAtlas mapper, Localer localer)
 		{
 			Namespace = namespc;
 			Mapper = mapper;
@@ -43,12 +43,8 @@ namespace Yari.Common.Resource
 			Children.Add(loader);
 
 			Total += loader.Total;
-			foreach(Runnable loaderTask in loader.Tasks)
-			{
-				Tasks.Enqueue(loaderTask);
-			}
 
-			DoneBasically = false;
+			FlushProgress();
 		}
 
 		void Enqueue0(Runnable task, bool preLoad)
@@ -82,8 +78,23 @@ namespace Yari.Common.Resource
 		{
 			if(Tasks.Count == 0)
 			{
-				DoneBasically = true;
-				Progress = 1;
+				if(Children.Count == 0)
+				{
+					DoneBasically = true;
+					Progress = 1;
+					return;
+				}
+				CommonLoader loader1 = Children[0];
+
+				loader1.Next();
+				++Run;
+				Progress = Run / Total;
+
+				if(loader1.Done)
+				{
+					Children.RemoveAt(0);
+					return;
+				}
 			}
 			else
 			{

@@ -14,9 +14,9 @@ namespace Yari.Draw
 
 		bool Decorated { set; }
 
-		long Nanotime { get; }
+		double Nanotime { get; }
 
-		long Millitime => Nanotime / 1000_000;
+		long Millitime => (long) (Nanotime / 1000_000);
 
 		void Swap();
 

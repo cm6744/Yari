@@ -9,9 +9,9 @@
 
 		private T ValueOptional;
 		public string Key;
-		private AssetManager<T> Getter;
+		private IdentityManager<T> Getter;
 
-		public Ref(AssetManager<T> resources, string key)
+		public Ref(IdentityManager<T> resources, string key)
 		{
 			Getter = resources;
 			Key = key;

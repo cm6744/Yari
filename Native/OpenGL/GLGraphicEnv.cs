@@ -34,7 +34,7 @@ namespace Yari.Native.OpenGL
 			set => GLFW.SetWindowAttrib(GLDevice.Window, WindowAttribute.Decorated, value);
 		}
 
-		public long Nanotime => (long) (GLFW.GetTime() * 1000_000_000);
+		public double Nanotime => (GLFW.GetTime() * 1000_000_000);
 
 		public unsafe string Title 
 		{ 

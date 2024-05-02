@@ -10,63 +10,47 @@ namespace Yari.Maths.Structs
 	public struct box4 : IDimension
 	{
 
-		public float x { get; set; }
-		public float y { get; set; }
-		public float xprom { get; set; }
-		public float yprom { get; set; }
-		public float xcentral => (x + xprom) / 2f;
-		public float ycentral => (y + yprom) / 2f;
-		public float w => xprom - x;
-		public float h => yprom - y;
+		public float x => xcentral - w / 2;
+		public float y => ycentral - h / 2;
+		public float xprom => xcentral + w / 2;
+		public float yprom => ycentral + h / 2;
+		public float xcentral { get; set; }
+		public float ycentral { get; set; }
+		public float w { get; set; }
+		public float h { get; set; }
+
+		public void LocateCentral(float x, float y)
+		{
+			xcentral = x;
+			ycentral = y;
+		}
 
 		public void Locate(float x, float y)
 		{
-			float w = this.w, h = this.h;
-			this.x = x;
-			this.y = y;
-			xprom = x + w;
-			yprom = y + h;
-		}
-
-		public void Set(float x, float y, float w, float h)
-		{
-			this.x = x;
-			this.y = y;
-			xprom = x + w;
-			yprom = y + h;
-		}
-
-		public void SetCentral(float x, float y, float w, float h)
-		{
-			this.x = x - w / 2f;
-			this.y = y - h / 2f;
-			xprom = x + w / 2f;
-			yprom = y + h / 2f;
-		}
-
-		public void SetVert(float x, float y, float xp, float yp)
-		{
-			this.x = x;
-			this.y = y;
-			xprom = xp;
-			yprom = yp;
-		}
-
-		public void ResizeCentral(float w, float h)
-		{
-			float cx = xcentral, cy = ycentral;
-			SetCentral(cx, cy, w, h);
+			LocateCentral(x + w / 2, y + h / 2);
 		}
 
 		public void Resize(float w, float h)
 		{
-			float px = x, py = y;
-			Set(px, py, w, h);
+			this.w = w;
+			this.h = h;
+		}
+
+		public void Expand(float w, float h)
+		{
+			this.w += w;
+			this.h += h;
+		}
+
+		public void Scale(float w, float h)
+		{
+			this.w *= w;
+			this.h *= h;
 		}
 
 		public void Translate(float x, float y)
 		{
-			Set(this.x + x, this.y + y, w, h);
+			LocateCentral(this.xcentral + x, this.ycentral + y);
 		}
 
 		public bool Interacts(IDimension c)

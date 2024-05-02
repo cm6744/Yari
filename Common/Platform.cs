@@ -25,13 +25,13 @@ namespace Yari.Common
 		public static int Tps, Fps;
 		public static int DTps { get; private set; }
 
-		public static void RunStandard(int tps, int chaseback = 1, bool syncRender = false)
+		public static void RunStandard(int tps, int chaseback = 5, bool syncRender = false)
 		{
 			Thread.CurrentThread.Name = "MAIN";
 
-			float renderPartialTicks = 0f;
-			long lastSyncSysClock = Graph.Nanotime;
-			float tickLength = 1_000_000_000f / tps;
+			double renderPartialTicks = 0f;
+			double lastSyncSysClock = Graph.Nanotime;
+			double tickLength = 1_000_000_000.0 / tps;
 			int framesT = 0, framesR = 0;
 			long lastCalcClock = Graph.Millitime;
 
@@ -45,8 +45,8 @@ namespace Yari.Common
 			{
 				while(!IsExited)
 				{
-					long i = Graph.Nanotime;
-					float elapsedPartialTicks = (i - lastSyncSysClock) / tickLength;
+					double i = Graph.Nanotime;
+					double elapsedPartialTicks = (i - lastSyncSysClock) / tickLength;
 					lastSyncSysClock = i;
 					renderPartialTicks += elapsedPartialTicks;
 					int elapsedTicks = (int) renderPartialTicks;
@@ -101,7 +101,8 @@ namespace Yari.Common
 			void DrawAndSwap()
 			{
 				Graph.Prepare();
-				Lifecycle.TaskRender.Invoke(renderPartialTicks);
+				Lifecycle.PartialTicks = (float) renderPartialTicks;
+				Lifecycle.TaskRender.Invoke((float) renderPartialTicks);
 				Graph.Swap();
 				framesR++;
 			}

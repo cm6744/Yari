@@ -53,7 +53,8 @@ namespace Yari.Native.OpenGL
 			{
 				Primitives.Triangles => PrimitiveType.Triangles,
 				Primitives.Lines => PrimitiveType.Lines,
-				Primitives.Point => PrimitiveType.Points
+				Primitives.Point => PrimitiveType.Points,
+				_ => PrimitiveType.Triangles
 			};
 		}
 

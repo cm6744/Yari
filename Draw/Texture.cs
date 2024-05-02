@@ -16,7 +16,7 @@
 
 	}
 
-	public class IconNull : Icon
+	public struct IconNoBehavior : Icon
 	{
 
 		public void Draw(DrawBatch batch, float x, float y, float w, float h)

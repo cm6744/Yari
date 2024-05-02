@@ -7,10 +7,15 @@ namespace Yari.Maths.Structs
 	public struct vec2
 	{
 
+		public static readonly vec2 Nil = new vec2(0, 0);
+		public static readonly vec2 One = new vec2(1, 1);
+
 		public float x, y;
 
 		public int xi => (int) x;
 		public int yi => (int) y;
+
+		public float Len => Mth.Sqrt(x * x + y * y);
 
 		public vec2(float x, float y)
 		{

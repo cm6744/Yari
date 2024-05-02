@@ -8,6 +8,11 @@ namespace Yari.Maths.Structs
 
 		public float x, y;
 
+		public int xi => (int) x;
+		public int yi => (int) y;
+
+		public float Len => Mth.Sqrt(x * x + y * y);
+
 		public mutvec2()
 		{
 		}

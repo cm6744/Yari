@@ -58,7 +58,7 @@ namespace Yari.Common.Toolkit
 				{
 					className = method.ReflectedType.Name;
 
-					if(className.StartsWith('<')) className = "Inside-run";
+					if(className.StartsWith('<')) className = "-";
 				}
 			}
 
@@ -66,7 +66,7 @@ namespace Yari.Common.Toolkit
 
 			if(string.IsNullOrWhiteSpace(threadName))
 			{
-				threadName = Thread.CurrentThread.IsThreadPoolThread ? "EXEC" : "-";
+				threadName = "-";
 			}
 
 			string time = DateTime.Now.ToString("u");

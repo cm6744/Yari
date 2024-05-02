@@ -9,6 +9,11 @@ namespace Yari.Maths
 		private const float DTR = (float) (Math.PI / 180F);
 		private const float RTD = 1 / DTR;
 
+		public static float Pow(float v, float d)
+		{
+			return (float) Math.Pow(v, d);
+		}
+
 		public static float Sqrt(float v)
 		{
 			return (float) Math.Sqrt(v);
